@@ -21,4 +21,4 @@
 
 ## Source
 
-[index.ts:1](https://github.com/ericvera/ohno/blob/main/src/index.ts#L1)
+[index.ts:1](https://github.com/ericvera/betterbe/blob/main/src/index.ts#L1)
