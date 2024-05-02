@@ -1,5 +1,5 @@
 {
-  "name": "i-forgot-to-rename-my-package",
+  "name": "betterbe",
   "version": "0.0.1",
   "type": "module",
   "exports": {
@@ -49,9 +49,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/user/i-forgot-to-rename-my-package"
+    "url": "https://github.com/ericvera/ohno.git"
   },
-  "keywords": [],
+  "keywords": [
+    "input",
+    "validation",
+    "yup"
+  ],
   "lint-staged": {
     "*.{ts,tsx,mjs}": "eslint --cache",
     "*": "prettier --ignore-unknown --write"

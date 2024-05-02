@@ -1,8 +1,8 @@
-i-forgot-to-rename-my-package • Docs
+betterbe • Docs
 
 ---
 
-# i-forgot-to-rename-my-package
+# betterbe
 
 ## Functions
 
