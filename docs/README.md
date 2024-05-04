@@ -4,6 +4,11 @@ betterbe • Docs
 
 # betterbe
 
+## Interfaces
+
+- [StringOptions](interfaces/StringOptions.md)
+
 ## Functions
 
-- [add](functions/add.md)
+- [object](functions/object.md)
+- [string](functions/string.md)
