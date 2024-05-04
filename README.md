@@ -11,6 +11,41 @@ Features:
 - Strict by default (no type cohersion)
 - No unknown properties allowed
 
-# API Reference
+## Example
+
+```ts
+import { boolean, number, object, string } from 'betterbe'
+
+const validateUid = string({
+  minLength: 10,
+  maxLength: 12,
+  alphabet: '0123456789',
+})
+
+const validateMessage = object({
+  from: object({
+    uid: validateUid,
+  }),
+  message: string({ minLength: 1, maxLength: 280 }),
+  utcTime: number({ integer: true }),
+  urgent: boolean({ required: false }),
+})
+
+// This is not expected to throw
+validateMessage({
+  from: { uid: '1234567890' },
+  message: 'Hello, World!',
+  utcTime: 1630000000,
+})
+
+// This is expected to throw as character `-` is not valid in the uid alphabet
+validateMessage({
+  from: { uid: '1234567-90' },
+  message: 'Hello, World!',
+  utcTime: 1630000000,
+})
+```
+
+## API Reference
 
 See [docs](docs/README.md)
