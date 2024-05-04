@@ -33,13 +33,7 @@ export const object =
     const schemaKeys = Object.keys(schema)
     const valueKeys = Object.keys(val)
 
-    // Check only keys defined in schema are present in value
-    for (const schemaKey of schemaKeys) {
-      if (!valueKeys.includes(schemaKey)) {
-        throw new ValidationError('is required', newPath, schemaKey)
-      }
-    }
-
+    // Check if there are any keys that are not defined in the schema
     for (const valueKey of valueKeys) {
       if (!schemaKeys.includes(valueKey)) {
         throw new ValidationError('is not allowed', newPath, valueKey)
@@ -47,12 +41,11 @@ export const object =
     }
 
     const getSchemaProp = getRequiredProp(schema)
-    const getValueProp = getRequiredProp(val)
 
     // Run through all the validation functions
     for (const schemaKey of schemaKeys) {
       const validationFunction = getSchemaProp(schemaKey)
-      const valueToValidate = getValueProp(schemaKey)
+      const valueToValidate = val[schemaKey]
 
       validationFunction(valueToValidate, newPath, schemaKey)
     }

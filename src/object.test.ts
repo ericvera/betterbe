@@ -1,5 +1,5 @@
 import { expect, it, vi } from 'vitest'
-import { object } from '.'
+import { boolean, number, object, string } from '.'
 import { Schema } from './types'
 
 it('should be able to create an object', () => {
@@ -22,19 +22,6 @@ it('should be able to create an object', () => {
 
   expect(schema.name).toHaveBeenCalledWith('John Doe', [], 'name')
   expect(schema.age).toHaveBeenCalledWith(42, [], 'age')
-})
-
-it('should throw an error if a key is missing', () => {
-  const schema = {
-    name: vi.fn(),
-    age: vi.fn(),
-  }
-
-  const validateObject = object(schema)
-
-  expect(() => {
-    validateObject({ name: 'John Doe' })
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: 'age' is required]`)
 })
 
 it('should throw an error if a key is not allowed', () => {
@@ -75,7 +62,7 @@ it('should work when nested', () => {
 it('should work when nested and there is an error', () => {
   const userSchema = {
     name: vi.fn(),
-    age: vi.fn(),
+    age: number(),
   }
 
   const schema: Schema = {
@@ -89,4 +76,29 @@ it('should work when nested and there is an error', () => {
   }).toThrowErrorMatchingInlineSnapshot(
     `[Error: 'age' is required at path 'user']`,
   )
+})
+
+it('should work when nested and with other validation functions', () => {
+  const validateUid = string({
+    minLength: 10,
+    maxLength: 12,
+    alphabet: '0123456789',
+  })
+
+  const validateMessage = object({
+    from: object({
+      uid: validateUid,
+    }),
+    message: string({ minLength: 1, maxLength: 280 }),
+    utcTime: number({ integer: true }),
+    urgent: boolean({ required: false }),
+  })
+
+  expect(() => {
+    validateMessage({
+      from: { uid: '1234567890' },
+      message: 'Hello, World!',
+      utcTime: 1630000000,
+    })
+  }).not.toThrow()
 })
