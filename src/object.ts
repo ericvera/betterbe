@@ -1,22 +1,37 @@
 import { ValidationError } from './internal/ValidationError'
 import { getRequiredProp } from './internal/getRequiredProp'
+import { validateType } from './internal/validateType'
 import type { Schema, ValidationFunction } from './types'
 
+/**
+ * Returns a validation function that checks if a value is an object and
+ * validates its properties against a schema.
+ *
+ * @param schema An object containing the validation functions for each
+ * property.
+ */
 export const object =
   (schema: Schema): ValidationFunction =>
-  (value: unknown, path?: string[], key?: string) => {
+  (value: unknown, path?: string[], key?: string): void => {
     const newPath = [...(path ?? [])]
 
     if (key !== undefined) {
       newPath.push(key)
     }
 
-    if (typeof value !== 'object' || value === null) {
-      throw new ValidationError('is not an object', path, key)
+    const val = validateType<Record<string, unknown>>(
+      'object',
+      value,
+      path,
+      key,
+    )
+
+    if (val === undefined) {
+      throw new ValidationError('is required', newPath, key)
     }
 
     const schemaKeys = Object.keys(schema)
-    const valueKeys = Object.keys(value)
+    const valueKeys = Object.keys(val)
 
     // Check only keys defined in schema are present in value
     for (const schemaKey of schemaKeys) {
@@ -32,7 +47,7 @@ export const object =
     }
 
     const getSchemaProp = getRequiredProp(schema)
-    const getValueProp = getRequiredProp(value as Record<string, unknown>)
+    const getValueProp = getRequiredProp(val)
 
     // Run through all the validation functions
     for (const schemaKey of schemaKeys) {

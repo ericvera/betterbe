@@ -6,30 +6,21 @@
 
 # Function: string()
 
-> **string**(`__namedParameters`): (`value`, `path`?, `key`?) => `void`
+> **string**(`options`): [`ValidationFunction`](../type-aliases/ValidationFunction.md)
+
+Returns a validation function that checks if a value is a string and
+optionally validates its length, pattern, and alphabet.
 
 ## Parameters
 
-| Parameter           | Type                                              |
-| :------------------ | :------------------------------------------------ |
-| `__namedParameters` | [`StringOptions`](../interfaces/StringOptions.md) |
+| Parameter | Type                                              | Description                                                                                                                                                                                                                                                                                                                                                                                                               |
+| :-------- | :------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `options` | [`StringOptions`](../interfaces/StringOptions.md) | An object containing the following properties:<br />- `minLength` (optional): The minimum length of the string.<br />- `maxLength` (optional): The maximum length of the string.<br />- `pattern` (optional): A regular expression that the string must match.<br />- `alphabet` (optional): A string containing the allowed characters.<br />- `required` (optional): Whether the value is required (default is `true`). |
 
 ## Returns
 
-`Function`
-
-### Parameters
-
-| Parameter | Type       |
-| :-------- | :--------- |
-| `value`   | `unknown`  |
-| `path`?   | `string`[] |
-| `key`?    | `string`   |
-
-### Returns
-
-`void`
+[`ValidationFunction`](../type-aliases/ValidationFunction.md)
 
 ## Source
 
-[string.ts:13](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L13)
+[string.ts:29](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L29)

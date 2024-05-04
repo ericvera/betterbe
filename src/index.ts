@@ -1,2 +1,5 @@
+export * from './boolean'
+export * from './number'
 export * from './object'
 export * from './string'
+export type * from './types'
