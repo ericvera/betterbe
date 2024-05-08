@@ -6,9 +6,15 @@
 
 # Function: boolean()
 
-> **boolean**(`options`): [`ValidationFunction`](../type-aliases/ValidationFunction.md)
+> **boolean**\<`T`\>(`options`): [`ValidationFunction`](../type-aliases/ValidationFunction.md)\<`T`\>
 
 Returns a validation function that checks if a value is a boolean.
+
+## Type parameters
+
+| Type parameter | Value     |
+| :------------- | :-------- |
+| `T`            | `unknown` |
 
 ## Parameters
 
@@ -18,7 +24,7 @@ Returns a validation function that checks if a value is a boolean.
 
 ## Returns
 
-[`ValidationFunction`](../type-aliases/ValidationFunction.md)
+[`ValidationFunction`](../type-aliases/ValidationFunction.md)\<`T`\>
 
 ## Source
 

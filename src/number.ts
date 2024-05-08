@@ -23,8 +23,8 @@ export interface NumberOptions {
  * - `required` (optional): Whether the value is required (default is `true`).
  */
 export const number =
-  (options: NumberOptions = {}): ValidationFunction =>
-  (value: unknown, path?: string[], key?: string): void => {
+  <T = unknown>(options: NumberOptions = {}): ValidationFunction<T> =>
+  (value: T, path?: string[], key?: string): void => {
     // Validate type
     const num = validateType<number>('number', value, path, key)
 

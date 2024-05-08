@@ -6,7 +6,7 @@
 
 # Type alias: Schema
 
-> **Schema**: `Record`\<`string`, [`ValidationFunction`](ValidationFunction.md)\>
+> **Schema**: `Record`\<`string`, [`ValidationFunction`](ValidationFunction.md)\<`unknown`\>\>
 
 ## Source
 

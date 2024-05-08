@@ -16,8 +16,8 @@ export interface BooleanOptions {
  * - `required` (optional): Whether the value is required (default is `true`).
  */
 export const boolean =
-  (options: BooleanOptions = {}): ValidationFunction =>
-  (value: unknown, path?: string[], key?: string): void => {
+  <T = unknown>(options: BooleanOptions = {}): ValidationFunction<T> =>
+  (value: T, path?: string[], key?: string): void => {
     // Validate type
     const b = validateType<boolean>('boolean', value, path, key)
 

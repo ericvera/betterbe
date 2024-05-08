@@ -26,8 +26,8 @@ export interface StringOptions {
  * - `required` (optional): Whether the value is required (default is `true`).
  */
 export const string =
-  (options: StringOptions = {}): ValidationFunction =>
-  (value: unknown, path?: string[], key?: string): void => {
+  <T = unknown>(options: StringOptions = {}): ValidationFunction<T> =>
+  (value: T, path?: string[], key?: string): void => {
     // Validate type
     const str = validateType<string>('string', value, path, key)
 

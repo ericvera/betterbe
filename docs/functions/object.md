@@ -6,10 +6,16 @@
 
 # Function: object()
 
-> **object**(`schema`): [`ValidationFunction`](../type-aliases/ValidationFunction.md)
+> **object**\<`T`\>(`schema`): [`ValidationFunction`](../type-aliases/ValidationFunction.md)\<`T`\>
 
 Returns a validation function that checks if a value is an object and
 validates its properties against a schema.
+
+## Type parameters
+
+| Type parameter | Value     |
+| :------------- | :-------- |
+| `T`            | `unknown` |
 
 ## Parameters
 
@@ -19,7 +25,7 @@ validates its properties against a schema.
 
 ## Returns
 
-[`ValidationFunction`](../type-aliases/ValidationFunction.md)
+[`ValidationFunction`](../type-aliases/ValidationFunction.md)\<`T`\>
 
 ## Source
 

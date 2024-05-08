@@ -6,10 +6,16 @@
 
 # Function: number()
 
-> **number**(`options`): [`ValidationFunction`](../type-aliases/ValidationFunction.md)
+> **number**\<`T`\>(`options`): [`ValidationFunction`](../type-aliases/ValidationFunction.md)\<`T`\>
 
 Returns a validation function that checks if a value is a number and
 optionally validates its minimum, maximum, and integer properties.
+
+## Type parameters
+
+| Type parameter | Value     |
+| :------------- | :-------- |
+| `T`            | `unknown` |
 
 ## Parameters
 
@@ -19,7 +25,7 @@ optionally validates its minimum, maximum, and integer properties.
 
 ## Returns
 
-[`ValidationFunction`](../type-aliases/ValidationFunction.md)
+[`ValidationFunction`](../type-aliases/ValidationFunction.md)\<`T`\>
 
 ## Source
 

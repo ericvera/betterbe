@@ -11,8 +11,8 @@ import type { Schema, ValidationFunction } from './types'
  * property.
  */
 export const object =
-  (schema: Schema): ValidationFunction =>
-  (value: unknown, path?: string[], key?: string): void => {
+  <T = unknown>(schema: Schema): ValidationFunction<T> =>
+  (value: T, path?: string[], key?: string): void => {
     const newPath = [...(path ?? [])]
 
     if (key !== undefined) {
