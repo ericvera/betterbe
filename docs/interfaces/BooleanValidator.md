@@ -1,4 +1,4 @@
-[betterbe](../README.md) • Docs
+[**betterbe**](../README.md) • **Docs**
 
 ---
 

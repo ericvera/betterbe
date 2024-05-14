@@ -60,5 +60,5 @@
     "*.{ts,tsx,mjs}": "eslint --cache",
     "*": "prettier --ignore-unknown --write"
   },
-  "packageManager": "yarn@4.2.0"
+  "packageManager": "yarn@4.2.2"
 }

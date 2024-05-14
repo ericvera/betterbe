@@ -1,4 +1,4 @@
-betterbe • Docs
+**betterbe** • **Docs**
 
 ---
 
