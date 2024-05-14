@@ -53,8 +53,7 @@
   },
   "keywords": [
     "input",
-    "validation",
-    "yup"
+    "validation"
   ],
   "license": "MIT",
   "lint-staged": {
