@@ -1,7 +1,21 @@
 import { ValidationError } from './internal/ValidationError'
-import { getRequiredProp } from './internal/getRequiredProp'
 import { validateType } from './internal/validateType'
-import type { Schema, ValidationFunction } from './types'
+import {
+  Schema,
+  TestFunction,
+  ValidatorType,
+  type ObjectValidator,
+  type ValidationFunction,
+} from './types'
+
+export interface ObjectOptions<T> {
+  test?: TestFunction<T>
+
+  /**
+   * Default is true
+   */
+  required?: boolean
+}
 
 /**
  * Returns a validation function that checks if a value is an object and
@@ -10,28 +24,36 @@ import type { Schema, ValidationFunction } from './types'
  * @param schema An object containing the validation functions for each
  * property.
  */
-export const object =
-  <T = unknown>(schema: Schema): ValidationFunction<T> =>
-  (value: T, path?: string[], key?: string): void => {
+export const object = <T extends object>(
+  schema: Schema<T>,
+  options: ObjectOptions<T> = {},
+): ObjectValidator => {
+  const validate: ValidationFunction = (
+    value: unknown,
+    path?: string[],
+    key?: string,
+  ): void => {
     const newPath = [...(path ?? [])]
 
     if (key !== undefined) {
       newPath.push(key)
     }
 
-    const val = validateType<Record<string, unknown>>(
-      'object',
-      value,
-      path,
-      key,
-    )
+    const obj = validateType<T>('object', value, path, key)
 
-    if (val === undefined) {
-      throw new ValidationError('is required', newPath, key)
+    const { required } = options
+
+    // Validate required
+    if (obj === undefined) {
+      if (required !== false) {
+        throw new ValidationError('is required', newPath, key)
+      }
+
+      return
     }
 
     const schemaKeys = Object.keys(schema)
-    const valueKeys = Object.keys(val)
+    const valueKeys = Object.keys(obj)
 
     // Check if there are any keys that are not defined in the schema
     for (const valueKey of valueKeys) {
@@ -40,15 +62,17 @@ export const object =
       }
     }
 
-    const getSchemaProp = getRequiredProp(schema)
-
     // Run through all the validation functions
-    for (const schemaKey of schemaKeys) {
-      const validationFunction = getSchemaProp(schemaKey)
-      const valueToValidate = val[schemaKey]
+    for (const schemaKey in schema) {
+      const schemaProp = schema[schemaKey]
 
-      validationFunction(valueToValidate, newPath, schemaKey)
+      const valueToValidate = obj[schemaKey]
+
+      schemaProp.validate(valueToValidate, newPath, schemaKey)
     }
 
-    return
+    options.test?.(obj, newPath, key)
   }
+
+  return { validate, type: ValidatorType.OBJECT }
+}

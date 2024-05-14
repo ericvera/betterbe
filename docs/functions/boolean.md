@@ -6,15 +6,9 @@
 
 # Function: boolean()
 
-> **boolean**\<`T`\>(`options`): [`ValidationFunction`](../type-aliases/ValidationFunction.md)\<`T`\>
+> **boolean**(`options`): [`BooleanValidator`](../interfaces/BooleanValidator.md)
 
 Returns a validation function that checks if a value is a boolean.
-
-## Type parameters
-
-| Type parameter | Value     |
-| :------------- | :-------- |
-| `T`            | `unknown` |
 
 ## Parameters
 
@@ -24,8 +18,8 @@ Returns a validation function that checks if a value is a boolean.
 
 ## Returns
 
-[`ValidationFunction`](../type-aliases/ValidationFunction.md)\<`T`\>
+[`BooleanValidator`](../interfaces/BooleanValidator.md)
 
 ## Source
 
-[boolean.ts:19](https://github.com/ericvera/betterbe/blob/main/src/boolean.ts#L19)
+[boolean.ts:22](https://github.com/ericvera/betterbe/blob/main/src/boolean.ts#L22)

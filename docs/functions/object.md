@@ -6,27 +6,28 @@
 
 # Function: object()
 
-> **object**\<`T`\>(`schema`): [`ValidationFunction`](../type-aliases/ValidationFunction.md)\<`T`\>
+> **object**\<`T`\>(`schema`, `options`): [`ObjectValidator`](../interfaces/ObjectValidator.md)
 
 Returns a validation function that checks if a value is an object and
 validates its properties against a schema.
 
 ## Type parameters
 
-| Type parameter | Value     |
-| :------------- | :-------- |
-| `T`            | `unknown` |
+| Type parameter         |
+| :--------------------- |
+| `T` _extends_ `object` |
 
 ## Parameters
 
-| Parameter | Type                                  | Description                                                           |
-| :-------- | :------------------------------------ | :-------------------------------------------------------------------- |
-| `schema`  | [`Schema`](../type-aliases/Schema.md) | An object containing the validation functions for each<br />property. |
+| Parameter | Type                                                     | Description                                                           |
+| :-------- | :------------------------------------------------------- | :-------------------------------------------------------------------- |
+| `schema`  | [`Schema`](../type-aliases/Schema.md)\<`T`\>             | An object containing the validation functions for each<br />property. |
+| `options` | [`ObjectOptions`](../interfaces/ObjectOptions.md)\<`T`\> | -                                                                     |
 
 ## Returns
 
-[`ValidationFunction`](../type-aliases/ValidationFunction.md)\<`T`\>
+[`ObjectValidator`](../interfaces/ObjectValidator.md)
 
 ## Source
 
-[object.ts:14](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L14)
+[object.ts:27](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L27)

@@ -32,14 +32,14 @@ const validateMessage = object({
 })
 
 // This is not expected to throw
-validateMessage({
+validateMessage.validate({
   from: { uid: '1234567890' },
   message: 'Hello, World!',
   utcTime: 1630000000,
 })
 
 // This is expected to throw as character `-` is not valid in the uid alphabet
-validateMessage({
+validateMessage.validate({
   from: { uid: '1234567-90' },
   message: 'Hello, World!',
   utcTime: 1630000000,

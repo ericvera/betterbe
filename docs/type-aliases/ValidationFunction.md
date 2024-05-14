@@ -4,21 +4,15 @@
 
 [betterbe](../README.md) / ValidationFunction
 
-# Type alias: ValidationFunction()\<T\>
+# Type alias: ValidationFunction()
 
-> **ValidationFunction**\<`T`\>: (`value`, `path`?, `key`?) => `void`
-
-## Type parameters
-
-| Type parameter |
-| :------------- |
-| `T`            |
+> **ValidationFunction**: (`value`, `path`?, `key`?) => `void`
 
 ## Parameters
 
 | Parameter | Type       |
 | :-------- | :--------- |
-| `value`   | `T`        |
+| `value`   | `unknown`  |
 | `path`?   | `string`[] |
 | `key`?    | `string`   |
 
@@ -28,4 +22,4 @@
 
 ## Source
 
-[types.ts:1](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L1)
+[types.ts:8](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L8)

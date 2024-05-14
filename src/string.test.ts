@@ -2,155 +2,155 @@ import { expect, it } from 'vitest'
 import { string } from './'
 
 it('should be able to create a string with no options defined', () => {
-  const validateString = string()
+  const validator = string()
 
   expect(() => {
-    validateString('John Doe')
+    validator.validate('John Doe')
   }).not.toThrow()
 })
 
 it('should throw an error if the value is not a string', () => {
-  const validateString = string()
+  const validator = string()
 
   expect(() => {
-    validateString(42)
+    validator.validate(42)
   }).toThrowErrorMatchingInlineSnapshot(`[Error: is not a string]`)
 })
 
 it('should throw an error if the value is undefined', () => {
-  const validateString = string()
+  const validator = string()
 
   expect(() => {
-    validateString(undefined)
+    validator.validate(undefined)
   }).toThrowErrorMatchingInlineSnapshot(`[Error: is required]`)
 })
 
 it('should throw an error if the value is an empty string', () => {
-  const validateString = string()
+  const validator = string()
 
   expect(() => {
-    validateString('')
+    validator.validate('')
   }).toThrowErrorMatchingInlineSnapshot(`[Error: is required]`)
 })
 
 it('should throw an error if the value is shorter than expected', () => {
-  const validateString = string({ minLength: 3 })
+  const validator = string({ minLength: 3 })
 
   expect(() => {
-    validateString('hi')
+    validator.validate('hi')
   }).toThrowErrorMatchingInlineSnapshot(
     `[Error: is shorter than expected length 3]`,
   )
 })
 
 it('should throw an error if the value is longer than expected', () => {
-  const validateString = string({ maxLength: 3 })
+  const validator = string({ maxLength: 3 })
 
   expect(() => {
-    validateString('hello')
+    validator.validate('hello')
   }).toThrowErrorMatchingInlineSnapshot(
     `[Error: is longer than expected length 3]`,
   )
 })
 
 it('should throw an error if the value does not match the pattern', () => {
-  const validateString = string({ pattern: /^[a-z]+$/ })
+  const validator = string({ pattern: /^[a-z]+$/ })
 
   expect(() => {
-    validateString('123')
+    validator.validate('123')
   }).toThrowErrorMatchingInlineSnapshot(`[Error: does not match pattern]`)
 })
 
 it('should throw an error if the value does not match the alphabet', () => {
-  const validateString = string({ alphabet: 'abc' })
+  const validator = string({ alphabet: 'abc' })
 
   expect(() => {
-    validateString('def')
+    validator.validate('def')
   }).toThrowErrorMatchingInlineSnapshot(
     `[Error: contains character 'd' which is not in alphabet 'abc']`,
   )
 })
 
 it('should not throw an error if the value matches the alphabet', () => {
-  const validateString = string({ alphabet: 'abc' })
+  const validator = string({ alphabet: 'abc' })
 
   expect(() => {
-    validateString('bbbbbc')
+    validator.validate('bbbbbc')
   }).not.toThrow()
 })
 
 it('should not throw an error if the value is undefined and not required', () => {
-  const validateString = string({ required: false })
+  const validator = string({ required: false })
 
   expect(() => {
-    validateString(undefined)
+    validator.validate(undefined)
   }).not.toThrow()
 })
 
 it('should not throw an error if the value is an empty string and not required', () => {
-  const validateString = string({ required: false })
+  const validator = string({ required: false })
 
   expect(() => {
-    validateString('')
+    validator.validate('')
   }).not.toThrow()
 })
 
 it('should not throw an error if the value is a string and not required', () => {
-  const validateString = string({ required: false })
+  const validator = string({ required: false })
 
   expect(() => {
-    validateString('John Doe')
+    validator.validate('John Doe')
   }).not.toThrow()
 })
 
 it('should throw an error if the value is shorter than expected and not required', () => {
-  const validateString = string({ minLength: 3, required: false })
+  const validator = string({ minLength: 3, required: false })
 
   expect(() => {
-    validateString('hi')
+    validator.validate('hi')
   }).toThrowErrorMatchingInlineSnapshot(
     `[Error: is shorter than expected length 3]`,
   )
 })
 
 it('should throw an error if the value is longer than expected and not required', () => {
-  const validateString = string({ maxLength: 3, required: false })
+  const validator = string({ maxLength: 3, required: false })
 
   expect(() => {
-    validateString('hello')
+    validator.validate('hello')
   }).toThrowErrorMatchingInlineSnapshot(
     `[Error: is longer than expected length 3]`,
   )
 })
 
 it('should throw an error if the value does not match the pattern and not required', () => {
-  const validateString = string({ pattern: /^[a-z]+$/, required: false })
+  const validator = string({ pattern: /^[a-z]+$/, required: false })
 
   expect(() => {
-    validateString('123')
+    validator.validate('123')
   }).toThrowErrorMatchingInlineSnapshot(`[Error: does not match pattern]`)
 })
 
 it('should throw an error if the value does not match the alphabet and not required', () => {
-  const validateString = string({ alphabet: 'abc', required: false })
+  const validator = string({ alphabet: 'abc', required: false })
 
   expect(() => {
-    validateString('abdc')
+    validator.validate('abdc')
   }).toThrowErrorMatchingInlineSnapshot(
     `[Error: contains character 'd' which is not in alphabet 'abc']`,
   )
 })
 
 it('should not throw an error if the value matches the alphabet and not required', () => {
-  const validateString = string({ alphabet: 'abc', required: false })
+  const validator = string({ alphabet: 'abc', required: false })
 
   expect(() => {
-    validateString('bbbbbc')
+    validator.validate('bbbbbc')
   }).not.toThrow()
 })
 
 it('should not throw an error if the value is undefined and not required', () => {
-  const validateString = string({
+  const validator = string({
     required: true,
     minLength: 3,
     maxLength: 5,
@@ -159,6 +159,6 @@ it('should not throw an error if the value is undefined and not required', () =>
   })
 
   expect(() => {
-    validateString('acc')
+    validator.validate('acc')
   }).not.toThrow()
 })

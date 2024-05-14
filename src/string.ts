@@ -1,7 +1,7 @@
 import { ValidationError } from './internal/ValidationError'
 import { validateAlphabet } from './internal/validateAlphabet'
 import { validateType } from './internal/validateType'
-import { ValidationFunction } from './types'
+import { StringValidator, ValidationFunction, ValidatorType } from './types'
 
 export interface StringOptions {
   minLength?: number
@@ -25,9 +25,12 @@ export interface StringOptions {
  * - `alphabet` (optional): A string containing the allowed characters.
  * - `required` (optional): Whether the value is required (default is `true`).
  */
-export const string =
-  <T = unknown>(options: StringOptions = {}): ValidationFunction<T> =>
-  (value: T, path?: string[], key?: string): void => {
+export const string = (options: StringOptions = {}): StringValidator => {
+  const validate: ValidationFunction = (
+    value: unknown,
+    path?: string[],
+    key?: string,
+  ): void => {
     // Validate type
     const str = validateType<string>('string', value, path, key)
 
@@ -68,6 +71,7 @@ export const string =
     if (alphabet !== undefined) {
       validateAlphabet(alphabet, str, path, key)
     }
-
-    return
   }
+
+  return { validate, type: ValidatorType.STRING }
+}

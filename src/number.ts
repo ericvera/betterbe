@@ -1,6 +1,6 @@
 import { ValidationError } from './internal/ValidationError'
 import { validateType } from './internal/validateType'
-import { ValidationFunction } from './types'
+import { NumberValidator, ValidationFunction, ValidatorType } from './types'
 
 export interface NumberOptions {
   min?: number
@@ -22,9 +22,12 @@ export interface NumberOptions {
  * - `integer` (optional): Whether the number must be an integer.
  * - `required` (optional): Whether the value is required (default is `true`).
  */
-export const number =
-  <T = unknown>(options: NumberOptions = {}): ValidationFunction<T> =>
-  (value: T, path?: string[], key?: string): void => {
+export const number = (options: NumberOptions = {}): NumberValidator => {
+  const validate: ValidationFunction = (
+    value: unknown,
+    path?: string[],
+    key?: string,
+  ): void => {
     // Validate type
     const num = validateType<number>('number', value, path, key)
 
@@ -61,6 +64,7 @@ export const number =
     if (integer === true && !Number.isInteger(value)) {
       throw new ValidationError('is not an integer', path, key)
     }
-
-    return
   }
+
+  return { validate, type: ValidatorType.NUMBER }
+}

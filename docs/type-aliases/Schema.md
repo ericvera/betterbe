@@ -4,10 +4,16 @@
 
 [betterbe](../README.md) / Schema
 
-# Type alias: Schema
+# Type alias: Schema\<TData\>
 
-> **Schema**: `Record`\<`string`, [`ValidationFunction`](ValidationFunction.md)\<`unknown`\>\>
+> **Schema**\<`TData`\>: `{ [P in keyof TData]-?: SchemaProp<TData[P]> }`
+
+## Type parameters
+
+| Type parameter |
+| :------------- |
+| `TData`        |
 
 ## Source
 
-[types.ts:7](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L7)
+[types.ts:51](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L51)

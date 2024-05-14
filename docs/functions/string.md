@@ -6,16 +6,10 @@
 
 # Function: string()
 
-> **string**\<`T`\>(`options`): [`ValidationFunction`](../type-aliases/ValidationFunction.md)\<`T`\>
+> **string**(`options`): [`StringValidator`](../interfaces/StringValidator.md)
 
 Returns a validation function that checks if a value is a string and
 optionally validates its length, pattern, and alphabet.
-
-## Type parameters
-
-| Type parameter | Value     |
-| :------------- | :-------- |
-| `T`            | `unknown` |
 
 ## Parameters
 
@@ -25,8 +19,8 @@ optionally validates its length, pattern, and alphabet.
 
 ## Returns
 
-[`ValidationFunction`](../type-aliases/ValidationFunction.md)\<`T`\>
+[`StringValidator`](../interfaces/StringValidator.md)
 
 ## Source
 
-[string.ts:29](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L29)
+[string.ts:28](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L28)
