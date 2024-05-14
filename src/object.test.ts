@@ -124,15 +124,42 @@ it('should work when nested and with other validation functions', () => {
 })
 
 it('should throw an error if the value is undefined (default required)', () => {
-  // TODO: Implement
+  const schema = {
+    name: string(),
+    age: number(),
+  }
+
+  const validator = object<User>(schema)
+
+  expect(() => {
+    validator.validate(undefined)
+  }).toThrowErrorMatchingInlineSnapshot(`[Error: is required]`)
 })
 
 it('should throw an error if the value is undefined (required: true)', () => {
-  // TODO: Implement
+  const schema = {
+    name: string(),
+    age: number(),
+  }
+
+  const validator = object<User>(schema, { required: true })
+
+  expect(() => {
+    validator.validate(undefined)
+  }).toThrowErrorMatchingInlineSnapshot(`[Error: is required]`)
 })
 
 it('should not throw an error if the value is undefined and not required', () => {
-  // TODO: Implement
+  const schema = {
+    name: string(),
+    age: number(),
+  }
+
+  const validator = object<User>(schema, { required: false })
+
+  expect(() => {
+    validator.validate(undefined)
+  }).not.toThrow()
 })
 
 it('should throw an error if the test function throws', () => {
