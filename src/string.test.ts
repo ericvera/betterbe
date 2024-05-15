@@ -162,3 +162,34 @@ it('should not throw an error if the value is undefined and not required', () =>
     validator.validate('acc')
   }).not.toThrow()
 })
+
+it('should not throw an error if the value is one of the allowed values', () => {
+  const validator = string({ oneOf: ['hello', 'world'] })
+
+  expect(() => {
+    validator.validate('world')
+  }).not.toThrow()
+})
+
+it('should throw an error if the value is not one of the allowed values', () => {
+  const validator = string({ oneOf: ['hello', 'world'] })
+
+  expect(() => {
+    validator.validate('foo')
+  }).toThrowErrorMatchingInlineSnapshot(
+    `[Error: is not one of the allowed values]`,
+  )
+})
+
+it('should not throw an error if the value is undefined and not required', () => {
+  enum Value {
+    One = 'one',
+    Two = 'two',
+  }
+
+  const validator = string({ required: false, oneOf: Object.values(Value) })
+
+  expect(() => {
+    validator.validate(undefined)
+  }).not.toThrow()
+})

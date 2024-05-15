@@ -16,13 +16,15 @@
 - [NumberValidator](interfaces/NumberValidator.md)
 - [ObjectOptions](interfaces/ObjectOptions.md)
 - [ObjectValidator](interfaces/ObjectValidator.md)
-- [StringOptions](interfaces/StringOptions.md)
+- [StringOptionsBase](interfaces/StringOptionsBase.md)
+- [StringOptionsOneOf](interfaces/StringOptionsOneOf.md)
 - [StringValidator](interfaces/StringValidator.md)
 
 ## Type Aliases
 
 - [Schema](type-aliases/Schema.md)
 - [SchemaProp](type-aliases/SchemaProp.md)
+- [StringOptions](type-aliases/StringOptions.md)
 - [TestFunction](type-aliases/TestFunction.md)
 - [ValidationFunction](type-aliases/ValidationFunction.md)
 

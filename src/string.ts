@@ -3,7 +3,7 @@ import { validateAlphabet } from './internal/validateAlphabet'
 import { validateType } from './internal/validateType'
 import { StringValidator, ValidationFunction, ValidatorType } from './types'
 
-export interface StringOptions {
+export interface StringOptionsBase {
   minLength?: number
   maxLength?: number
   pattern?: RegExp
@@ -12,7 +12,25 @@ export interface StringOptions {
    * Default is true
    */
   required?: boolean
+
+  oneOf?: never
 }
+
+export interface StringOptionsOneOf {
+  oneOf: string[]
+
+  /**
+   * Default is true
+   */
+  required?: boolean
+
+  minLength?: never
+  maxLength?: never
+  pattern?: never
+  alphabet?: never
+}
+
+export type StringOptions = StringOptionsBase | StringOptionsOneOf
 
 /**
  * Returns a validation function that checks if a value is a string and
@@ -34,7 +52,7 @@ export const string = (options: StringOptions = {}): StringValidator => {
     // Validate type
     const str = validateType<string>('string', value, path, key)
 
-    const { maxLength, minLength, required, pattern, alphabet } = options
+    const { maxLength, minLength, required, pattern, alphabet, oneOf } = options
 
     // Validate required
     if (str === undefined || str === '') {
@@ -70,6 +88,11 @@ export const string = (options: StringOptions = {}): StringValidator => {
     // Validate alphabet
     if (alphabet !== undefined) {
       validateAlphabet(alphabet, str, path, key)
+    }
+
+    // Validate oneOf
+    if (oneOf !== undefined && !oneOf.includes(str)) {
+      throw new ValidationError('is not one of the allowed values', path, key)
     }
   }
 

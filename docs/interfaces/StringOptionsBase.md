@@ -2,9 +2,9 @@
 
 ---
 
-[betterbe](../README.md) / StringOptions
+[betterbe](../README.md) / StringOptionsBase
 
-# Interface: StringOptions
+# Interface: StringOptionsBase
 
 ## Properties
 
@@ -35,6 +35,16 @@
 #### Source
 
 [string.ts:7](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L7)
+
+---
+
+### oneOf?
+
+> `optional` **oneOf**: `undefined`
+
+#### Source
+
+[string.ts:16](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L16)
 
 ---
 
