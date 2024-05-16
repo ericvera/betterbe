@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { boolean } from '.'
+import { boolean } from './index.js'
 
 it('should be able to create a boolean with no options defined', () => {
   const validator = boolean()

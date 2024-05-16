@@ -1,6 +1,6 @@
 import { expect, it, vi } from 'vitest'
-import { Schema, boolean, number, object, string } from '.'
-import { ValidationError } from './internal/ValidationError'
+import { Schema, boolean, number, object, string } from './index.js'
+import { ValidationError } from './internal/ValidationError.js'
 
 interface User {
   name: string

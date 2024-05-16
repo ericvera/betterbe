@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { number } from '.'
+import { number } from './index.js'
 
 it('should be able to create a number with no options defined', () => {
   const validator = number()

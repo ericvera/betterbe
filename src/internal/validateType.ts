@@ -1,4 +1,4 @@
-import { ValidationError } from './ValidationError'
+import { ValidationError } from './ValidationError.js'
 
 export const validateType = <T>(
   type: string,

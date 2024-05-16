@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { string } from './'
+import { string } from './index.js'
 
 it('should be able to create a string with no options defined', () => {
   const validator = string()

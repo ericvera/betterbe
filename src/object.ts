@@ -1,12 +1,12 @@
-import { ValidationError } from './internal/ValidationError'
-import { validateType } from './internal/validateType'
+import { ValidationError } from './internal/ValidationError.js'
+import { validateType } from './internal/validateType.js'
 import {
   Schema,
   TestFunction,
   ValidatorType,
   type ObjectValidator,
   type ValidationFunction,
-} from './types'
+} from './types.js'
 
 export interface ObjectOptions<T> {
   test?: TestFunction<T>

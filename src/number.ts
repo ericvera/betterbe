@@ -1,6 +1,6 @@
-import { ValidationError } from './internal/ValidationError'
-import { validateType } from './internal/validateType'
-import { NumberValidator, ValidationFunction, ValidatorType } from './types'
+import { ValidationError } from './internal/ValidationError.js'
+import { validateType } from './internal/validateType.js'
+import { NumberValidator, ValidationFunction, ValidatorType } from './types.js'
 
 export interface NumberOptions {
   min?: number

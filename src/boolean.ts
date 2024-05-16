@@ -1,10 +1,10 @@
-import { ValidationError } from './internal/ValidationError'
-import { validateType } from './internal/validateType'
+import { ValidationError } from './internal/ValidationError.js'
+import { validateType } from './internal/validateType.js'
 import {
   ValidatorType,
   type BooleanValidator,
   type ValidationFunction,
-} from './types'
+} from './types.js'
 
 export interface BooleanOptions {
   /**

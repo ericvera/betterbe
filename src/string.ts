@@ -1,7 +1,7 @@
-import { ValidationError } from './internal/ValidationError'
-import { validateAlphabet } from './internal/validateAlphabet'
-import { validateType } from './internal/validateType'
-import { StringValidator, ValidationFunction, ValidatorType } from './types'
+import { ValidationError } from './internal/ValidationError.js'
+import { validateAlphabet } from './internal/validateAlphabet.js'
+import { validateType } from './internal/validateType.js'
+import { StringValidator, ValidationFunction, ValidatorType } from './types.js'
 
 export interface StringOptionsBase {
   minLength?: number
