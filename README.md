@@ -31,7 +31,7 @@ const validateMessage = object({
   urgent: boolean({ required: false }),
 })
 
-// This is not expected to throw
+// This is not expected to throw (valid input)
 validateMessage.validate({
   from: { uid: '1234567890' },
   message: 'Hello, World!',
