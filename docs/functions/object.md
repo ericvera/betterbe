@@ -19,10 +19,10 @@ validates its properties against a schema.
 
 ## Parameters
 
-| Parameter | Type                                                     | Description                                                           |
-| :-------- | :------------------------------------------------------- | :-------------------------------------------------------------------- |
-| `schema`  | [`Schema`](../type-aliases/Schema.md)\<`T`\>             | An object containing the validation functions for each<br />property. |
-| `options` | [`ObjectOptions`](../interfaces/ObjectOptions.md)\<`T`\> | -                                                                     |
+| Parameter | Type                                                     | Description                                                      |
+| :-------- | :------------------------------------------------------- | :--------------------------------------------------------------- |
+| `schema`  | [`Schema`](../type-aliases/Schema.md)\<`T`\>             | An object containing the validation functions for each property. |
+| `options` | [`ObjectOptions`](../interfaces/ObjectOptions.md)\<`T`\> | -                                                                |
 
 ## Returns
 

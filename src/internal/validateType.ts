@@ -1,7 +1,7 @@
 import { ValidationError } from './ValidationError.js'
 
 export const validateType = <T>(
-  type: string,
+  type: 'boolean' | 'number' | 'string' | 'object',
   value: unknown,
   path?: string[],
   key?: string,

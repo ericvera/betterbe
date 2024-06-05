@@ -13,9 +13,9 @@ optionally validates its minimum, maximum, and integer properties.
 
 ## Parameters
 
-| Parameter | Type                                              | Description                                                                                                                                                                                                                                                                                                             |
-| :-------- | :------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `options` | [`NumberOptions`](../interfaces/NumberOptions.md) | An object containing the following properties:<br />- `min` (optional): The minimum value of the number.<br />- `max` (optional): The maximum value of the number.<br />- `integer` (optional): Whether the number must be an integer.<br />- `required` (optional): Whether the value is required (default is `true`). |
+| Parameter | Type                                              | Description                                                                                                                                                                                                                                                                                                                                 |
+| :-------- | :------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `options` | [`NumberOptions`](../interfaces/NumberOptions.md) | <p>An object containing the following properties:</p><ul><li>`min` (optional): The minimum value of the number.</li><li>`max` (optional): The maximum value of the number.</li><li>`integer` (optional): Whether the number must be an integer.</li><li>`required` (optional): Whether the value is required (default is `true`).</li></ul> |
 
 ## Returns
 
