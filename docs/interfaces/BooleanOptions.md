@@ -16,4 +16,4 @@ Default is true
 
 #### Source
 
-[boolean.ts:13](https://github.com/ericvera/betterbe/blob/main/src/boolean.ts#L13)
+[src/boolean.ts:13](https://github.com/ericvera/betterbe/blob/main/src/boolean.ts#L13)

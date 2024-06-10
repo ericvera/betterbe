@@ -8,6 +8,10 @@
 
 - [ValidatorType](enumerations/ValidatorType.md)
 
+## Classes
+
+- [ValidationError](classes/ValidationError.md)
+
 ## Interfaces
 
 - [BooleanOptions](interfaces/BooleanOptions.md)
@@ -22,10 +26,12 @@
 
 ## Type Aliases
 
+- [GetPropValidatorFunction](type-aliases/GetPropValidatorFunction.md)
 - [Schema](type-aliases/Schema.md)
 - [SchemaProp](type-aliases/SchemaProp.md)
 - [StringOptions](type-aliases/StringOptions.md)
 - [TestFunction](type-aliases/TestFunction.md)
+- [ValidationErrorType](type-aliases/ValidationErrorType.md)
 - [ValidationFunction](type-aliases/ValidationFunction.md)
 
 ## Functions

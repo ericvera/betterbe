@@ -1,4 +1,4 @@
-import { ValidationError } from './internal/ValidationError.js'
+import { ValidationError } from './ValidationError.js'
 import { validateType } from './internal/validateType.js'
 import { NumberValidator, ValidationFunction, ValidatorType } from './types.js'
 
@@ -36,7 +36,7 @@ export const number = (options: NumberOptions = {}): NumberValidator => {
     // Validate required
     if (num === undefined) {
       if (required !== false) {
-        throw new ValidationError('is required', path, key)
+        throw new ValidationError('required', 'is required', path, key)
       }
 
       return
@@ -45,6 +45,7 @@ export const number = (options: NumberOptions = {}): NumberValidator => {
     // Validate min
     if (min !== undefined && num < min) {
       throw new ValidationError(
+        'min',
         `is less than minimum ${min.toString()}`,
         path,
         key,
@@ -54,6 +55,7 @@ export const number = (options: NumberOptions = {}): NumberValidator => {
     // Validate max
     if (max !== undefined && num > max) {
       throw new ValidationError(
+        'max',
         `is greater than maximum ${max.toString()}`,
         path,
         key,
@@ -62,7 +64,7 @@ export const number = (options: NumberOptions = {}): NumberValidator => {
 
     // Validate integer
     if (integer === true && !Number.isInteger(value)) {
-      throw new ValidationError('is not an integer', path, key)
+      throw new ValidationError('int', 'is not an integer', path, key)
     }
   }
 

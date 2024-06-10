@@ -22,4 +22,4 @@ Returns a validation function that checks if a value is a boolean.
 
 ## Source
 
-[boolean.ts:22](https://github.com/ericvera/betterbe/blob/main/src/boolean.ts#L22)
+[src/boolean.ts:22](https://github.com/ericvera/betterbe/blob/main/src/boolean.ts#L22)

@@ -1,6 +1,6 @@
 import { expect, it, vi } from 'vitest'
+import { ValidationError } from './ValidationError.js'
 import { Schema, boolean, number, object, string } from './index.js'
-import { ValidationError } from './internal/ValidationError.js'
 
 interface User {
   name: string
@@ -170,7 +170,7 @@ it('should throw an error if the test function throws', () => {
 
   const test = vi.fn().mockImplementation((value: Partial<User>) => {
     if (value.age === 42) {
-      throw new ValidationError('cannot be 42', [], 'age')
+      throw new ValidationError('one-of', 'cannot be 42', [], 'age')
     }
   })
 
@@ -198,7 +198,7 @@ it('should not throw an error if the test function does not throw', () => {
 
   const test = vi.fn().mockImplementation((value: Partial<User>) => {
     if (value.age === 42) {
-      throw new ValidationError('cannot be 42', [], 'age')
+      throw new ValidationError('max', 'cannot be 42', [], 'age')
     }
   })
 

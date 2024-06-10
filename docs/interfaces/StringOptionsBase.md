@@ -14,7 +14,7 @@
 
 #### Source
 
-[string.ts:10](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L10)
+[src/string.ts:10](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L10)
 
 ---
 
@@ -24,7 +24,7 @@
 
 #### Source
 
-[string.ts:8](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L8)
+[src/string.ts:8](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L8)
 
 ---
 
@@ -34,7 +34,7 @@
 
 #### Source
 
-[string.ts:7](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L7)
+[src/string.ts:7](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L7)
 
 ---
 
@@ -44,7 +44,7 @@
 
 #### Source
 
-[string.ts:16](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L16)
+[src/string.ts:16](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L16)
 
 ---
 
@@ -54,7 +54,7 @@
 
 #### Source
 
-[string.ts:9](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L9)
+[src/string.ts:9](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L9)
 
 ---
 
@@ -66,4 +66,4 @@ Default is true
 
 #### Source
 
-[string.ts:14](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L14)
+[src/string.ts:14](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L14)

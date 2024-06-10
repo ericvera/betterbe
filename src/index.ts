@@ -1,3 +1,4 @@
+export * from './ValidationError.js'
 export * from './boolean.js'
 export * from './number.js'
 export * from './object.js'

@@ -1,4 +1,4 @@
-import { ValidationError } from './internal/ValidationError.js'
+import { ValidationError } from './ValidationError.js'
 import { validateAlphabet } from './internal/validateAlphabet.js'
 import { validateType } from './internal/validateType.js'
 import { StringValidator, ValidationFunction, ValidatorType } from './types.js'
@@ -57,7 +57,7 @@ export const string = (options: StringOptions = {}): StringValidator => {
     // Validate required
     if (str === undefined || str === '') {
       if (required !== false) {
-        throw new ValidationError('is required', path, key)
+        throw new ValidationError('required', 'is required', path, key)
       }
 
       return
@@ -66,6 +66,7 @@ export const string = (options: StringOptions = {}): StringValidator => {
     // Validate length
     if (minLength !== undefined && str.length < minLength) {
       throw new ValidationError(
+        'minLength',
         `is shorter than expected length ${minLength.toString()}`,
         path,
         key,
@@ -74,6 +75,7 @@ export const string = (options: StringOptions = {}): StringValidator => {
 
     if (maxLength !== undefined && str.length > maxLength) {
       throw new ValidationError(
+        'maxLength',
         `is longer than expected length ${maxLength.toString()}`,
         path,
         key,
@@ -82,7 +84,7 @@ export const string = (options: StringOptions = {}): StringValidator => {
 
     // Validate pattern
     if (pattern && !pattern.test(str)) {
-      throw new ValidationError('does not match pattern', path, key)
+      throw new ValidationError('pattern', 'does not match pattern', path, key)
     }
 
     // Validate alphabet
@@ -92,7 +94,12 @@ export const string = (options: StringOptions = {}): StringValidator => {
 
     // Validate oneOf
     if (oneOf !== undefined && !oneOf.includes(str)) {
-      throw new ValidationError('is not one of the allowed values', path, key)
+      throw new ValidationError(
+        'one-of',
+        'is not one of the allowed values',
+        path,
+        key,
+      )
     }
   }
 

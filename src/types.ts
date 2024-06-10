@@ -11,6 +11,10 @@ export type ValidationFunction = (
   key?: string,
 ) => void
 
+export type GetPropValidatorFunction<T> = (
+  key: keyof T,
+) => Schema<T>[typeof key]
+
 export type TestFunction<TData = unknown> = (
   value: Partial<TData>,
   path?: string[],
@@ -34,12 +38,13 @@ export interface BooleanValidator extends ValidatorBase {
   type: ValidatorType.BOOLEAN
 }
 
-export interface ObjectValidator extends ValidatorBase {
+export interface ObjectValidator<TData> extends ValidatorBase {
   type: ValidatorType.OBJECT
+  getProp: GetPropValidatorFunction<TData>
 }
 
 export type SchemaProp<TData> = TData extends object
-  ? ObjectValidator
+  ? ObjectValidator<TData>
   : TData extends string
     ? StringValidator
     : TData extends number

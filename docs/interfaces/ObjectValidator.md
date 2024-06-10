@@ -4,13 +4,29 @@
 
 [betterbe](../README.md) / ObjectValidator
 
-# Interface: ObjectValidator
+# Interface: ObjectValidator\<TData\>
 
 ## Extends
 
 - `ValidatorBase`
 
+## Type parameters
+
+| Type parameter |
+| :------------- |
+| `TData`        |
+
 ## Properties
+
+### getProp
+
+> **getProp**: [`GetPropValidatorFunction`](../type-aliases/GetPropValidatorFunction.md)\<`TData`\>
+
+#### Source
+
+[src/types.ts:43](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L43)
+
+---
 
 ### type
 
@@ -22,7 +38,7 @@
 
 #### Source
 
-[types.ts:38](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L38)
+[src/types.ts:42](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L42)
 
 ---
 
@@ -36,4 +52,4 @@
 
 #### Source
 
-[types.ts:21](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L21)
+[src/types.ts:25](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L25)

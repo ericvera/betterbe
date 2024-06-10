@@ -1,4 +1,4 @@
-import { ValidationError } from './ValidationError.js'
+import { ValidationError } from '../ValidationError.js'
 
 export const validateAlphabet = (
   alphabet: string,
@@ -9,6 +9,7 @@ export const validateAlphabet = (
   for (const char of value) {
     if (!alphabet.includes(char)) {
       throw new ValidationError(
+        'alphabet',
         `contains character '${char}' which is not in alphabet '${alphabet}'`,
         path,
         key,

@@ -1,6 +1,7 @@
-import { ValidationError } from './internal/ValidationError.js'
+import { ValidationError } from './ValidationError.js'
 import { validateType } from './internal/validateType.js'
 import {
+  GetPropValidatorFunction,
   Schema,
   TestFunction,
   ValidatorType,
@@ -27,7 +28,7 @@ export interface ObjectOptions<T> {
 export const object = <T extends object>(
   schema: Schema<T>,
   options: ObjectOptions<T> = {},
-): ObjectValidator => {
+): ObjectValidator<T> => {
   const validate: ValidationFunction = (
     value: unknown,
     path?: string[],
@@ -46,7 +47,7 @@ export const object = <T extends object>(
     // Validate required
     if (obj === undefined) {
       if (required !== false) {
-        throw new ValidationError('is required', newPath, key)
+        throw new ValidationError('required', 'is required', newPath, key)
       }
 
       return
@@ -58,7 +59,12 @@ export const object = <T extends object>(
     // Check if there are any keys that are not defined in the schema
     for (const valueKey of valueKeys) {
       if (!schemaKeys.includes(valueKey)) {
-        throw new ValidationError('is not allowed', newPath, valueKey)
+        throw new ValidationError(
+          'unknown-keys',
+          'is not allowed',
+          newPath,
+          valueKey,
+        )
       }
     }
 
@@ -74,5 +80,7 @@ export const object = <T extends object>(
     options.test?.(obj, newPath, key)
   }
 
-  return { validate, type: ValidatorType.OBJECT }
+  const getProp: GetPropValidatorFunction<T> = (key: keyof T) => schema[key]
+
+  return { validate, getProp, type: ValidatorType.OBJECT }
 }

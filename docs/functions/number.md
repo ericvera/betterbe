@@ -23,4 +23,4 @@ optionally validates its minimum, maximum, and integer properties.
 
 ## Source
 
-[number.ts:25](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L25)
+[src/number.ts:25](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L25)

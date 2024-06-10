@@ -22,7 +22,7 @@ Default is true
 
 #### Source
 
-[object.ts:17](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L17)
+[src/object.ts:18](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L18)
 
 ---
 
@@ -32,4 +32,4 @@ Default is true
 
 #### Source
 
-[object.ts:12](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L12)
+[src/object.ts:13](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L13)

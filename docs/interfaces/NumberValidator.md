@@ -22,7 +22,7 @@
 
 #### Source
 
-[types.ts:30](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L30)
+[src/types.ts:34](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L34)
 
 ---
 
@@ -36,4 +36,4 @@
 
 #### Source
 
-[types.ts:21](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L21)
+[src/types.ts:25](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L25)

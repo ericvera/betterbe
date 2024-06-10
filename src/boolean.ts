@@ -1,4 +1,4 @@
-import { ValidationError } from './internal/ValidationError.js'
+import { ValidationError } from './ValidationError.js'
 import { validateType } from './internal/validateType.js'
 import {
   ValidatorType,
@@ -33,7 +33,7 @@ export const boolean = (options: BooleanOptions = {}): BooleanValidator => {
     // Validate required
     if (b === undefined) {
       if (required !== false) {
-        throw new ValidationError('is required', path, key)
+        throw new ValidationError('required', 'is required', path, key)
       }
 
       return

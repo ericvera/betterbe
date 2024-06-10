@@ -16,4 +16,4 @@
 
 ## Source
 
-[types.ts:51](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L51)
+[src/types.ts:56](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L56)

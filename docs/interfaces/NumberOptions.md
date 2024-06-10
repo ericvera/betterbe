@@ -14,7 +14,7 @@
 
 #### Source
 
-[number.ts:8](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L8)
+[src/number.ts:8](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L8)
 
 ---
 
@@ -24,7 +24,7 @@
 
 #### Source
 
-[number.ts:7](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L7)
+[src/number.ts:7](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L7)
 
 ---
 
@@ -34,7 +34,7 @@
 
 #### Source
 
-[number.ts:6](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L6)
+[src/number.ts:6](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L6)
 
 ---
 
@@ -46,4 +46,4 @@ Default is true
 
 #### Source
 
-[number.ts:12](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L12)
+[src/number.ts:12](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L12)

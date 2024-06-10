@@ -6,7 +6,7 @@
 
 # Function: object()
 
-> **object**\<`T`\>(`schema`, `options`): [`ObjectValidator`](../interfaces/ObjectValidator.md)
+> **object**\<`T`\>(`schema`, `options`): [`ObjectValidator`](../interfaces/ObjectValidator.md)\<`T`\>
 
 Returns a validation function that checks if a value is an object and
 validates its properties against a schema.
@@ -26,8 +26,8 @@ validates its properties against a schema.
 
 ## Returns
 
-[`ObjectValidator`](../interfaces/ObjectValidator.md)
+[`ObjectValidator`](../interfaces/ObjectValidator.md)\<`T`\>
 
 ## Source
 
-[object.ts:27](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L27)
+[src/object.ts:28](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L28)

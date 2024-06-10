@@ -1,4 +1,4 @@
-import { ValidationError } from './ValidationError.js'
+import { ValidationError } from '../ValidationError.js'
 
 export const validateType = <T>(
   type: 'boolean' | 'number' | 'string' | 'object',
@@ -7,7 +7,7 @@ export const validateType = <T>(
   key?: string,
 ): T | undefined => {
   if (typeof value !== type && typeof value !== 'undefined') {
-    throw new ValidationError(`is not a ${type}`, path, key)
+    throw new ValidationError('type', `is not a ${type}`, path, key)
   }
 
   return value as T
