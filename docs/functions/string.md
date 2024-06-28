@@ -23,4 +23,4 @@ optionally validates its length, pattern, and alphabet.
 
 ## Source
 
-[src/string.ts:46](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L46)
+[src/string.ts:61](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L61)

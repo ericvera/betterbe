@@ -30,4 +30,4 @@ validates its properties against a schema.
 
 ## Source
 
-[src/object.ts:28](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L28)
+[src/object.ts:32](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L32)

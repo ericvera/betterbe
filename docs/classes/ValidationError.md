@@ -35,7 +35,7 @@
 
 #### Source
 
-[src/ValidationError.ts:17](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L17)
+[src/ValidationError.ts:18](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L18)
 
 ## Properties
 
@@ -101,7 +101,7 @@ node_modules/typescript/lib/lib.es5.d.ts:1078
 
 #### Source
 
-[src/ValidationError.ts:15](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L15)
+[src/ValidationError.ts:16](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L16)
 
 ---
 

@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { string } from './index.js'
 
 it('should be able to create a string with no options defined', () => {
@@ -192,4 +192,34 @@ it('should not throw an error if the value is undefined and not required', () =>
   expect(() => {
     validator.validate(undefined)
   }).not.toThrow()
+})
+
+it('should not throw an error if the the test function does not throw', () => {
+  const test = vi.fn().mockImplementation(() => {})
+
+  const validator = string({
+    required: false,
+    test,
+  })
+
+  expect(() => {
+    validator.validate('John Doe')
+  }).not.toThrow()
+
+  expect(test).toHaveBeenCalledTimes(1)
+  expect(test).toHaveBeenCalledWith('John Doe', undefined, undefined)
+})
+
+it('should not throw an error if the the test function throws an error', () => {
+  const validator = string({
+    required: true,
+    alphabet: 'JDohne ',
+    test: (value: string) => {
+      throw new Error(`Can't be ${value}.`)
+    },
+  })
+
+  expect(() => {
+    validator.validate('John Doe')
+  }).toThrowErrorMatchingInlineSnapshot(`[Error: Can't be John Doe.]`)
 })

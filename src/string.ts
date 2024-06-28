@@ -1,7 +1,12 @@
 import { ValidationError } from './ValidationError.js'
 import { validateAlphabet } from './internal/validateAlphabet.js'
 import { validateType } from './internal/validateType.js'
-import { StringValidator, ValidationFunction, ValidatorType } from './types.js'
+import {
+  StringValidator,
+  TestFunction,
+  ValidationFunction,
+  ValidatorType,
+} from './types.js'
 
 export interface StringOptionsBase {
   minLength?: number
@@ -12,6 +17,11 @@ export interface StringOptionsBase {
    * Default is true
    */
   required?: boolean
+  /**
+   * Expects a function that receives the string value and throws an Error if it
+   * is invalid.
+   */
+  test?: TestFunction<string>
 
   oneOf?: never
 }
@@ -23,6 +33,11 @@ export interface StringOptionsOneOf {
    * Default is true
    */
   required?: boolean
+  /**
+   * Expects a function that receives the string value and throws an Error if it
+   * is invalid.
+   */
+  test?: TestFunction<string>
 
   minLength?: never
   maxLength?: never
@@ -100,6 +115,15 @@ export const string = (options: StringOptions = {}): StringValidator => {
         path,
         key,
       )
+    }
+
+    // Run test function
+    try {
+      options.test?.(str, path, key)
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'failed tests'
+
+      throw new ValidationError('test', message, path, key)
     }
   }
 

@@ -10,6 +10,7 @@ export type ValidationErrorType =
   | 'maxLength'
   | 'pattern'
   | 'one-of'
+  | 'test'
 
 export class ValidationError extends Error {
   public readonly type: ValidationErrorType

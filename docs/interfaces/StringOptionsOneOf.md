@@ -14,7 +14,7 @@
 
 #### Source
 
-[src/string.ts:30](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L30)
+[src/string.ts:45](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L45)
 
 ---
 
@@ -24,7 +24,7 @@
 
 #### Source
 
-[src/string.ts:28](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L28)
+[src/string.ts:43](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L43)
 
 ---
 
@@ -34,7 +34,7 @@
 
 #### Source
 
-[src/string.ts:27](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L27)
+[src/string.ts:42](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L42)
 
 ---
 
@@ -44,7 +44,7 @@
 
 #### Source
 
-[src/string.ts:20](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L20)
+[src/string.ts:30](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L30)
 
 ---
 
@@ -54,7 +54,7 @@
 
 #### Source
 
-[src/string.ts:29](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L29)
+[src/string.ts:44](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L44)
 
 ---
 
@@ -66,4 +66,17 @@ Default is true
 
 #### Source
 
-[src/string.ts:25](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L25)
+[src/string.ts:35](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L35)
+
+---
+
+### test?
+
+> `optional` **test**: [`TestFunction`](../type-aliases/TestFunction.md)\<`string`\>
+
+Expects a function that receives the string value and throws an Error if it
+is invalid.
+
+#### Source
+
+[src/string.ts:40](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L40)

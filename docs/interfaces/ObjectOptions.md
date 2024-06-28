@@ -22,7 +22,7 @@ Default is true
 
 #### Source
 
-[src/object.ts:18](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L18)
+[src/object.ts:22](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L22)
 
 ---
 
@@ -30,6 +30,9 @@ Default is true
 
 > `optional` **test**: [`TestFunction`](../type-aliases/TestFunction.md)\<`T`\>
 
+Expects a function that receives the string value and throws an Error if it
+is invalid.
+
 #### Source
 
-[src/object.ts:13](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L13)
+[src/object.ts:17](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L17)

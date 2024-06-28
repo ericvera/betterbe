@@ -217,3 +217,28 @@ it('should not throw an error if the test function does not throw', () => {
     undefined,
   )
 })
+
+it('should throw an error if an inner test function throws', () => {
+  const schema = {
+    name: string({
+      test: (value: string) => {
+        throw new Error(`cannot be ${value}`)
+      },
+    }),
+    age: number(),
+  }
+
+  const test = vi.fn().mockImplementation((value: Partial<User>) => {
+    if (value.age === 42) {
+      throw new ValidationError('one-of', 'cannot be 42', [], 'age')
+    }
+  })
+
+  const validator = object<User>(schema, {
+    test,
+  })
+
+  expect(() => {
+    validator.validate({ name: 'John Doe', age: 42 })
+  }).toThrowErrorMatchingInlineSnapshot(`[Error: 'name' cannot be John Doe]`)
+})

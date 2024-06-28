@@ -6,7 +6,7 @@
 
 # Type alias: ValidationErrorType
 
-> **ValidationErrorType**: `"required"` \| `"alphabet"` \| `"type"` \| `"min"` \| `"max"` \| `"int"` \| `"unknown-keys"` \| `"minLength"` \| `"maxLength"` \| `"pattern"` \| `"one-of"`
+> **ValidationErrorType**: `"required"` \| `"alphabet"` \| `"type"` \| `"min"` \| `"max"` \| `"int"` \| `"unknown-keys"` \| `"minLength"` \| `"maxLength"` \| `"pattern"` \| `"one-of"` \| `"test"`
 
 ## Source
 

@@ -10,4 +10,4 @@
 
 ## Source
 
-[src/string.ts:33](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L33)
+[src/string.ts:48](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L48)
