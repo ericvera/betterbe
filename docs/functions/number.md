@@ -13,14 +13,14 @@ optionally validates its minimum, maximum, and integer properties.
 
 ## Parameters
 
-| Parameter | Type                                              | Description                                                                                                                                                                                                                                                                                                                                 |
-| :-------- | :------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `options` | [`NumberOptions`](../interfaces/NumberOptions.md) | <p>An object containing the following properties:</p><ul><li>`min` (optional): The minimum value of the number.</li><li>`max` (optional): The maximum value of the number.</li><li>`integer` (optional): Whether the number must be an integer.</li><li>`required` (optional): Whether the value is required (default is `true`).</li></ul> |
+| Parameter | Type                                              | Description                                                                                                                                                                                                                                                                                         |
+| --------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `options` | [`NumberOptions`](../interfaces/NumberOptions.md) | An object containing the following properties: - `min` (optional): The minimum value of the number. - `max` (optional): The maximum value of the number. - `integer` (optional): Whether the number must be an integer. - `required` (optional): Whether the value is required (default is `true`). |
 
 ## Returns
 
 [`NumberValidator`](../interfaces/NumberValidator.md)
 
-## Source
+## Defined in
 
 [src/number.ts:25](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L25)

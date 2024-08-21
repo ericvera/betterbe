@@ -4,16 +4,16 @@
 
 [betterbe](../README.md) / Schema
 
-# Type alias: Schema\<TData\>
+# Type Alias: Schema\<TData\>
 
 > **Schema**\<`TData`\>: `{ [P in keyof TData]-?: SchemaProp<TData[P]> }`
 
-## Type parameters
+## Type Parameters
 
-| Type parameter |
-| :------------- |
+| Type Parameter |
+| -------------- |
 | `TData`        |
 
-## Source
+## Defined in
 
 [src/types.ts:56](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L56)

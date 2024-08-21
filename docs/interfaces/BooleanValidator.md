@@ -20,7 +20,7 @@
 
 `ValidatorBase.type`
 
-#### Source
+#### Defined in
 
 [src/types.ts:38](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L38)
 
@@ -34,6 +34,6 @@
 
 `ValidatorBase.validate`
 
-#### Source
+#### Defined in
 
 [src/types.ts:25](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L25)

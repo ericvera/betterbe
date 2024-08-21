@@ -12,7 +12,7 @@
 
 > `optional` **integer**: `boolean`
 
-#### Source
+#### Defined in
 
 [src/number.ts:8](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L8)
 
@@ -22,7 +22,7 @@
 
 > `optional` **max**: `number`
 
-#### Source
+#### Defined in
 
 [src/number.ts:7](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L7)
 
@@ -32,7 +32,7 @@
 
 > `optional` **min**: `number`
 
-#### Source
+#### Defined in
 
 [src/number.ts:6](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L6)
 
@@ -44,6 +44,6 @@
 
 Default is true
 
-#### Source
+#### Defined in
 
 [src/number.ts:12](https://github.com/ericvera/betterbe/blob/main/src/number.ts#L12)

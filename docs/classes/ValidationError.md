@@ -19,7 +19,7 @@
 #### Parameters
 
 | Parameter | Type                                                            |
-| :-------- | :-------------------------------------------------------------- |
+| --------- | --------------------------------------------------------------- |
 | `type`    | [`ValidationErrorType`](../type-aliases/ValidationErrorType.md) |
 | `message` | `string`                                                        |
 | `path`?   | `string`[]                                                      |
@@ -33,7 +33,7 @@
 
 `Error.constructor`
 
-#### Source
+#### Defined in
 
 [src/ValidationError.ts:18](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L18)
 
@@ -47,7 +47,7 @@
 
 `Error.cause`
 
-#### Source
+#### Defined in
 
 node_modules/typescript/lib/lib.es2022.error.d.ts:24
 
@@ -61,7 +61,7 @@ node_modules/typescript/lib/lib.es2022.error.d.ts:24
 
 `Error.message`
 
-#### Source
+#### Defined in
 
 node_modules/typescript/lib/lib.es5.d.ts:1077
 
@@ -75,7 +75,7 @@ node_modules/typescript/lib/lib.es5.d.ts:1077
 
 `Error.name`
 
-#### Source
+#### Defined in
 
 node_modules/typescript/lib/lib.es5.d.ts:1076
 
@@ -89,7 +89,7 @@ node_modules/typescript/lib/lib.es5.d.ts:1076
 
 `Error.stack`
 
-#### Source
+#### Defined in
 
 node_modules/typescript/lib/lib.es5.d.ts:1078
 
@@ -99,7 +99,7 @@ node_modules/typescript/lib/lib.es5.d.ts:1078
 
 > `readonly` **type**: [`ValidationErrorType`](../type-aliases/ValidationErrorType.md)
 
-#### Source
+#### Defined in
 
 [src/ValidationError.ts:16](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L16)
 
@@ -111,14 +111,10 @@ node_modules/typescript/lib/lib.es5.d.ts:1078
 
 Optional override for formatting stack traces
 
-#### See
-
-https://v8.dev/docs/stack-trace-api#customizing-stack-traces
-
 #### Parameters
 
 | Parameter     | Type         |
-| :------------ | :----------- |
+| ------------- | ------------ |
 | `err`         | `Error`      |
 | `stackTraces` | `CallSite`[] |
 
@@ -126,13 +122,17 @@ https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 `any`
 
+#### See
+
+https://v8.dev/docs/stack-trace-api#customizing-stack-traces
+
 #### Inherited from
 
 `Error.prepareStackTrace`
 
-#### Source
+#### Defined in
 
-node_modules/@types/node/globals.d.ts:28
+node_modules/@types/node/globals.d.ts:29
 
 ---
 
@@ -144,9 +144,9 @@ node_modules/@types/node/globals.d.ts:28
 
 `Error.stackTraceLimit`
 
-#### Source
+#### Defined in
 
-node_modules/@types/node/globals.d.ts:30
+node_modules/@types/node/globals.d.ts:31
 
 ## Methods
 
@@ -159,7 +159,7 @@ Create .stack property on a target object
 #### Parameters
 
 | Parameter         | Type       |
-| :---------------- | :--------- |
+| ----------------- | ---------- |
 | `targetObject`    | `object`   |
 | `constructorOpt`? | `Function` |
 
@@ -171,6 +171,6 @@ Create .stack property on a target object
 
 `Error.captureStackTrace`
 
-#### Source
+#### Defined in
 
-node_modules/@types/node/globals.d.ts:21
+node_modules/@types/node/globals.d.ts:22

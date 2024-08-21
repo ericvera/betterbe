@@ -4,10 +4,10 @@
 
 [betterbe](../README.md) / ValidationErrorType
 
-# Type alias: ValidationErrorType
+# Type Alias: ValidationErrorType
 
 > **ValidationErrorType**: `"required"` \| `"alphabet"` \| `"type"` \| `"min"` \| `"max"` \| `"int"` \| `"unknown-keys"` \| `"minLength"` \| `"maxLength"` \| `"pattern"` \| `"one-of"` \| `"test"`
 
-## Source
+## Defined in
 
 [src/ValidationError.ts:1](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L1)

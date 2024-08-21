@@ -4,26 +4,26 @@
 
 [betterbe](../README.md) / GetPropValidatorFunction
 
-# Type alias: GetPropValidatorFunction()\<T\>
+# Type Alias: GetPropValidatorFunction()\<T\>
 
 > **GetPropValidatorFunction**\<`T`\>: (`key`) => [`Schema`](Schema.md)\<`T`\>\[_typeof_ `key`\]
 
-## Type parameters
+## Type Parameters
 
-| Type parameter |
-| :------------- |
+| Type Parameter |
+| -------------- |
 | `T`            |
 
 ## Parameters
 
 | Parameter | Type      |
-| :-------- | :-------- |
+| --------- | --------- |
 | `key`     | keyof `T` |
 
 ## Returns
 
 [`Schema`](Schema.md)\<`T`\>\[_typeof_ `key`\]
 
-## Source
+## Defined in
 
 [src/types.ts:14](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L14)

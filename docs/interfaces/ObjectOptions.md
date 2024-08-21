@@ -6,10 +6,10 @@
 
 # Interface: ObjectOptions\<T\>
 
-## Type parameters
+## Type Parameters
 
-| Type parameter |
-| :------------- |
+| Type Parameter |
+| -------------- |
 | `T`            |
 
 ## Properties
@@ -20,7 +20,7 @@
 
 Default is true
 
-#### Source
+#### Defined in
 
 [src/object.ts:22](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L22)
 
@@ -33,6 +33,6 @@ Default is true
 Expects a function that receives the string value and throws an Error if it
 is invalid.
 
-#### Source
+#### Defined in
 
 [src/object.ts:17](https://github.com/ericvera/betterbe/blob/main/src/object.ts#L17)

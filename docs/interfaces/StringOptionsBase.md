@@ -12,7 +12,7 @@
 
 > `optional` **alphabet**: `string`
 
-#### Source
+#### Defined in
 
 [src/string.ts:15](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L15)
 
@@ -22,7 +22,7 @@
 
 > `optional` **maxLength**: `number`
 
-#### Source
+#### Defined in
 
 [src/string.ts:13](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L13)
 
@@ -32,7 +32,7 @@
 
 > `optional` **minLength**: `number`
 
-#### Source
+#### Defined in
 
 [src/string.ts:12](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L12)
 
@@ -42,7 +42,7 @@
 
 > `optional` **oneOf**: `undefined`
 
-#### Source
+#### Defined in
 
 [src/string.ts:26](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L26)
 
@@ -52,7 +52,7 @@
 
 > `optional` **pattern**: `RegExp`
 
-#### Source
+#### Defined in
 
 [src/string.ts:14](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L14)
 
@@ -64,7 +64,7 @@
 
 Default is true
 
-#### Source
+#### Defined in
 
 [src/string.ts:19](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L19)
 
@@ -77,6 +77,6 @@ Default is true
 Expects a function that receives the string value and throws an Error if it
 is invalid.
 
-#### Source
+#### Defined in
 
 [src/string.ts:24](https://github.com/ericvera/betterbe/blob/main/src/string.ts#L24)

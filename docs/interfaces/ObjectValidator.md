@@ -10,10 +10,10 @@
 
 - `ValidatorBase`
 
-## Type parameters
+## Type Parameters
 
-| Type parameter |
-| :------------- |
+| Type Parameter |
+| -------------- |
 | `TData`        |
 
 ## Properties
@@ -22,7 +22,7 @@
 
 > **getProp**: [`GetPropValidatorFunction`](../type-aliases/GetPropValidatorFunction.md)\<`TData`\>
 
-#### Source
+#### Defined in
 
 [src/types.ts:43](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L43)
 
@@ -36,7 +36,7 @@
 
 `ValidatorBase.type`
 
-#### Source
+#### Defined in
 
 [src/types.ts:42](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L42)
 
@@ -50,6 +50,6 @@
 
 `ValidatorBase.validate`
 
-#### Source
+#### Defined in
 
 [src/types.ts:25](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L25)

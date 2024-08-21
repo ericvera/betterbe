@@ -12,14 +12,14 @@ Returns a validation function that checks if a value is a boolean.
 
 ## Parameters
 
-| Parameter | Type                                                | Description                                                                                                                                      |
-| :-------- | :-------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `options` | [`BooleanOptions`](../interfaces/BooleanOptions.md) | <p>An object containing the following properties:</p><ul><li>`required` (optional): Whether the value is required (default is `true`).</li></ul> |
+| Parameter | Type                                                | Description                                                                                                                |
+| --------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `options` | [`BooleanOptions`](../interfaces/BooleanOptions.md) | An object containing the following properties: - `required` (optional): Whether the value is required (default is `true`). |
 
 ## Returns
 
 [`BooleanValidator`](../interfaces/BooleanValidator.md)
 
-## Source
+## Defined in
 
 [src/boolean.ts:22](https://github.com/ericvera/betterbe/blob/main/src/boolean.ts#L22)
