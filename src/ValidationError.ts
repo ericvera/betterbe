@@ -12,14 +12,27 @@ export type ValidationErrorType =
   | 'one-of'
   | 'test'
 
+interface ValidationErrorMeta {
+  maxLength?: number
+  minLength?: number
+  pattern?: RegExp
+  oneOf?: string[]
+  type?: string
+  alphabet?: string
+  min?: number
+  max?: number
+}
+
 export class ValidationError extends Error {
   public readonly type: ValidationErrorType
+  public readonly meta: ValidationErrorMeta
 
   constructor(
     type: ValidationErrorType,
     message: string,
     path?: string[],
     key?: string,
+    meta: ValidationErrorMeta = {},
   ) {
     let errorMessage = message
 
@@ -34,5 +47,6 @@ export class ValidationError extends Error {
     super(errorMessage)
 
     this.type = type
+    this.meta = meta
   }
 }

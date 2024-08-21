@@ -49,6 +49,7 @@ export const number = (options: NumberOptions = {}): NumberValidator => {
         `is less than minimum ${min.toString()}`,
         path,
         key,
+        { min },
       )
     }
 
@@ -59,6 +60,7 @@ export const number = (options: NumberOptions = {}): NumberValidator => {
         `is greater than maximum ${max.toString()}`,
         path,
         key,
+        { max },
       )
     }
 

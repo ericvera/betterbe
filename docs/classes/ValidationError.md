@@ -14,7 +14,7 @@
 
 ### new ValidationError()
 
-> **new ValidationError**(`type`, `message`, `path`?, `key`?): [`ValidationError`](ValidationError.md)
+> **new ValidationError**(`type`, `message`, `path`?, `key`?, `meta`?): [`ValidationError`](ValidationError.md)
 
 #### Parameters
 
@@ -24,6 +24,7 @@
 | `message` | `string`                                                        |
 | `path`?   | `string`[]                                                      |
 | `key`?    | `string`                                                        |
+| `meta`?   | `ValidationErrorMeta`                                           |
 
 #### Returns
 
@@ -35,7 +36,7 @@
 
 #### Defined in
 
-[src/ValidationError.ts:18](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L18)
+[src/ValidationError.ts:30](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L30)
 
 ## Properties
 
@@ -64,6 +65,16 @@ node_modules/typescript/lib/lib.es2022.error.d.ts:24
 #### Defined in
 
 node_modules/typescript/lib/lib.es5.d.ts:1077
+
+---
+
+### meta
+
+> `readonly` **meta**: `ValidationErrorMeta`
+
+#### Defined in
+
+[src/ValidationError.ts:28](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L28)
 
 ---
 
@@ -101,7 +112,7 @@ node_modules/typescript/lib/lib.es5.d.ts:1078
 
 #### Defined in
 
-[src/ValidationError.ts:16](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L16)
+[src/ValidationError.ts:27](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L27)
 
 ---
 
@@ -132,7 +143,7 @@ https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:29
+node_modules/@types/node/globals.d.ts:31
 
 ---
 
@@ -146,7 +157,7 @@ node_modules/@types/node/globals.d.ts:29
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:31
+node_modules/@types/node/globals.d.ts:33
 
 ## Methods
 
@@ -173,4 +184,4 @@ Create .stack property on a target object
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:22
+node_modules/@types/node/globals.d.ts:24

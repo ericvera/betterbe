@@ -85,6 +85,7 @@ export const string = (options: StringOptions = {}): StringValidator => {
         `is shorter than expected length ${minLength.toString()}`,
         path,
         key,
+        { minLength },
       )
     }
 
@@ -94,12 +95,19 @@ export const string = (options: StringOptions = {}): StringValidator => {
         `is longer than expected length ${maxLength.toString()}`,
         path,
         key,
+        { maxLength },
       )
     }
 
     // Validate pattern
     if (pattern && !pattern.test(str)) {
-      throw new ValidationError('pattern', 'does not match pattern', path, key)
+      throw new ValidationError(
+        'pattern',
+        'does not match pattern',
+        path,
+        key,
+        { pattern },
+      )
     }
 
     // Validate alphabet
@@ -114,6 +122,7 @@ export const string = (options: StringOptions = {}): StringValidator => {
         'is not one of the allowed values',
         path,
         key,
+        { oneOf },
       )
     }
 
