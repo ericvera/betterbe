@@ -43,14 +43,30 @@ it('should throw an error if the value is shorter than expected', () => {
   )
 })
 
-it('should throw an error if the value is longer than expected', () => {
+it('should not throw if the value is exactly minLength', () => {
+  const validator = string({ minLength: 3 })
+
+  expect(() => {
+    validator.validate('ola')
+  }).not.toThrow()
+})
+
+it('should throw an error if the value is longer than maxLength', () => {
   const validator = string({ maxLength: 3 })
 
   expect(() => {
-    validator.validate('hello')
+    validator.validate('hola')
   }).toThrowErrorMatchingInlineSnapshot(
     `[Error: is longer than expected length 3]`,
   )
+})
+
+it('should not throw if the value is exactly maxLength', () => {
+  const validator = string({ maxLength: 3 })
+
+  expect(() => {
+    validator.validate('ola')
+  }).not.toThrow()
 })
 
 it('should throw an error if the value does not match the pattern', () => {
