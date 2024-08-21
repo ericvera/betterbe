@@ -1,6 +1,5 @@
 import { ValidationError } from '../ValidationError.js'
 
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters -- This is necessary to ensure that the return type is correct
 export const validateType = <T>(
   type: 'boolean' | 'number' | 'string' | 'object',
   value: unknown,

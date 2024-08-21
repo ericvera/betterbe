@@ -143,7 +143,7 @@ https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:31
+node_modules/@types/node/globals.d.ts:74
 
 ---
 
@@ -157,7 +157,7 @@ node_modules/@types/node/globals.d.ts:31
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:33
+node_modules/@types/node/globals.d.ts:76
 
 ## Methods
 
@@ -184,4 +184,4 @@ Create .stack property on a target object
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:24
+node_modules/@types/node/globals.d.ts:67
