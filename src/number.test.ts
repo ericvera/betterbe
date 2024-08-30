@@ -14,7 +14,7 @@ it('should throw an error if the value is not a number', () => {
 
   expect(() => {
     validator.validate('42')
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not a number]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not number]`)
 })
 
 it('should throw an error if the value is undefined', () => {

@@ -26,4 +26,4 @@
 
 ## Defined in
 
-[src/types.ts:14](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L14)
+[src/types.ts:15](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L15)

@@ -3,6 +3,7 @@ export enum ValidatorType {
   NUMBER = 'number',
   BOOLEAN = 'boolean',
   OBJECT = 'object',
+  ARRAY = 'array',
 }
 
 export type ValidationFunction = (
@@ -21,7 +22,7 @@ export type TestFunction<TData = unknown> = (
   key?: string,
 ) => void
 
-interface ValidatorBase {
+export interface ValidatorBase {
   validate: ValidationFunction
   type: ValidatorType
 }
@@ -43,7 +44,11 @@ export interface ObjectValidator<TData> extends ValidatorBase {
   getProp: GetPropValidatorFunction<TData>
 }
 
-export type SchemaProp<TData> = TData extends object
+export interface ArrayValidator extends ValidatorBase {
+  type: ValidatorType.ARRAY
+}
+
+export type Value<TData> = TData extends object
   ? ObjectValidator<TData>
   : TData extends string
     ? StringValidator
@@ -54,5 +59,5 @@ export type SchemaProp<TData> = TData extends object
         : ValidatorBase
 
 export type Schema<TData> = {
-  [P in keyof TData]-?: SchemaProp<TData[P]>
+  [P in keyof TData]-?: Value<TData[P]>
 }

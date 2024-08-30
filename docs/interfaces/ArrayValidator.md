@@ -2,9 +2,9 @@
 
 ---
 
-[betterbe](../README.md) / NumberValidator
+[betterbe](../README.md) / ArrayValidator
 
-# Interface: NumberValidator
+# Interface: ArrayValidator
 
 ## Extends
 
@@ -14,7 +14,7 @@
 
 ### type
 
-> **type**: `NUMBER`
+> **type**: `ARRAY`
 
 #### Overrides
 
@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[src/types.ts:35](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L35)
+[src/types.ts:48](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L48)
 
 ---
 

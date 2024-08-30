@@ -11,7 +11,7 @@ import {
 
 export interface ObjectOptions<T> {
   /**
-   * Expects a function that receives the string value and throws an Error if it
+   * Expects a function that receives the object value and throws an Error if it
    * is invalid.
    */
   test?: TestFunction<T>

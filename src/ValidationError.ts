@@ -12,7 +12,7 @@ export type ValidationErrorType =
   | 'one-of'
   | 'test'
 
-interface ValidationErrorMeta {
+export interface ValidationErrorMeta {
   maxLength?: number
   minLength?: number
   pattern?: RegExp

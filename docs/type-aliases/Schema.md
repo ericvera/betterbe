@@ -6,7 +6,7 @@
 
 # Type Alias: Schema\<TData\>
 
-> **Schema**\<`TData`\>: `{ [P in keyof TData]-?: SchemaProp<TData[P]> }`
+> **Schema**\<`TData`\>: `{ [P in keyof TData]-?: Value<TData[P]> }`
 
 ## Type Parameters
 
@@ -16,4 +16,4 @@
 
 ## Defined in
 
-[src/types.ts:56](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L56)
+[src/types.ts:61](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L61)

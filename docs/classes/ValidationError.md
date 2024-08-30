@@ -24,7 +24,7 @@
 | `message` | `string`                                                        |
 | `path`?   | `string`[]                                                      |
 | `key`?    | `string`                                                        |
-| `meta`?   | `ValidationErrorMeta`                                           |
+| `meta`?   | [`ValidationErrorMeta`](../interfaces/ValidationErrorMeta.md)   |
 
 #### Returns
 
@@ -70,7 +70,7 @@ node_modules/typescript/lib/lib.es5.d.ts:1077
 
 ### meta
 
-> `readonly` **meta**: `ValidationErrorMeta`
+> `readonly` **meta**: [`ValidationErrorMeta`](../interfaces/ValidationErrorMeta.md)
 
 #### Defined in
 

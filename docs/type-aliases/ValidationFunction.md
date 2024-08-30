@@ -22,4 +22,4 @@
 
 ## Defined in
 
-[src/types.ts:8](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L8)
+[src/types.ts:9](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L9)

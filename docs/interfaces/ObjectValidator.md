@@ -8,7 +8,7 @@
 
 ## Extends
 
-- `ValidatorBase`
+- [`ValidatorBase`](ValidatorBase.md)
 
 ## Type Parameters
 
@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[src/types.ts:43](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L43)
+[src/types.ts:44](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L44)
 
 ---
 
@@ -34,11 +34,11 @@
 
 #### Overrides
 
-`ValidatorBase.type`
+[`ValidatorBase`](ValidatorBase.md).[`type`](ValidatorBase.md#type)
 
 #### Defined in
 
-[src/types.ts:42](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L42)
+[src/types.ts:43](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L43)
 
 ---
 
@@ -48,8 +48,8 @@
 
 #### Inherited from
 
-`ValidatorBase.validate`
+[`ValidatorBase`](ValidatorBase.md).[`validate`](ValidatorBase.md#validate)
 
 #### Defined in
 
-[src/types.ts:25](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L25)
+[src/types.ts:26](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L26)

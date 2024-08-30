@@ -28,4 +28,4 @@
 
 ## Defined in
 
-[src/types.ts:18](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L18)
+[src/types.ts:19](https://github.com/ericvera/betterbe/blob/main/src/types.ts#L19)

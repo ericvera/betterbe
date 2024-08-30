@@ -14,7 +14,7 @@ it('should throw an error if the value is not a string', () => {
 
   expect(() => {
     validator.validate(42)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not a string]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not string]`)
 })
 
 it('should throw an error if the value is undefined', () => {
