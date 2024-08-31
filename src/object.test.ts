@@ -1,6 +1,6 @@
 import { expect, it, vi } from 'vitest'
 import { ValidationError } from './ValidationError.js'
-import { Schema, boolean, number, object, string } from './index.js'
+import { Schema, array, boolean, number, object, string } from './index.js'
 
 interface User {
   name: string
@@ -241,4 +241,20 @@ it('should throw an error if an inner test function throws', () => {
   expect(() => {
     validator.validate({ name: 'John Doe', age: 42 })
   }).toThrowErrorMatchingInlineSnapshot(`[Error: 'name' cannot be John Doe]`)
+})
+
+it('should work for object containing an array', () => {
+  const schema = {
+    uids: array(string({ minLength: 5, maxLength: 5 })),
+  }
+
+  interface UserList {
+    uids: string[]
+  }
+
+  const validator = object<UserList>(schema)
+
+  expect(() => {
+    validator.validate({ uids: ['asdij', '01234', '1414k'] })
+  }).not.throw()
 })

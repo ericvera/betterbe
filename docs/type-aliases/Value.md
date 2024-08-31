@@ -6,7 +6,7 @@
 
 # Type Alias: Value\<TData\>
 
-> **Value**\<`TData`\>: `TData` _extends_ `object` ? [`ObjectValidator`](../interfaces/ObjectValidator.md)\<`TData`\> : `TData` _extends_ `string` ? [`StringValidator`](../interfaces/StringValidator.md) : `TData` _extends_ `number` ? [`NumberValidator`](../interfaces/NumberValidator.md) : `TData` _extends_ `boolean` ? [`BooleanValidator`](../interfaces/BooleanValidator.md) : [`ValidatorBase`](../interfaces/ValidatorBase.md)
+> **Value**\<`TData`\>: `TData` _extends_ `unknown`[] ? [`ArrayValidator`](../interfaces/ArrayValidator.md) : `TData` _extends_ `object` ? [`ObjectValidator`](../interfaces/ObjectValidator.md)\<`TData`\> : `TData` _extends_ `string` ? [`StringValidator`](../interfaces/StringValidator.md) : `TData` _extends_ `number` ? [`NumberValidator`](../interfaces/NumberValidator.md) : `TData` _extends_ `boolean` ? [`BooleanValidator`](../interfaces/BooleanValidator.md) : [`ValidatorBase`](../interfaces/ValidatorBase.md)
 
 ## Type Parameters
 

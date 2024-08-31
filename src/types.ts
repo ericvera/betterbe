@@ -48,15 +48,17 @@ export interface ArrayValidator extends ValidatorBase {
   type: ValidatorType.ARRAY
 }
 
-export type Value<TData> = TData extends object
-  ? ObjectValidator<TData>
-  : TData extends string
-    ? StringValidator
-    : TData extends number
-      ? NumberValidator
-      : TData extends boolean
-        ? BooleanValidator
-        : ValidatorBase
+export type Value<TData> = TData extends unknown[]
+  ? ArrayValidator
+  : TData extends object
+    ? ObjectValidator<TData>
+    : TData extends string
+      ? StringValidator
+      : TData extends number
+        ? NumberValidator
+        : TData extends boolean
+          ? BooleanValidator
+          : ValidatorBase
 
 export type Schema<TData> = {
   [P in keyof TData]-?: Value<TData[P]>
