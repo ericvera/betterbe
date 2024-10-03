@@ -258,3 +258,16 @@ it('should work for object containing an array', () => {
     validator.validate({ uids: ['asdij', '01234', '1414k'] })
   }).not.throw()
 })
+
+it('should work with an object containing non-required keys', () => {
+  const schema = {
+    name: string({ required: false }),
+    age: number({ required: false }),
+  }
+
+  const validator = object<User>(schema)
+
+  expect(() => {
+    validator.validate({ age: 12 })
+  }).not.toThrow()
+})
