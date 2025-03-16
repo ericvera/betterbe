@@ -289,3 +289,63 @@ it('should not throw an error if the test function does not throw', () => {
 
   expect(valueSpy).toHaveBeenCalledTimes(3)
 })
+
+it('should throw an error if unique is true and array contains duplicates', () => {
+  const itemValidator = string()
+  const valueSpy = vi.spyOn(itemValidator, 'validate')
+  const validator = array(itemValidator, { unique: true })
+
+  expect(valueSpy).not.toHaveBeenCalled()
+
+  expect(() => {
+    validator.validate(['a', 'b', 'a'])
+  }).toThrowErrorMatchingInlineSnapshot(`[Error: contains duplicate values]`)
+
+  expect(valueSpy).toHaveBeenCalledTimes(0)
+})
+
+it('should not throw an error if unique is true and array has no duplicates', () => {
+  const itemValidator = string()
+  const valueSpy = vi.spyOn(itemValidator, 'validate')
+  const validator = array(itemValidator, { unique: true })
+
+  expect(valueSpy).not.toHaveBeenCalled()
+
+  expect(() => {
+    validator.validate(['a', 'b', 'c'])
+  }).not.toThrow()
+
+  expect(valueSpy).toHaveBeenCalledTimes(3)
+})
+
+it('should not throw an error if unique is false and array contains duplicates', () => {
+  const itemValidator = string()
+  const valueSpy = vi.spyOn(itemValidator, 'validate')
+  const validator = array(itemValidator, { unique: false })
+
+  expect(valueSpy).not.toHaveBeenCalled()
+
+  expect(() => {
+    validator.validate(['a', 'b', 'a'])
+  }).not.toThrow()
+
+  expect(valueSpy).toHaveBeenCalledTimes(3)
+})
+
+it('should handle unique validation with object values', () => {
+  const itemValidator = string()
+  const valueSpy = vi.spyOn(itemValidator, 'validate')
+  const validator = array(itemValidator, { unique: true })
+
+  expect(valueSpy).not.toHaveBeenCalled()
+
+  const obj1 = { id: 1 }
+  const obj2 = { id: 2 }
+  const obj3 = { id: 1 } // Different object reference but same content as obj1
+
+  expect(() => {
+    validator.validate([obj1, obj2, obj3])
+  }).toThrowErrorMatchingInlineSnapshot(`[Error: contains duplicate values]`)
+
+  expect(valueSpy).toHaveBeenCalledTimes(0)
+})

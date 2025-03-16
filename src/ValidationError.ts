@@ -11,6 +11,7 @@ export type ValidationErrorType =
   | 'pattern'
   | 'one-of'
   | 'test'
+  | 'unique'
 
 export interface ValidationErrorMeta {
   maxLength?: number

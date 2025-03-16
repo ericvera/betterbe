@@ -30,4 +30,4 @@ validates its items against a validator.
 
 ## Defined in
 
-[src/array.ts:33](https://github.com/ericvera/betterbe/blob/main/src/array.ts#L33)
+[src/array.ts:39](https://github.com/ericvera/betterbe/blob/main/src/array.ts#L39)

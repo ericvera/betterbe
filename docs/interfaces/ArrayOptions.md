@@ -56,3 +56,16 @@ is invalid.
 #### Defined in
 
 [src/array.ts:19](https://github.com/ericvera/betterbe/blob/main/src/array.ts#L19)
+
+---
+
+### unique?
+
+> `optional` **unique**: `boolean`
+
+When true, the array must contain only unique values (no duplicates).
+Default is false.
+
+#### Defined in
+
+[src/array.ts:30](https://github.com/ericvera/betterbe/blob/main/src/array.ts#L30)

@@ -22,6 +22,12 @@ export interface ArrayOptions<T> {
    * Default is true
    */
   required?: boolean
+
+  /**
+   * When true, the array must contain only unique values (no duplicates).
+   * Default is false.
+   */
+  unique?: boolean
 }
 
 /**
@@ -47,7 +53,7 @@ export const array = <T>(
 
     const arr = validateType<T[]>('array', value, path, key)
 
-    const { maxLength, minLength, required } = options
+    const { maxLength, minLength, required, unique } = options
 
     // Validate required
     if (arr === undefined) {
@@ -77,6 +83,31 @@ export const array = <T>(
         key,
         { maxLength },
       )
+    }
+
+    // Validate uniqueness
+    if (unique === true && arr.length > 0) {
+      const seen = new Set()
+
+      for (let i = 0; i < arr.length; i++) {
+        const value = arr[i]
+        // For objects and arrays, we can't reliably check uniqueness with Set
+        // So we stringify them first
+        const valueKey =
+          typeof value === 'object' && value !== null
+            ? JSON.stringify(value)
+            : value
+
+        if (seen.has(valueKey)) {
+          throw new ValidationError(
+            'unique',
+            'contains duplicate values',
+            newPath,
+            key,
+          )
+        }
+        seen.add(valueKey)
+      }
     }
 
     // Run through all the validation functions

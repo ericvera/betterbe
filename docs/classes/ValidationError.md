@@ -36,7 +36,7 @@
 
 #### Defined in
 
-[src/ValidationError.ts:30](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L30)
+[src/ValidationError.ts:31](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L31)
 
 ## Properties
 
@@ -50,7 +50,7 @@
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es2022.error.d.ts:24
+node_modules/typescript/lib/lib.es2022.error.d.ts:26
 
 ---
 
@@ -74,7 +74,7 @@ node_modules/typescript/lib/lib.es5.d.ts:1077
 
 #### Defined in
 
-[src/ValidationError.ts:28](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L28)
+[src/ValidationError.ts:29](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L29)
 
 ---
 
@@ -112,7 +112,7 @@ node_modules/typescript/lib/lib.es5.d.ts:1078
 
 #### Defined in
 
-[src/ValidationError.ts:27](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L27)
+[src/ValidationError.ts:28](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L28)
 
 ---
 
@@ -143,7 +143,7 @@ https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:74
+node_modules/@types/node/globals.d.ts:143
 
 ---
 
@@ -157,7 +157,7 @@ node_modules/@types/node/globals.d.ts:74
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:76
+node_modules/@types/node/globals.d.ts:145
 
 ## Methods
 
@@ -184,4 +184,4 @@ Create .stack property on a target object
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:67
+node_modules/@types/node/globals.d.ts:136

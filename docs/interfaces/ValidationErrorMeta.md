@@ -14,7 +14,7 @@
 
 #### Defined in
 
-[src/ValidationError.ts:21](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L21)
+[src/ValidationError.ts:22](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L22)
 
 ---
 
@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[src/ValidationError.ts:23](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L23)
+[src/ValidationError.ts:24](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L24)
 
 ---
 
@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[src/ValidationError.ts:16](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L16)
+[src/ValidationError.ts:17](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L17)
 
 ---
 
@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[src/ValidationError.ts:22](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L22)
+[src/ValidationError.ts:23](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L23)
 
 ---
 
@@ -54,7 +54,7 @@
 
 #### Defined in
 
-[src/ValidationError.ts:17](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L17)
+[src/ValidationError.ts:18](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L18)
 
 ---
 
@@ -64,7 +64,7 @@
 
 #### Defined in
 
-[src/ValidationError.ts:19](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L19)
+[src/ValidationError.ts:20](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L20)
 
 ---
 
@@ -74,7 +74,7 @@
 
 #### Defined in
 
-[src/ValidationError.ts:18](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L18)
+[src/ValidationError.ts:19](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L19)
 
 ---
 
@@ -84,4 +84,4 @@
 
 #### Defined in
 
-[src/ValidationError.ts:20](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L20)
+[src/ValidationError.ts:21](https://github.com/ericvera/betterbe/blob/main/src/ValidationError.ts#L21)
