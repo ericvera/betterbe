@@ -3,6 +3,8 @@ on:
     branches:
       - main
 
+# Random number when I want to force a new release: 2
+
 jobs:
   publish:
     runs-on: ubuntu-latest
