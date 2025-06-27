@@ -17,6 +17,22 @@ it('should throw an error if the value is not a number', () => {
   }).toThrowErrorMatchingInlineSnapshot(`[Error: is not number]`)
 })
 
+it('should throw an error if the value is NaN', () => {
+  const validator = number()
+
+  expect(() => {
+    validator.validate(Number.NaN)
+  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not a number]`)
+})
+
+it('should throw an error if the value is NaN with options', () => {
+  const validator = number({ min: 0, max: 100 })
+
+  expect(() => {
+    validator.validate(Number.NaN)
+  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not a number]`)
+})
+
 it('should throw an error if the value is undefined', () => {
   const validator = number()
 

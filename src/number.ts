@@ -31,6 +31,13 @@ export const number = (options: NumberOptions = {}): NumberValidator => {
     // Validate type
     const num = validateType<number>('number', value, path, key)
 
+    // Validate NaN
+    if (Number.isNaN(num)) {
+      throw new ValidationError('type', 'is not a number', path, key, {
+        type: 'NaN',
+      })
+    }
+
     const { min, max, integer, required } = options
 
     // Validate required
