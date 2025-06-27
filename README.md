@@ -132,7 +132,16 @@ const validatePercentage = number({
 const validateOptionalCount = number({
   required: false,
 })
+
+// Example: NaN validation
+try {
+  validateAge.validate(NaN)
+} catch (error) {
+  console.log(error.message) // "is not a number"
+}
 ```
+
+**Note**: The number validator automatically rejects `NaN` values and will throw a validation error with the message "is not a number".
 
 Options:
 

@@ -16,6 +16,9 @@ export interface NumberOptions {
  * Returns a validation function that checks if a value is a number and
  * optionally validates its minimum, maximum, and integer properties.
  *
+ * Note: This validator automatically rejects NaN values and will throw
+ * a ValidationError with type 'type' and message 'is not a number'.
+ *
  * @param options An object containing the following properties:
  * - `min` (optional): The minimum value of the number.
  * - `max` (optional): The maximum value of the number.
