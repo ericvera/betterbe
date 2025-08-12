@@ -8,7 +8,7 @@ export const getRequiredProp =
     const value = object[key]
 
     if (value === undefined || value === null) {
-      throw new Error(`Property '${key.toString()}' is unexpectedly undefined`)
+      throw new Error(`Property '${key}' is unexpectedly undefined`)
     }
 
     return value
