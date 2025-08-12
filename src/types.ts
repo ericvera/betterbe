@@ -4,6 +4,7 @@ export enum ValidatorType {
   BOOLEAN = 'boolean',
   OBJECT = 'object',
   ARRAY = 'array',
+  RECORD = 'record',
 }
 
 export type ValidationFunction = (
@@ -46,6 +47,10 @@ export interface ObjectValidator<TData> extends ValidatorBase {
 
 export interface ArrayValidator extends ValidatorBase {
   type: ValidatorType.ARRAY
+}
+
+export interface RecordValidator extends ValidatorBase {
+  type: ValidatorType.RECORD
 }
 
 export type Value<TData> = TData extends unknown[]

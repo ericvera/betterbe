@@ -38,6 +38,7 @@ export const number = (options: NumberOptions = {}): NumberValidator => {
     if (Number.isNaN(num)) {
       throw new ValidationError('type', 'is not a number', path, key, {
         type: 'NaN',
+        context: 'value',
       })
     }
 
@@ -59,7 +60,7 @@ export const number = (options: NumberOptions = {}): NumberValidator => {
         `is less than minimum ${min.toString()}`,
         path,
         key,
-        { min },
+        { min, context: 'value' },
       )
     }
 
@@ -70,13 +71,15 @@ export const number = (options: NumberOptions = {}): NumberValidator => {
         `is greater than maximum ${max.toString()}`,
         path,
         key,
-        { max },
+        { max, context: 'value' },
       )
     }
 
     // Validate integer
     if (integer === true && !Number.isInteger(value)) {
-      throw new ValidationError('int', 'is not an integer', path, key)
+      throw new ValidationError('int', 'is not an integer', path, key, {
+        context: 'value',
+      })
     }
   }
 

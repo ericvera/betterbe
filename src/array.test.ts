@@ -349,3 +349,34 @@ it('should handle unique validation with object values', () => {
 
   expect(valueSpy).toHaveBeenCalledTimes(0)
 })
+
+it('should include context metadata for array validation errors', () => {
+  const validator = array(string(), { minLength: 3 })
+
+  try {
+    validator.validate(['a', 'b'])
+    expect.fail('Should have thrown an error')
+  } catch (error) {
+    expect(error).toBeInstanceOf(ValidationError)
+    const validationError = error as ValidationError
+    expect(validationError.type).toBe('minLength')
+    expect(validationError.meta.context).toBe('value')
+    expect(validationError.meta.minLength).toBe(3)
+  }
+})
+
+it('should include arrayIndex metadata for item validation errors', () => {
+  const validator = array(string({ minLength: 3 }))
+
+  try {
+    validator.validate(['valid', 'ab', 'also-valid'])
+    expect.fail('Should have thrown an error')
+  } catch (error) {
+    expect(error).toBeInstanceOf(ValidationError)
+    const validationError = error as ValidationError
+    expect(validationError.type).toBe('minLength')
+    expect(validationError.meta.context).toBe('value')
+    expect(validationError.meta.arrayIndex).toBe(1)
+    expect(validationError.meta.minLength).toBe(3)
+  }
+})

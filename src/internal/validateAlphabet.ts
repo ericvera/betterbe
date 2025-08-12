@@ -13,7 +13,7 @@ export const validateAlphabet = (
         `contains character '${char}' which is not in alphabet '${alphabet}'`,
         path,
         key,
-        { alphabet },
+        { alphabet, context: 'value' },
       )
     }
   }

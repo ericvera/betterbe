@@ -85,7 +85,7 @@ export const string = (options: StringOptions = {}): StringValidator => {
         `is shorter than expected length ${minLength.toString()}`,
         path,
         key,
-        { minLength },
+        { minLength, context: 'value' },
       )
     }
 
@@ -95,7 +95,7 @@ export const string = (options: StringOptions = {}): StringValidator => {
         `is longer than expected length ${maxLength.toString()}`,
         path,
         key,
-        { maxLength },
+        { maxLength, context: 'value' },
       )
     }
 
@@ -106,7 +106,7 @@ export const string = (options: StringOptions = {}): StringValidator => {
         'does not match pattern',
         path,
         key,
-        { pattern },
+        { pattern, context: 'value' },
       )
     }
 
@@ -122,7 +122,7 @@ export const string = (options: StringOptions = {}): StringValidator => {
         'is not one of the allowed values',
         path,
         key,
-        { oneOf },
+        { oneOf, context: 'value' },
       )
     }
 
@@ -132,7 +132,9 @@ export const string = (options: StringOptions = {}): StringValidator => {
     } catch (e) {
       const message = e instanceof Error ? e.message : 'failed tests'
 
-      throw new ValidationError('test', message, path, key)
+      throw new ValidationError('test', message, path, key, {
+        context: 'value',
+      })
     }
   }
 

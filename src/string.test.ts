@@ -1,5 +1,5 @@
 import { expect, it, vi } from 'vitest'
-import { string } from './index.js'
+import { string, ValidationError } from './index.js'
 
 it('should be able to create a string with no options defined', () => {
   const validator = string()
@@ -238,4 +238,19 @@ it('should not throw an error if the the test function throws an error', () => {
   expect(() => {
     validator.validate('John Doe')
   }).toThrowErrorMatchingInlineSnapshot(`[Error: Can't be John Doe.]`)
+})
+
+it('should include context metadata for string validation errors', () => {
+  const validator = string({ minLength: 5 })
+
+  try {
+    validator.validate('abc')
+    expect.fail('Should have thrown an error')
+  } catch (error) {
+    expect(error).toBeInstanceOf(ValidationError)
+    const validationError = error as ValidationError
+    expect(validationError.type).toBe('minLength')
+    expect(validationError.meta.context).toBe('value')
+    expect(validationError.meta.minLength).toBe(5)
+  }
 })

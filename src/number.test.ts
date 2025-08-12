@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { number } from './index.js'
+import { number, ValidationError } from './index.js'
 
 it('should be able to create a number with no options defined', () => {
   const validator = number()
@@ -116,4 +116,19 @@ it('should throw no a negative number when min is 0', () => {
   expect(() => {
     validator.validate(-1)
   }).toThrowErrorMatchingInlineSnapshot(`[Error: is less than minimum 0]`)
+})
+
+it('should include context metadata for number validation errors', () => {
+  const validator = number({ min: 10 })
+
+  try {
+    validator.validate(5)
+    expect.fail('Should have thrown an error')
+  } catch (error) {
+    expect(error).toBeInstanceOf(ValidationError)
+    const validationError = error as ValidationError
+    expect(validationError.type).toBe('min')
+    expect(validationError.meta.context).toBe('value')
+    expect(validationError.meta.min).toBe(10)
+  }
 })

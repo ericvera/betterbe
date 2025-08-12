@@ -26,7 +26,7 @@ yarn add betterbe
 ## Basic Example
 
 ```ts
-import { boolean, number, object, string } from 'betterbe'
+import { boolean, number, object, record, string } from 'betterbe'
 
 const validateUid = string({
   minLength: 10,
@@ -41,6 +41,9 @@ const validateMessage = object({
   message: string({ minLength: 1, maxLength: 280 }),
   utcTime: number({ integer: true }),
   urgent: boolean({ required: false }),
+  metadata: record(string({ pattern: /^[a-z_]+$/ }), string(), {
+    required: false,
+  }),
 })
 
 // This is not expected to throw (valid input)
@@ -48,6 +51,7 @@ validateMessage.validate({
   from: { uid: '1234567890' },
   message: 'Hello, World!',
   utcTime: 1630000000,
+  metadata: { user_agent: 'Mozilla/5.0', client_version: '1.0.0' },
 })
 
 // This is expected to throw as character `-` is not valid in the uid alphabet
@@ -266,6 +270,60 @@ Options:
 - `required`: Whether the value is required (default: `true`)
 - `test`: Custom validation function
 
+### Record Validator
+
+```ts
+import { record, string, number, boolean } from 'betterbe'
+
+// Basic usage - validates objects with dynamic keys
+const validateScores = record(
+  string(), // all keys must be strings
+  number(), // all values must be numbers
+)
+
+// With key validation - only specific keys allowed
+const validatePermissions = record(
+  string({ oneOf: ['read', 'write', 'admin'] }),
+  boolean(),
+)
+
+// With key pattern validation
+const validateUserData = record(
+  string({ pattern: /^user_[0-9]+$/ }), // keys like "user_123"
+  object({
+    name: string(),
+    age: number(),
+  }),
+)
+
+// Nested records
+const validateConfiguration = record(
+  string({ pattern: /^[a-z]+$/ }), // lowercase keys only
+  record(string({ oneOf: ['value', 'enabled', 'config'] }), string()),
+)
+
+// Optional record
+const validateOptionalSettings = record(string(), string(), { required: false })
+
+// With custom test function
+const validateApiKeys = record(
+  string({ pattern: /^api_/ }),
+  string({ minLength: 32 }),
+  {
+    test: (value) => {
+      if (Object.keys(value).length === 0) {
+        throw new Error('At least one API key is required')
+      }
+    },
+  },
+)
+```
+
+Options:
+
+- `required`: Whether the value is required (default: `true`)
+- `test`: Custom validation function
+
 ## Error Handling
 
 The library throws `ValidationError` instances when validation fails. These errors contain:
@@ -274,19 +332,65 @@ The library throws `ValidationError` instances when validation fails. These erro
 - `message`: A human-readable error message
 - `meta`: Additional metadata about the validation that failed
 
-Example:
+### Error Metadata
+
+The `meta` object includes context information:
+
+- `context`: `'key'` or `'value'` - indicates whether the error is for key or value validation
+- `originalKey`: The key that failed validation (in record validators)
+- `propertyName`: The property name that failed validation (in object validators)
+- `arrayIndex`: The array index where validation failed (in array validators)
+
+### Examples
 
 ```ts
-import { string } from 'betterbe'
+import { string, record, array, object } from 'betterbe'
 
+// Basic validation error
 const validateUsername = string({ minLength: 3 })
 
 try {
   validateUsername.validate('ab')
 } catch (error) {
   console.log(error.type) // 'minLength'
-  console.log(error.message) // "'username' must be at least 3 characters"
-  console.log(error.meta) // { minLength: 3 }
+  console.log(error.message) // "is shorter than expected length 3"
+  console.log(error.meta) // { minLength: 3, context: 'value' }
+}
+
+// Record key validation error
+const validateScores = record(string({ pattern: /^[a-z]+$/ }), number())
+
+try {
+  validateScores.validate({ 'Invalid-Key': 100 })
+} catch (error) {
+  console.log(error.type) // 'pattern'
+  console.log(error.message) // "key 'Invalid-Key' does not match pattern"
+  console.log(error.meta) // { pattern: /^[a-z]+$/, context: 'key', originalKey: 'Invalid-Key' }
+}
+
+// Array item validation error
+const validateNumbers = array(number({ min: 0 }))
+
+try {
+  validateNumbers.validate([1, -5, 3])
+} catch (error) {
+  console.log(error.type) // 'min'
+  console.log(error.message) // "'[1]' is less than minimum 0"
+  console.log(error.meta) // { min: 0, context: 'value', arrayIndex: 1 }
+}
+
+// Object property validation error
+const validateUser = object({
+  name: string({ maxLength: 10 }),
+  age: number(),
+})
+
+try {
+  validateUser.validate({ name: 'ThisNameIsTooLong', age: 25 })
+} catch (error) {
+  console.log(error.type) // 'maxLength'
+  console.log(error.message) // "'name' is longer than expected length 10"
+  console.log(error.meta) // { maxLength: 10, context: 'value', propertyName: 'name' }
 }
 ```
 

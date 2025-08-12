@@ -271,3 +271,24 @@ it('should work with an object containing non-required keys', () => {
     validator.validate({ age: 12 })
   }).not.toThrow()
 })
+
+it('should include propertyName metadata for property validation errors', () => {
+  const schema = {
+    name: string({ minLength: 5 }),
+    age: number(),
+  }
+
+  const validator = object(schema)
+
+  try {
+    validator.validate({ name: 'Bob', age: 25 })
+    expect.fail('Should have thrown an error')
+  } catch (error) {
+    expect(error).toBeInstanceOf(ValidationError)
+    const validationError = error as ValidationError
+    expect(validationError.type).toBe('minLength')
+    expect(validationError.meta.context).toBe('value')
+    expect(validationError.meta.propertyName).toBe('name')
+    expect(validationError.meta.minLength).toBe(5)
+  }
+})

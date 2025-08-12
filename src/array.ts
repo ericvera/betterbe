@@ -71,7 +71,7 @@ export const array = <T>(
         `is shorter than expected length ${minLength.toString()}`,
         path,
         key,
-        { minLength },
+        { minLength, context: 'value' },
       )
     }
 
@@ -81,7 +81,7 @@ export const array = <T>(
         `is longer than expected length ${maxLength.toString()}`,
         path,
         key,
-        { maxLength },
+        { maxLength, context: 'value' },
       )
     }
 
@@ -104,6 +104,7 @@ export const array = <T>(
             'contains duplicate values',
             newPath,
             key,
+            { context: 'value', arrayIndex: i },
           )
         }
         seen.add(valueKey)
@@ -112,7 +113,18 @@ export const array = <T>(
 
     // Run through all the validation functions
     for (let i = 0; i < arr.length; i++) {
-      itemValidator.validate(arr[i], newPath, `[${i.toString()}]`)
+      try {
+        itemValidator.validate(arr[i], newPath, `[${i.toString()}]`)
+      } catch (e) {
+        if (e instanceof ValidationError) {
+          // Add arrayIndex metadata to all validation errors
+          e.meta.arrayIndex = i
+          if (!e.meta.context) {
+            e.meta.context = 'value'
+          }
+        }
+        throw e
+      }
     }
 
     try {
@@ -120,7 +132,9 @@ export const array = <T>(
     } catch (e) {
       const message = e instanceof Error ? e.message : 'failed tests'
 
-      throw new ValidationError('test', message, newPath, key)
+      throw new ValidationError('test', message, newPath, key, {
+        context: 'value',
+      })
     }
   }
 

@@ -78,7 +78,19 @@ export const object = <T extends object>(
 
       const valueToValidate = obj[schemaKey]
 
-      schemaProp.validate(valueToValidate, newPath, schemaKey)
+      try {
+        schemaProp.validate(valueToValidate, newPath, schemaKey)
+      } catch (e) {
+        if (e instanceof ValidationError) {
+          // Add propertyName metadata to all validation errors
+          e.meta.propertyName = schemaKey
+
+          if (!e.meta.context) {
+            e.meta.context = 'value'
+          }
+        }
+        throw e
+      }
     }
 
     try {
@@ -86,7 +98,9 @@ export const object = <T extends object>(
     } catch (e) {
       const message = e instanceof Error ? e.message : 'failed tests'
 
-      throw new ValidationError('test', message, newPath, key)
+      throw new ValidationError('test', message, newPath, key, {
+        context: 'value',
+      })
     }
   }
 
