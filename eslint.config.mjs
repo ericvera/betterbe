@@ -1,15 +1,18 @@
 // @ts-check
 
 import eslint from '@eslint/js'
+import { defineConfig } from 'eslint/config'
 import tseslint from 'typescript-eslint'
 
-export default tseslint.config(
+export default defineConfig([
   eslint.configs.recommended,
-  ...tseslint.configs.strictTypeChecked,
+  tseslint.configs.strictTypeChecked,
   {
     languageOptions: {
       parserOptions: {
-        project: ['./tsconfig.eslint.json', './tsconfig.json'],
+        projectService: {
+          allowDefaultProject: ['eslint.config.mjs'],
+        },
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -17,4 +20,4 @@ export default tseslint.config(
   {
     ignores: ['dist/*', '.yarn/*', '.vscode/*', '.github/*'],
   },
-)
+])
