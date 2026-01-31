@@ -27,7 +27,7 @@ export interface StringOptionsBase {
 }
 
 export interface StringOptionsOneOf {
-  oneOf: string[]
+  oneOf: string[] | readonly string[]
 
   /**
    * Default is true

@@ -25,7 +25,7 @@ export interface ValidationErrorMeta {
   /** Regular expression pattern that the value must match */
   pattern?: RegExp
   /** Array of allowed values for oneOf validation */
-  oneOf?: string[]
+  oneOf?: string[] | readonly string[]
   /** Type information for validation errors */
   type?: string
   /** Allowed character set for alphabet validation */
