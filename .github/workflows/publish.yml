@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
+      # Required for OIDC trusted publishing with npm
+      id-token: write
       # Give the default GITHUB_TOKEN write permission to commit and push the
       # added or changed files to the repository.
       contents: write
@@ -44,11 +46,13 @@ jobs:
           output-file: 'false'
           github-token: ${{ github.token }}
 
-      - name: Publish to NPM
-        uses: JS-DevTools/npm-publish@v3
+      - name: Upgrade npm
         if: ${{ steps.changelog.outputs.skipped == 'false' }}
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+        run: npm install -g npm@latest
+
+      - name: Publish to NPM
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        run: npm publish --provenance
 
       - name: Create Release
         uses: ncipollo/release-action@v1
