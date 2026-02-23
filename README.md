@@ -94,9 +94,9 @@ const validateColor = string({
 
 // With custom test function
 const validateEmail = string({
-  test: (value) => {
+  test: (value, report) => {
     if (!value.includes('@')) {
-      throw new Error('Invalid email format')
+      report({ message: 'Invalid email format' })
     }
   },
 })
@@ -109,7 +109,7 @@ Options:
 - `pattern`: RegExp pattern the string must match
 - `alphabet`: String of allowed characters
 - `required`: Whether the value is required (default: `true`)
-- `test`: Custom validation function
+- `test`: Custom validation function; receives `(value, report, path?, key?)`. Call `report({ message })` to fail.
 - `oneOf`: Array of allowed string values (cannot be used with other string options)
 
 ### Number Validator
@@ -198,10 +198,10 @@ const validateOptionalItems = array(string(), {
 
 // With custom test function
 const validateSortedNumbers = array(number(), {
-  test: (values) => {
+  test: (values, report) => {
     for (let i = 1; i < values.length; i++) {
       if (values[i] < values[i - 1]) {
-        throw new Error('Array must be sorted in ascending order')
+        report({ message: 'Array must be sorted in ascending order' })
       }
     }
   },
@@ -214,7 +214,7 @@ Options:
 - `maxLength`: Maximum array length
 - `required`: Whether the value is required (default: `true`)
 - `unique`: Whether array values must be unique (default: `false`)
-- `test`: Custom validation function
+- `test`: Custom validation function; receives `(value, report, path?, key?)`. Call `report({ message })` to fail.
 
 ### Object Validator
 
@@ -256,9 +256,9 @@ const validateCredentials = object(
     password: string(),
   },
   {
-    test: (value) => {
+    test: (value, report) => {
       if (value.username === value.password) {
-        throw new Error('Username and password cannot be the same')
+        report({ message: 'Username and password cannot be the same' })
       }
     },
   },
@@ -268,7 +268,7 @@ const validateCredentials = object(
 Options:
 
 - `required`: Whether the value is required (default: `true`)
-- `test`: Custom validation function
+- `test`: Custom validation function; receives `(value, report, path?, key?)`. Call `report({ message })` to fail.
 
 ### Record Validator
 
@@ -310,9 +310,9 @@ const validateApiKeys = record(
   string({ pattern: /^api_/ }),
   string({ minLength: 32 }),
   {
-    test: (value) => {
+    test: (value, report) => {
       if (Object.keys(value).length === 0) {
-        throw new Error('At least one API key is required')
+        report({ message: 'At least one API key is required' })
       }
     },
   },
@@ -322,24 +322,20 @@ const validateApiKeys = record(
 Options:
 
 - `required`: Whether the value is required (default: `true`)
-- `test`: Custom validation function
+- `test`: Custom validation function; receives `(value, report, path?, key?)`. Call `report({ message })` to fail.
 
 ## Error Handling
 
 The library throws `ValidationError` instances when validation fails. These errors contain:
 
-- `type`: The type of validation that failed (e.g., 'required', 'minLength', 'pattern')
+- `code`: The validation that failed (e.g., 'required', 'minLength', 'pattern')
 - `message`: A human-readable error message
-- `meta`: Additional metadata about the validation that failed
-
-### Error Metadata
-
-The `meta` object includes context information:
-
-- `context`: `'key'` or `'value'` - indicates whether the error is for key or value validation
-- `originalKey`: The key that failed validation (in record validators)
-- `propertyName`: The property name that failed validation (in object validators)
-- `arrayIndex`: The array index where validation failed (in array validators)
+- `path`: Path to the parent of the failing value (array of segments)
+- `key`: The segment that identifies the failing value
+- `pathString`: Full path as a dot-separated string (e.g. `'items.0.price'`)
+- `value`: The invalid value
+- `context`: `'key'` or `'value'` for record validation
+- `constraint`: Discriminated union with `code` and rule params (e.g. `{ code: 'min', min: 0 }`)
 
 ### Examples
 
@@ -352,9 +348,10 @@ const validateUsername = string({ minLength: 3 })
 try {
   validateUsername.validate('ab')
 } catch (error) {
-  console.log(error.type) // 'minLength'
-  console.log(error.message) // "is shorter than expected length 3"
-  console.log(error.meta) // { minLength: 3, context: 'value' }
+  console.log(error.code) // 'minLength'
+  console.log(error.path) // []
+  console.log(error.key) // undefined
+  console.log(error.constraint) // { code: 'minLength', minLength: 3 }
 }
 
 // Record key validation error
@@ -363,9 +360,9 @@ const validateScores = record(string({ pattern: /^[a-z]+$/ }), number())
 try {
   validateScores.validate({ 'Invalid-Key': 100 })
 } catch (error) {
-  console.log(error.type) // 'pattern'
-  console.log(error.message) // "key 'Invalid-Key' does not match pattern"
-  console.log(error.meta) // { pattern: /^[a-z]+$/, context: 'key', originalKey: 'Invalid-Key' }
+  console.log(error.code) // 'pattern'
+  console.log(error.context) // 'key'
+  console.log(error.key) // 'Invalid-Key'
 }
 
 // Array item validation error
@@ -374,9 +371,10 @@ const validateNumbers = array(number({ min: 0 }))
 try {
   validateNumbers.validate([1, -5, 3])
 } catch (error) {
-  console.log(error.type) // 'min'
-  console.log(error.message) // "'[1]' is less than minimum 0"
-  console.log(error.meta) // { min: 0, context: 'value', arrayIndex: 1 }
+  console.log(error.code) // 'min'
+  console.log(error.path) // []
+  console.log(error.key) // '[1]'
+  console.log(error.constraint) // { code: 'min', min: 0 }
 }
 
 // Object property validation error
@@ -388,9 +386,10 @@ const validateUser = object({
 try {
   validateUser.validate({ name: 'ThisNameIsTooLong', age: 25 })
 } catch (error) {
-  console.log(error.type) // 'maxLength'
-  console.log(error.message) // "'name' is longer than expected length 10"
-  console.log(error.meta) // { maxLength: 10, context: 'value', propertyName: 'name' }
+  console.log(error.code) // 'maxLength'
+  console.log(error.path) // []
+  console.log(error.key) // 'name'
+  console.log(error.constraint) // { code: 'maxLength', maxLength: 10 }
 }
 ```
 

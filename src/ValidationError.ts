@@ -1,76 +1,94 @@
-export type ValidationErrorType =
-  | 'required'
-  | 'alphabet'
-  | 'type'
-  | 'min'
-  | 'max'
-  | 'int'
-  | 'unknown-keys'
-  | 'minLength'
-  | 'maxLength'
-  | 'pattern'
-  | 'one-of'
-  | 'test'
-  | 'unique'
-
 /**
- * Metadata associated with validation errors, providing additional context
- * and information about the specific validation failure.
+ * Discriminated union of validation error codes and their constraint params.
+ * Use `constraint.code` to narrow the type and access code-specific fields.
  */
-export interface ValidationErrorMeta {
-  /** Maximum allowed length for string or array validation */
-  maxLength?: number
-  /** Minimum required length for string or array validation */
-  minLength?: number
-  /** Regular expression pattern that the value must match */
-  pattern?: RegExp
-  /** Array of allowed values for oneOf validation */
-  oneOf?: string[] | readonly string[]
-  /** Type information for validation errors */
-  type?: string
-  /** Allowed character set for alphabet validation */
-  alphabet?: string
-  /** Minimum allowed value for number validation */
-  min?: number
-  /** Maximum allowed value for number validation */
-  max?: number
-  /**
-   * Context of the validation error - indicates whether the error is for a key
-   * or value
-   */
+export type ValidationErrorConstraint =
+  | { code: 'min'; min: number }
+  | { code: 'max'; max: number }
+  | { code: 'minLength'; minLength: number }
+  | { code: 'maxLength'; maxLength: number }
+  | { code: 'pattern'; pattern: string }
+  | { code: 'one-of'; oneOf: readonly string[] }
+  | { code: 'type'; expected: string }
+  | { code: 'alphabet'; alphabet: string }
+  | { code: 'unique' }
+  | { code: 'required' | 'int' | 'unknown-keys' | 'test' }
+
+/** Error code identifying the validation rule that failed. */
+export type ValidationErrorCode = ValidationErrorConstraint['code']
+
+/** Options for constructing a {@link ValidationError}. */
+export interface ValidationErrorOptions {
+  /** Human-readable description of the validation failure. */
+  message: string
+  /** Error code and constraint parameters. */
+  constraint: ValidationErrorConstraint
+  /** Parent path segments (e.g. `['items', '0']`). Defaults to `[]`. */
+  path?: string[]
+  /** Current segment (e.g. `'price'` or `'0'`). Omitted at root level. */
+  key?: string | undefined
+  /** Whether the error is for a key or value. Defaults to `'value'`. */
   context?: 'key' | 'value'
-  /** The original key that failed validation (used in record validation) */
-  originalKey?: string
-  /** The property name that failed validation (used in object validation) */
-  propertyName?: string
-  /** The array index where validation failed (used in array validation) */
-  arrayIndex?: number
+  /** The invalid value that failed validation. */
+  value?: unknown
 }
 
+/**
+ * Error thrown when validation fails. Extends `Error` with structured metadata
+ * for the validation rule, path, and invalid value.
+ */
 export class ValidationError extends Error {
-  public readonly type: ValidationErrorType
-  public readonly meta: ValidationErrorMeta
+  /** Parent path segments. */
+  public readonly path: string[]
+  /** Current path segment, if any. */
+  public readonly key: string | undefined
+  /** The invalid value that failed validation. */
+  public readonly value: unknown
+  /** Whether this error is for a key or value. */
+  public readonly context: 'key' | 'value'
+  /** Error code and constraint parameters. */
+  public readonly constraint: ValidationErrorConstraint
 
-  constructor(
-    type: ValidationErrorType,
-    message: string,
-    path?: string[],
-    key?: string,
-    meta: ValidationErrorMeta = {},
-  ) {
-    let errorMessage = message
+  /**
+   * Creates a ValidationError.
+   *
+   * @param options - Message, constraint, and optional path/value metadata.
+   */
+  constructor(options: ValidationErrorOptions) {
+    super(options.message)
 
-    if (path !== undefined && path.length > 0) {
-      errorMessage += ` at path '${path.join('.')}'`
+    this.name = 'ValidationError'
+    this.path = options.path ?? []
+    this.key = options.key
+    this.value = options.value
+    this.context = options.context ?? 'value'
+    this.constraint = options.constraint
+  }
+
+  /** Error code identifying the validation rule that failed. */
+  get code(): ValidationErrorCode {
+    return this.constraint.code
+  }
+
+  /** Full path as a dot-separated string (e.g. `'items.0.price'`). */
+  get pathString(): string {
+    const segments =
+      this.key !== undefined ? [...this.path, this.key] : this.path
+
+    return segments.filter(Boolean).join('.')
+  }
+
+  /** Returns a plain object suitable for logging or serialization. */
+  toJSON(): Record<string, unknown> {
+    return {
+      code: this.code,
+      message: this.message,
+      path: this.path,
+      key: this.key,
+      pathString: this.pathString,
+      value: this.value,
+      context: this.context,
+      constraint: this.constraint,
     }
-
-    if (key !== undefined) {
-      errorMessage = `'${key}' ${errorMessage}`
-    }
-
-    super(errorMessage)
-
-    this.type = type
-    this.meta = meta
   }
 }

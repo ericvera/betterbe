@@ -28,8 +28,8 @@ it('should be able to create an object', () => {
   expect(nameSpy).toHaveBeenCalledTimes(1)
   expect(ageSpy).toHaveBeenCalledTimes(1)
 
-  expect(nameSpy).toHaveBeenCalledWith('John Doe', [], 'name')
-  expect(ageSpy).toHaveBeenCalledWith(42, [], 'age')
+  expect(nameSpy).toHaveBeenCalledWith('John Doe', [], 'name', 'value')
+  expect(ageSpy).toHaveBeenCalledWith(42, [], 'age', 'value')
 })
 
 it('should throw an error if a key is not allowed', () => {
@@ -41,7 +41,7 @@ it('should throw an error if a key is not allowed', () => {
 
   expect(() => {
     validator.validate({ name: 'John Doe', age: 42 })
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: 'age' is not allowed]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not allowed]`)
 })
 
 it('should work when nested', () => {
@@ -66,8 +66,8 @@ it('should work when nested', () => {
   expect(nameSpy).toHaveBeenCalledTimes(1)
   expect(ageSpy).toHaveBeenCalledTimes(1)
 
-  expect(nameSpy).toHaveBeenCalledWith('John Doe', ['user'], 'name')
-  expect(ageSpy).toHaveBeenCalledWith(42, ['user'], 'age')
+  expect(nameSpy).toHaveBeenCalledWith('John Doe', ['user'], 'name', 'value')
+  expect(ageSpy).toHaveBeenCalledWith(42, ['user'], 'age', 'value')
 })
 
 it('should work when nested and there is an error', () => {
@@ -84,9 +84,7 @@ it('should work when nested and there is an error', () => {
 
   expect(() => {
     validator.validate({ user: { name: 'John Doe' } })
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: 'age' is required at path 'user']`,
-  )
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
 })
 
 it('should work when nested and with other validation functions', () => {
@@ -133,7 +131,7 @@ it('should throw an error if the value is undefined (default required)', () => {
 
   expect(() => {
     validator.validate(undefined)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is required]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
 })
 
 it('should throw an error if the value is undefined (required: true)', () => {
@@ -146,7 +144,7 @@ it('should throw an error if the value is undefined (required: true)', () => {
 
   expect(() => {
     validator.validate(undefined)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is required]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
 })
 
 it('should not throw an error if the value is undefined and not required', () => {
@@ -170,7 +168,13 @@ it('should throw an error if the test function throws', () => {
 
   const test = vi.fn().mockImplementation((value: Partial<User>) => {
     if (value.age === 42) {
-      throw new ValidationError('one-of', 'cannot be 42', [], 'age')
+      throw new ValidationError({
+        message: 'cannot be 42',
+        path: [],
+        key: 'age',
+        context: 'value',
+        constraint: { code: 'one-of', oneOf: ['a', 'b'] },
+      })
     }
   })
 
@@ -180,11 +184,12 @@ it('should throw an error if the test function throws', () => {
 
   expect(() => {
     validator.validate({ name: 'John Doe', age: 42 })
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: 'age' cannot be 42]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: cannot be 42]`)
 
   expect(test).toHaveBeenCalledTimes(1)
   expect(test).toHaveBeenCalledWith(
     { name: 'John Doe', age: 42 },
+    expect.any(Function),
     [],
     undefined,
   )
@@ -198,7 +203,13 @@ it('should not throw an error if the test function does not throw', () => {
 
   const test = vi.fn().mockImplementation((value: Partial<User>) => {
     if (value.age === 42) {
-      throw new ValidationError('max', 'cannot be 42', [], 'age')
+      throw new ValidationError({
+        message: 'cannot be 42',
+        path: [],
+        key: 'age',
+        context: 'value',
+        constraint: { code: 'max', max: 42 },
+      })
     }
   })
 
@@ -213,6 +224,7 @@ it('should not throw an error if the test function does not throw', () => {
   expect(test).toHaveBeenCalledTimes(1)
   expect(test).toHaveBeenCalledWith(
     { name: 'John Doe', age: 45 },
+    expect.any(Function),
     [],
     undefined,
   )
@@ -221,8 +233,8 @@ it('should not throw an error if the test function does not throw', () => {
 it('should throw an error if an inner test function throws', () => {
   const schema = {
     name: string({
-      test: (value: string) => {
-        throw new Error(`cannot be ${value}`)
+      test: (value: string, report) => {
+        report({ message: `cannot be ${value}` })
       },
     }),
     age: number(),
@@ -230,7 +242,13 @@ it('should throw an error if an inner test function throws', () => {
 
   const test = vi.fn().mockImplementation((value: Partial<User>) => {
     if (value.age === 42) {
-      throw new ValidationError('one-of', 'cannot be 42', [], 'age')
+      throw new ValidationError({
+        message: 'cannot be 42',
+        path: [],
+        key: 'age',
+        context: 'value',
+        constraint: { code: 'one-of', oneOf: ['a', 'b'] },
+      })
     }
   })
 
@@ -240,7 +258,7 @@ it('should throw an error if an inner test function throws', () => {
 
   expect(() => {
     validator.validate({ name: 'John Doe', age: 42 })
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: 'name' cannot be John Doe]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: cannot be John Doe]`)
 })
 
 it('should work for object containing an array', () => {
@@ -272,7 +290,7 @@ it('should work with an object containing non-required keys', () => {
   }).not.toThrow()
 })
 
-it('should include propertyName metadata for property validation errors', () => {
+it('should include path and key for property validation errors', () => {
   const schema = {
     name: string({ minLength: 5 }),
     age: number(),
@@ -286,9 +304,38 @@ it('should include propertyName metadata for property validation errors', () => 
   } catch (error) {
     expect(error).toBeInstanceOf(ValidationError)
     const validationError = error as ValidationError
-    expect(validationError.type).toBe('minLength')
-    expect(validationError.meta.context).toBe('value')
-    expect(validationError.meta.propertyName).toBe('name')
-    expect(validationError.meta.minLength).toBe(5)
+    expect(validationError.code).toBe('minLength')
+    expect(validationError.path).toEqual([])
+    expect(validationError.key).toBe('name')
+    expect(validationError.value).toBe('Bob')
+    expect(validationError.constraint).toEqual({
+      code: 'minLength',
+      minLength: 5,
+    })
+  }
+})
+
+it('should include path and key for nested object validation errors', () => {
+  const itemSchema = { price: number({ min: 1 }) }
+  const schema = {
+    items: array(object(itemSchema)),
+  }
+  const validator = object(schema)
+
+  try {
+    validator.validate({ items: [{ price: 0 }] })
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect(error).toBeInstanceOf(ValidationError)
+    const e = error as ValidationError
+    expect(e.code).toBe('min')
+    expect(e.path).toEqual(['items', '[0]'])
+    expect(e.key).toBe('price')
+    expect(e.value).toBe(0)
+    expect(e.constraint).toEqual({ code: 'min', min: 1 })
+    const json = e.toJSON()
+    expect(json['path']).toEqual(['items', '[0]'])
+    expect(json['key']).toBe('price')
+    expect(json['value']).toBe(0)
   }
 })

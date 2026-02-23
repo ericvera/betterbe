@@ -37,71 +37,73 @@ export const object = <T extends object>(
     value: unknown,
     path?: string[],
     key?: string,
+    context?: 'key' | 'value',
   ): void => {
+    const effectiveContext = context ?? 'value'
     const newPath = [...(path ?? [])]
 
     if (key !== undefined) {
       newPath.push(key)
     }
 
-    const obj = validateType<T>('object', value, path, key)
+    const object = validateType<T>('object', value, path, key, effectiveContext)
 
     const { required } = options
 
-    // Validate required
-    if (obj === undefined) {
+    if (object === undefined) {
       if (required !== false) {
-        throw new ValidationError('required', 'is required', newPath, key)
+        throw new ValidationError({
+          message: 'is required',
+          path: path ?? [],
+          key,
+          context: effectiveContext,
+          value,
+          constraint: { code: 'required' },
+        })
       }
-
       return
     }
 
     const schemaKeys = Object.keys(schema)
-    const valueKeys = Object.keys(obj)
+    const valueKeys = Object.keys(object)
 
-    // Check if there are any keys that are not defined in the schema
     for (const valueKey of valueKeys) {
       if (!schemaKeys.includes(valueKey)) {
-        throw new ValidationError(
-          'unknown-keys',
-          'is not allowed',
-          newPath,
-          valueKey,
-        )
+        throw new ValidationError({
+          message: 'is not allowed',
+          path: newPath,
+          key: valueKey,
+          context: effectiveContext,
+          value,
+          constraint: { code: 'unknown-keys' },
+        })
       }
     }
 
-    // Run through all the validation functions
     for (const schemaKey in schema) {
-      const schemaProp = schema[schemaKey]
+      const schemaProperty = schema[schemaKey]
+      const valueToValidate = object[schemaKey]
 
-      const valueToValidate = obj[schemaKey]
-
-      try {
-        schemaProp.validate(valueToValidate, newPath, schemaKey)
-      } catch (e) {
-        if (e instanceof ValidationError) {
-          // Add propertyName metadata to all validation errors
-          e.meta.propertyName = schemaKey
-
-          if (!e.meta.context) {
-            e.meta.context = 'value'
-          }
-        }
-        throw e
-      }
+      schemaProperty.validate(
+        valueToValidate,
+        newPath,
+        schemaKey,
+        effectiveContext,
+      )
     }
 
-    try {
-      options.test?.(obj, newPath, key)
-    } catch (e) {
-      const message = e instanceof Error ? e.message : 'failed tests'
-
-      throw new ValidationError('test', message, newPath, key, {
-        context: 'value',
+    const report = (opts: { message: string }): never => {
+      throw new ValidationError({
+        message: opts.message,
+        path: path ?? [],
+        key,
+        context: effectiveContext,
+        value: object,
+        constraint: { code: 'test' },
       })
     }
+
+    options.test?.(object, report, newPath, key)
   }
 
   const getProp: GetPropValidatorFunction<T> = (key: keyof T) => schema[key]

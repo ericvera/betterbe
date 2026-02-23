@@ -14,7 +14,7 @@ it('should throw an error if the value is not a string', () => {
 
   expect(() => {
     validator.validate(42)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not string]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not string]`)
 })
 
 it('should throw an error if the value is undefined', () => {
@@ -22,7 +22,7 @@ it('should throw an error if the value is undefined', () => {
 
   expect(() => {
     validator.validate(undefined)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is required]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
 })
 
 it('should throw an error if the value is an empty string', () => {
@@ -30,7 +30,7 @@ it('should throw an error if the value is an empty string', () => {
 
   expect(() => {
     validator.validate('')
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is required]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
 })
 
 it('should throw an error if the value is shorter than expected', () => {
@@ -39,7 +39,7 @@ it('should throw an error if the value is shorter than expected', () => {
   expect(() => {
     validator.validate('hi')
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: is shorter than expected length 3]`,
+    `[ValidationError: is shorter than expected length 3]`,
   )
 })
 
@@ -57,7 +57,7 @@ it('should throw an error if the value is longer than maxLength', () => {
   expect(() => {
     validator.validate('hola')
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: is longer than expected length 3]`,
+    `[ValidationError: is longer than expected length 3]`,
   )
 })
 
@@ -74,7 +74,9 @@ it('should throw an error if the value does not match the pattern', () => {
 
   expect(() => {
     validator.validate('123')
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: does not match pattern]`)
+  }).toThrowErrorMatchingInlineSnapshot(
+    `[ValidationError: does not match pattern]`,
+  )
 })
 
 it('should throw an error if the value does not match the alphabet', () => {
@@ -83,7 +85,7 @@ it('should throw an error if the value does not match the alphabet', () => {
   expect(() => {
     validator.validate('def')
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: contains character 'd' which is not in alphabet 'abc']`,
+    `[ValidationError: contains character 'd' which is not in alphabet 'abc']`,
   )
 })
 
@@ -125,7 +127,7 @@ it('should throw an error if the value is shorter than expected and not required
   expect(() => {
     validator.validate('hi')
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: is shorter than expected length 3]`,
+    `[ValidationError: is shorter than expected length 3]`,
   )
 })
 
@@ -135,7 +137,7 @@ it('should throw an error if the value is longer than expected and not required'
   expect(() => {
     validator.validate('hello')
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: is longer than expected length 3]`,
+    `[ValidationError: is longer than expected length 3]`,
   )
 })
 
@@ -144,7 +146,9 @@ it('should throw an error if the value does not match the pattern and not requir
 
   expect(() => {
     validator.validate('123')
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: does not match pattern]`)
+  }).toThrowErrorMatchingInlineSnapshot(
+    `[ValidationError: does not match pattern]`,
+  )
 })
 
 it('should throw an error if the value does not match the alphabet and not required', () => {
@@ -153,7 +157,7 @@ it('should throw an error if the value does not match the alphabet and not requi
   expect(() => {
     validator.validate('abdc')
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: contains character 'd' which is not in alphabet 'abc']`,
+    `[ValidationError: contains character 'd' which is not in alphabet 'abc']`,
   )
 })
 
@@ -193,7 +197,7 @@ it('should throw an error if the value is not one of the allowed values', () => 
   expect(() => {
     validator.validate('foo')
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: is not one of the allowed values]`,
+    `[ValidationError: is not one of the allowed values]`,
   )
 })
 
@@ -211,7 +215,7 @@ it('should not throw an error if the value is undefined and not required', () =>
 })
 
 it('should not throw an error if the the test function does not throw', () => {
-  const test = vi.fn().mockImplementation(() => {})
+  const test = vi.fn().mockImplementation(() => undefined)
 
   const validator = string({
     required: false,
@@ -223,21 +227,26 @@ it('should not throw an error if the the test function does not throw', () => {
   }).not.toThrow()
 
   expect(test).toHaveBeenCalledTimes(1)
-  expect(test).toHaveBeenCalledWith('John Doe', undefined, undefined)
+  expect(test).toHaveBeenCalledWith(
+    'John Doe',
+    expect.any(Function),
+    undefined,
+    undefined,
+  )
 })
 
 it('should not throw an error if the the test function throws an error', () => {
   const validator = string({
     required: true,
     alphabet: 'JDohne ',
-    test: (value: string) => {
-      throw new Error(`Can't be ${value}.`)
+    test: (value: string, report) => {
+      report({ message: `Can't be ${value}.` })
     },
   })
 
   expect(() => {
     validator.validate('John Doe')
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: Can't be John Doe.]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: Can't be John Doe.]`)
 })
 
 it('should include context metadata for string validation errors', () => {
@@ -249,8 +258,10 @@ it('should include context metadata for string validation errors', () => {
   } catch (error) {
     expect(error).toBeInstanceOf(ValidationError)
     const validationError = error as ValidationError
-    expect(validationError.type).toBe('minLength')
-    expect(validationError.meta.context).toBe('value')
-    expect(validationError.meta.minLength).toBe(5)
+    expect(validationError.code).toBe('minLength')
+    expect(validationError.constraint).toEqual({
+      code: 'minLength',
+      minLength: 5,
+    })
   }
 })

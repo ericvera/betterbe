@@ -5,18 +5,18 @@ export const validateAlphabet = (
   value: string,
   path?: string[],
   key?: string,
+  context?: 'key' | 'value',
 ) => {
-  for (const char of value) {
-    if (!alphabet.includes(char)) {
-      throw new ValidationError(
-        'alphabet',
-        `contains character '${char}' which is not in alphabet '${alphabet}'`,
-        path,
+  for (const character of value) {
+    if (!alphabet.includes(character)) {
+      throw new ValidationError({
+        message: `contains character '${character}' which is not in alphabet '${alphabet}'`,
+        path: path ?? [],
         key,
-        { alphabet, context: 'value' },
-      )
+        context: context ?? 'value',
+        value,
+        constraint: { code: 'alphabet', alphabet },
+      })
     }
   }
-
-  return
 }

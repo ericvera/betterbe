@@ -44,86 +44,70 @@ export const record = <TKey extends string | number | symbol, TValue>(
     value: unknown,
     path?: string[],
     key?: string,
+    context?: 'key' | 'value',
   ): void => {
+    const effectiveContext = context ?? 'value'
     const newPath = [...(path ?? [])]
 
     if (key !== undefined) {
       newPath.push(key)
     }
 
-    const obj = validateType<Record<TKey, TValue>>('object', value, path, key)
+    const object = validateType<Record<TKey, TValue>>(
+      'object',
+      value,
+      path,
+      key,
+      effectiveContext,
+    )
 
     const { required } = options
 
-    // Validate required
-    if (obj === undefined) {
+    if (object === undefined) {
       if (required !== false) {
-        throw new ValidationError('required', 'is required', newPath, key)
+        throw new ValidationError({
+          message: 'is required',
+          path: path ?? [],
+          key,
+          context: effectiveContext,
+          value,
+          constraint: { code: 'required' },
+        })
       }
-
       return
     }
 
-    // Handle null (typeof null === 'object' but Object.keys(null) throws)
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (obj === null) {
-      throw new ValidationError('type', 'is not object', newPath, key)
+    if (object === null) {
+      throw new ValidationError({
+        message: 'is not object',
+        path: path ?? [],
+        key,
+        context: effectiveContext,
+        value,
+        constraint: { code: 'type', expected: 'object' },
+      })
     }
 
-    // Validate each key-value pair
-    for (const objKey in obj) {
-      const objValue = obj[objKey]
+    for (const objectKey in object) {
+      const objectValue = object[objectKey]
 
-      // Validate the key with enhanced error messaging
-      try {
-        keyValidator.validate(objKey, newPath, objKey)
-      } catch (e) {
-        if (e instanceof ValidationError) {
-          // Extract the base message by removing the key prefix and path suffix
-          let baseMessage = e.message
-
-          // Remove key prefix if present
-          const keyPrefix = `'${objKey}' `
-
-          if (baseMessage.startsWith(keyPrefix)) {
-            baseMessage = baseMessage.substring(keyPrefix.length)
-          }
-
-          // Remove path suffix if present
-          const pathPattern = / at path '.+'$/
-
-          baseMessage = baseMessage.replace(pathPattern, '')
-
-          // Create new error with "key" prefix in the base message and key context metadata
-          const keySpecificMessage = `key ${keyPrefix}${baseMessage}`
-
-          throw new ValidationError(
-            e.type,
-            keySpecificMessage,
-            newPath,
-            undefined,
-            {
-              ...e.meta,
-              context: 'key',
-              originalKey: objKey,
-            },
-          )
-        }
-
-        throw e
-      }
-
-      // Validate the value
-      valueValidator.validate(objValue, newPath, objKey)
+      keyValidator.validate(objectKey, newPath, objectKey, 'key')
+      valueValidator.validate(objectValue, newPath, objectKey, 'value')
     }
 
-    try {
-      options.test?.(obj, newPath, key)
-    } catch (e) {
-      const message = e instanceof Error ? e.message : 'failed tests'
-
-      throw new ValidationError('test', message, newPath, key)
+    const report = (opts: { message: string }): never => {
+      throw new ValidationError({
+        message: opts.message,
+        path: path ?? [],
+        key,
+        context: effectiveContext,
+        value: object,
+        constraint: { code: 'test' },
+      })
     }
+
+    options.test?.(object, report, newPath, key)
   }
 
   return { validate, type: ValidatorType.RECORD }

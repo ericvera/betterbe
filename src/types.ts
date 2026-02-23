@@ -11,14 +11,24 @@ export type ValidationFunction = (
   value: unknown,
   path?: string[],
   key?: string,
+  context?: 'key' | 'value',
 ) => void
 
 export type GetPropValidatorFunction<T> = (
   key: keyof T,
 ) => Schema<T>[typeof key]
 
+/** Options for the report callback in test functions. */
+export interface TestReportOptions {
+  message: string
+}
+
+/** Function that reports a test failure. Never returns (always throws). */
+export type TestReport = (options: TestReportOptions) => never
+
 export type TestFunction<TData = unknown> = (
   value: Partial<TData>,
+  report: TestReport,
   path?: string[],
   key?: string,
 ) => void

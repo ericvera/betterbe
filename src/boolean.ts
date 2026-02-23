@@ -24,19 +24,30 @@ export const boolean = (options: BooleanOptions = {}): BooleanValidator => {
     value: unknown,
     path?: string[],
     key?: string,
+    context?: 'key' | 'value',
   ): void => {
-    // Validate type
-    const b = validateType<boolean>('boolean', value, path, key)
+    const effectiveContext = context ?? 'value'
+    const booleanValue = validateType<boolean>(
+      'boolean',
+      value,
+      path,
+      key,
+      effectiveContext,
+    )
 
     const { required } = options
 
-    // Validate required
-    if (b === undefined) {
+    if (booleanValue === undefined) {
       if (required !== false) {
-        throw new ValidationError('required', 'is required', path, key)
+        throw new ValidationError({
+          message: 'is required',
+          path: path ?? [],
+          key,
+          context: effectiveContext,
+          value,
+          constraint: { code: 'required' },
+        })
       }
-
-      return
     }
   }
 

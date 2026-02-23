@@ -14,7 +14,7 @@ it('should throw an error if the value is not a boolean', () => {
 
   expect(() => {
     validator.validate('true')
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not boolean]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not boolean]`)
 })
 
 it('should throw an error if the value is undefined', () => {
@@ -22,7 +22,7 @@ it('should throw an error if the value is undefined', () => {
 
   expect(() => {
     validator.validate(undefined)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is required]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
 })
 
 it('should not throw an error if the value is undefined and not required', () => {

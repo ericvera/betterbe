@@ -14,7 +14,7 @@ it('should throw an error if the value is not a number', () => {
 
   expect(() => {
     validator.validate('42')
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not number]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not number]`)
 })
 
 it('should throw an error if the value is NaN', () => {
@@ -22,7 +22,7 @@ it('should throw an error if the value is NaN', () => {
 
   expect(() => {
     validator.validate(Number.NaN)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not a number]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not a number]`)
 })
 
 it('should throw an error if the value is NaN with options', () => {
@@ -30,7 +30,7 @@ it('should throw an error if the value is NaN with options', () => {
 
   expect(() => {
     validator.validate(Number.NaN)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not a number]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not a number]`)
 })
 
 it('should throw an error if the value is undefined', () => {
@@ -38,7 +38,7 @@ it('should throw an error if the value is undefined', () => {
 
   expect(() => {
     validator.validate(undefined)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is required]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
 })
 
 it('should throw an error if the value is less than the minimum', () => {
@@ -46,7 +46,9 @@ it('should throw an error if the value is less than the minimum', () => {
 
   expect(() => {
     validator.validate(2)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is less than minimum 3]`)
+  }).toThrowErrorMatchingInlineSnapshot(
+    `[ValidationError: is less than minimum 3]`,
+  )
 })
 
 it('should throw an error if the value is greater than the maximum', () => {
@@ -54,7 +56,9 @@ it('should throw an error if the value is greater than the maximum', () => {
 
   expect(() => {
     validator.validate(4)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is greater than maximum 3]`)
+  }).toThrowErrorMatchingInlineSnapshot(
+    `[ValidationError: is greater than maximum 3]`,
+  )
 })
 
 it('should throw an error if the value is not an integer', () => {
@@ -62,7 +66,7 @@ it('should throw an error if the value is not an integer', () => {
 
   expect(() => {
     validator.validate(3.14)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not an integer]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not an integer]`)
 })
 
 it('should not throw an error if the value is an integer', () => {
@@ -86,7 +90,7 @@ it('should not throw an error if the value is undefined and required', () => {
 
   expect(() => {
     validator.validate(undefined)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is required]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
 })
 
 it('should not throw an error if the value is a number and not required', () => {
@@ -115,7 +119,9 @@ it('should throw no a negative number when min is 0', () => {
 
   expect(() => {
     validator.validate(-1)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is less than minimum 0]`)
+  }).toThrowErrorMatchingInlineSnapshot(
+    `[ValidationError: is less than minimum 0]`,
+  )
 })
 
 it('should include context metadata for number validation errors', () => {
@@ -127,8 +133,7 @@ it('should include context metadata for number validation errors', () => {
   } catch (error) {
     expect(error).toBeInstanceOf(ValidationError)
     const validationError = error as ValidationError
-    expect(validationError.type).toBe('min')
-    expect(validationError.meta.context).toBe('value')
-    expect(validationError.meta.min).toBe(10)
+    expect(validationError.code).toBe('min')
+    expect(validationError.constraint).toEqual({ code: 'min', min: 10 })
   }
 })

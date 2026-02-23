@@ -17,13 +17,13 @@ it('should validate a record with string keys and number values', () => {
   expect(keySpy).toHaveBeenCalledTimes(3)
   expect(valueSpy).toHaveBeenCalledTimes(3)
 
-  expect(keySpy).toHaveBeenCalledWith('foo', [], 'foo')
-  expect(keySpy).toHaveBeenCalledWith('bar', [], 'bar')
-  expect(keySpy).toHaveBeenCalledWith('baz', [], 'baz')
+  expect(keySpy).toHaveBeenCalledWith('foo', [], 'foo', 'key')
+  expect(keySpy).toHaveBeenCalledWith('bar', [], 'bar', 'key')
+  expect(keySpy).toHaveBeenCalledWith('baz', [], 'baz', 'key')
 
-  expect(valueSpy).toHaveBeenCalledWith(1, [], 'foo')
-  expect(valueSpy).toHaveBeenCalledWith(2, [], 'bar')
-  expect(valueSpy).toHaveBeenCalledWith(3, [], 'baz')
+  expect(valueSpy).toHaveBeenCalledWith(1, [], 'foo', 'value')
+  expect(valueSpy).toHaveBeenCalledWith(2, [], 'bar', 'value')
+  expect(valueSpy).toHaveBeenCalledWith(3, [], 'baz', 'value')
 })
 
 it('should throw an error for invalid keys', () => {
@@ -35,7 +35,7 @@ it('should throw an error for invalid keys', () => {
   expect(() => {
     validator.validate({ 'invalid-key': 1, foo: 2 })
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: key 'invalid-key' does not match pattern]`,
+    `[ValidationError: does not match pattern]`,
   )
 })
 
@@ -47,7 +47,9 @@ it('should throw an error for invalid values', () => {
 
   expect(() => {
     validator.validate({ foo: -1, bar: 2 })
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: 'foo' is less than minimum 0]`)
+  }).toThrowErrorMatchingInlineSnapshot(
+    `[ValidationError: is less than minimum 0]`,
+  )
 })
 
 it('should work with empty objects', () => {
@@ -79,9 +81,7 @@ it('should provide proper error paths for nested validation', () => {
       user1: { score: 100 },
       user2: { score: 'invalid' },
     })
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: 'score' is not number at path 'user2']`,
-  )
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not number]`)
 })
 
 it('should handle required option', () => {
@@ -89,7 +89,7 @@ it('should handle required option', () => {
 
   expect(() => {
     validator.validate(undefined)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is required]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
 })
 
 it('should handle required: false option', () => {
@@ -105,24 +105,24 @@ it('should throw error for non-object values', () => {
 
   expect(() => {
     validator.validate('not an object')
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not object]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not object]`)
 
   expect(() => {
     validator.validate(42)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not object]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not object]`)
 
   expect(() => {
     validator.validate([])
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not object]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not object]`)
 })
 
 it('should work with custom test function', () => {
   const validator = record(string(), number(), {
-    test: (value) => {
+    test: (value, report) => {
       const keys = Object.keys(value)
 
       if (keys.length < 2) {
-        throw new Error('Must have at least 2 properties')
+        report({ message: 'Must have at least 2 properties' })
       }
     },
   })
@@ -130,7 +130,7 @@ it('should work with custom test function', () => {
   expect(() => {
     validator.validate({ a: 1 })
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: Must have at least 2 properties]`,
+    `[ValidationError: Must have at least 2 properties]`,
   )
 
   expect(() => {
@@ -151,7 +151,7 @@ it('should validate with different key and value types', () => {
   expect(() => {
     validator.validate({ invalid: true })
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: key 'invalid' is not one of the allowed values]`,
+    `[ValidationError: is not one of the allowed values]`,
   )
 })
 
@@ -180,7 +180,7 @@ it('should handle null and undefined values correctly', () => {
 
   expect(() => {
     validator.validate(null)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is not object]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not object]`)
 })
 
 it('should provide key-specific errors for various validation types', () => {
@@ -190,7 +190,7 @@ it('should provide key-specific errors for various validation types', () => {
   expect(() => {
     minLengthValidator.validate({ ab: 1 })
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: key 'ab' is shorter than expected length 3]`,
+    `[ValidationError: is shorter than expected length 3]`,
   )
 
   // Test maxLength key validation
@@ -199,7 +199,7 @@ it('should provide key-specific errors for various validation types', () => {
   expect(() => {
     maxLengthValidator.validate({ toolongkey: 1 })
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: key 'toolongkey' is longer than expected length 5]`,
+    `[ValidationError: is longer than expected length 5]`,
   )
 })
 
@@ -215,7 +215,7 @@ it('should provide key-specific errors in nested records with proper paths', () 
       user2: { invalidfield: 'value' },
     })
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: key 'invalidfield' is not one of the allowed values at path 'user2']`,
+    `[ValidationError: is not one of the allowed values]`,
   )
 })
 
@@ -228,10 +228,13 @@ it('should include key context metadata in validation errors', () => {
   } catch (error) {
     expect(error).toBeInstanceOf(ValidationError)
     const validationError = error as ValidationError
-    expect(validationError.type).toBe('pattern')
-    expect(validationError.meta.context).toBe('key')
-    expect(validationError.meta.originalKey).toBe('Invalid-Key')
-    expect(validationError.meta.pattern).toEqual(/^[a-z]+$/)
+    expect(validationError.code).toBe('pattern')
+    expect(validationError.context).toBe('key')
+    expect(validationError.key).toBe('Invalid-Key')
+    expect(validationError.constraint).toEqual({
+      code: 'pattern',
+      pattern: '/^[a-z]+$/',
+    })
   }
 })
 
@@ -247,10 +250,13 @@ it('should include key context metadata for oneOf validation errors', () => {
   } catch (error) {
     expect(error).toBeInstanceOf(ValidationError)
     const validationError = error as ValidationError
-    expect(validationError.type).toBe('one-of')
-    expect(validationError.meta.context).toBe('key')
-    expect(validationError.meta.originalKey).toBe('invalid')
-    expect(validationError.meta.oneOf).toEqual(['admin', 'user', 'guest'])
+    expect(validationError.code).toBe('one-of')
+    expect(validationError.context).toBe('key')
+    expect(validationError.key).toBe('invalid')
+    expect(validationError.constraint).toEqual({
+      code: 'one-of',
+      oneOf: ['admin', 'user', 'guest'],
+    })
   }
 })
 
@@ -263,10 +269,13 @@ it('should include key context metadata for length validation errors', () => {
   } catch (error) {
     expect(error).toBeInstanceOf(ValidationError)
     const validationError = error as ValidationError
-    expect(validationError.type).toBe('minLength')
-    expect(validationError.meta.context).toBe('key')
-    expect(validationError.meta.originalKey).toBe('abc')
-    expect(validationError.meta.minLength).toBe(5)
+    expect(validationError.code).toBe('minLength')
+    expect(validationError.context).toBe('key')
+    expect(validationError.key).toBe('abc')
+    expect(validationError.constraint).toEqual({
+      code: 'minLength',
+      minLength: 5,
+    })
   }
 })
 
@@ -279,9 +288,9 @@ it('should include value context metadata for value validation errors', () => {
   } catch (error) {
     expect(error).toBeInstanceOf(ValidationError)
     const validationError = error as ValidationError
-    expect(validationError.type).toBe('min')
-    expect(validationError.meta.context).toBe('value')
-    expect(validationError.meta.originalKey).toBeUndefined()
-    expect(validationError.meta.min).toBe(0)
+    expect(validationError.code).toBe('min')
+    expect(validationError.context).toBe('value')
+    expect(validationError.key).toBe('foo')
+    expect(validationError.constraint).toEqual({ code: 'min', min: 0 })
   }
 })

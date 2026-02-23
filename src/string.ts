@@ -63,79 +63,93 @@ export const string = (options: StringOptions = {}): StringValidator => {
     value: unknown,
     path?: string[],
     key?: string,
+    context?: 'key' | 'value',
   ): void => {
-    // Validate type
-    const str = validateType<string>('string', value, path, key)
+    const effectiveContext = context ?? 'value'
+    const stringValue = validateType<string>(
+      'string',
+      value,
+      path,
+      key,
+      effectiveContext,
+    )
 
     const { maxLength, minLength, required, pattern, alphabet, oneOf } = options
 
-    // Validate required
-    if (str === undefined || str === '') {
+    if (stringValue === undefined || stringValue === '') {
       if (required !== false) {
-        throw new ValidationError('required', 'is required', path, key)
+        throw new ValidationError({
+          message: 'is required',
+          path: path ?? [],
+          key,
+          context: effectiveContext,
+          value,
+          constraint: { code: 'required' },
+        })
       }
-
       return
     }
 
-    // Validate length
-    if (minLength !== undefined && str.length < minLength) {
-      throw new ValidationError(
-        'minLength',
-        `is shorter than expected length ${minLength.toString()}`,
-        path,
+    if (minLength !== undefined && stringValue.length < minLength) {
+      throw new ValidationError({
+        message: `is shorter than expected length ${minLength.toString()}`,
+        path: path ?? [],
         key,
-        { minLength, context: 'value' },
-      )
-    }
-
-    if (maxLength !== undefined && str.length > maxLength) {
-      throw new ValidationError(
-        'maxLength',
-        `is longer than expected length ${maxLength.toString()}`,
-        path,
-        key,
-        { maxLength, context: 'value' },
-      )
-    }
-
-    // Validate pattern
-    if (pattern && !pattern.test(str)) {
-      throw new ValidationError(
-        'pattern',
-        'does not match pattern',
-        path,
-        key,
-        { pattern, context: 'value' },
-      )
-    }
-
-    // Validate alphabet
-    if (alphabet !== undefined) {
-      validateAlphabet(alphabet, str, path, key)
-    }
-
-    // Validate oneOf
-    if (oneOf !== undefined && !oneOf.includes(str)) {
-      throw new ValidationError(
-        'one-of',
-        'is not one of the allowed values',
-        path,
-        key,
-        { oneOf, context: 'value' },
-      )
-    }
-
-    // Run test function
-    try {
-      options.test?.(str, path, key)
-    } catch (e) {
-      const message = e instanceof Error ? e.message : 'failed tests'
-
-      throw new ValidationError('test', message, path, key, {
-        context: 'value',
+        context: effectiveContext,
+        value,
+        constraint: { code: 'minLength', minLength },
       })
     }
+
+    if (maxLength !== undefined && stringValue.length > maxLength) {
+      throw new ValidationError({
+        message: `is longer than expected length ${maxLength.toString()}`,
+        path: path ?? [],
+        key,
+        context: effectiveContext,
+        value,
+        constraint: { code: 'maxLength', maxLength },
+      })
+    }
+
+    if (pattern !== undefined && !pattern.test(stringValue)) {
+      throw new ValidationError({
+        message: 'does not match pattern',
+        path: path ?? [],
+        key,
+        context: effectiveContext,
+        value,
+        constraint: { code: 'pattern', pattern: pattern.toString() },
+      })
+    }
+
+    if (alphabet !== undefined) {
+      validateAlphabet(alphabet, stringValue, path, key, effectiveContext)
+    }
+
+    if (oneOf !== undefined && !oneOf.includes(stringValue)) {
+      throw new ValidationError({
+        message: 'is not one of the allowed values',
+        path: path ?? [],
+        key,
+        context: effectiveContext,
+        value,
+        constraint: { code: 'one-of', oneOf },
+      })
+    }
+
+    const report = (opts: { message: string }): never => {
+      throw new ValidationError({
+        message: opts.message,
+        path: path ?? [],
+        key,
+        context: effectiveContext,
+        value,
+        constraint: { code: 'test' },
+      })
+    }
+
+    options.test?.(stringValue, report, path, key)
   }
 
   return { validate, type: ValidatorType.STRING }

@@ -34,7 +34,7 @@ export interface ArrayOptions<T> {
  * Returns a validation function that checks if a value is an array and
  * validates its items against a validator.
  *
- * @param itemValidator A validation functions for each the items of the array.
+ * @param itemValidator A validation function for each item in the array.
  */
 export const array = <T>(
   itemValidator: Value<T>,
@@ -44,98 +44,99 @@ export const array = <T>(
     value: unknown,
     path?: string[],
     key?: string,
+    context?: 'key' | 'value',
   ): void => {
+    const effectiveContext = context ?? 'value'
     const newPath = [...(path ?? [])]
 
     if (key !== undefined) {
       newPath.push(key)
     }
 
-    const arr = validateType<T[]>('array', value, path, key)
+    const array = validateType<T[]>('array', value, path, key, effectiveContext)
 
     const { maxLength, minLength, required, unique } = options
 
-    // Validate required
-    if (arr === undefined) {
+    if (array === undefined) {
       if (required !== false) {
-        throw new ValidationError('required', 'is required', newPath, key)
+        throw new ValidationError({
+          message: 'is required',
+          path: newPath,
+          key,
+          context: effectiveContext,
+          value,
+          constraint: { code: 'required' },
+        })
       }
-
       return
     }
 
-    // Validate length
-    if (minLength !== undefined && arr.length < minLength) {
-      throw new ValidationError(
-        'minLength',
-        `is shorter than expected length ${minLength.toString()}`,
-        path,
+    if (minLength !== undefined && array.length < minLength) {
+      throw new ValidationError({
+        message: `is shorter than expected length ${minLength.toString()}`,
+        path: path ?? [],
         key,
-        { minLength, context: 'value' },
-      )
+        context: effectiveContext,
+        value,
+        constraint: { code: 'minLength', minLength },
+      })
     }
 
-    if (maxLength !== undefined && arr.length > maxLength) {
-      throw new ValidationError(
-        'maxLength',
-        `is longer than expected length ${maxLength.toString()}`,
-        path,
+    if (maxLength !== undefined && array.length > maxLength) {
+      throw new ValidationError({
+        message: `is longer than expected length ${maxLength.toString()}`,
+        path: path ?? [],
         key,
-        { maxLength, context: 'value' },
-      )
+        context: effectiveContext,
+        value,
+        constraint: { code: 'maxLength', maxLength },
+      })
     }
 
-    // Validate uniqueness
-    if (unique === true && arr.length > 0) {
+    if (unique === true && array.length > 0) {
       const seen = new Set()
 
-      for (let i = 0; i < arr.length; i++) {
-        const value = arr[i]
-        // For objects and arrays, we can't reliably check uniqueness with Set
-        // So we stringify them first
+      for (let index = 0; index < array.length; index++) {
+        const item = array[index]
         const valueKey =
-          typeof value === 'object' && value !== null
-            ? JSON.stringify(value)
-            : value
+          typeof item === 'object' && item !== null
+            ? JSON.stringify(item)
+            : item
 
         if (seen.has(valueKey)) {
-          throw new ValidationError(
-            'unique',
-            'contains duplicate values',
-            newPath,
-            key,
-            { context: 'value', arrayIndex: i },
-          )
+          throw new ValidationError({
+            message: 'contains duplicate values',
+            path: newPath,
+            key: `[${index.toString()}]`,
+            context: effectiveContext,
+            value: item,
+            constraint: { code: 'unique' },
+          })
         }
         seen.add(valueKey)
       }
     }
 
-    // Run through all the validation functions
-    for (let i = 0; i < arr.length; i++) {
-      try {
-        itemValidator.validate(arr[i], newPath, `[${i.toString()}]`)
-      } catch (e) {
-        if (e instanceof ValidationError) {
-          // Add arrayIndex metadata to all validation errors
-          e.meta.arrayIndex = i
-          if (!e.meta.context) {
-            e.meta.context = 'value'
-          }
-        }
-        throw e
-      }
+    for (let index = 0; index < array.length; index++) {
+      itemValidator.validate(
+        array[index],
+        newPath,
+        `[${index.toString()}]`,
+        effectiveContext,
+      )
     }
 
-    try {
-      options.test?.(arr, newPath, key)
-    } catch (e) {
-      const message = e instanceof Error ? e.message : 'failed tests'
-
-      throw new ValidationError('test', message, newPath, key, {
-        context: 'value',
+    const report = (opts: { message: string }): never => {
+      throw new ValidationError({
+        message: opts.message,
+        path: newPath,
+        key,
+        context: effectiveContext,
+        value,
+        constraint: { code: 'test' },
       })
     }
+    options.test?.(array, report, newPath, key)
   }
 
   return { validate, type: ValidatorType.ARRAY }

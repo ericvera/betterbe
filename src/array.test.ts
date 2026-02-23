@@ -1,4 +1,5 @@
 import { expect, it, vi } from 'vitest'
+import type { TestReport } from './index.js'
 import { array, number, string, ValidationError } from './index.js'
 
 it('should be able to create an array', () => {
@@ -21,6 +22,7 @@ it('should be able to create an array', () => {
       "1",
       [],
       "[0]",
+      "value",
     ]
   `)
   expect(valueSpy.mock.calls[1]).toMatchInlineSnapshot(`
@@ -28,6 +30,7 @@ it('should be able to create an array', () => {
       "hello",
       [],
       "[1]",
+      "value",
     ]
   `)
 })
@@ -60,7 +63,7 @@ it('should throw an error if the array is shorter than expected', () => {
   expect(() => {
     validator.validate(['a'])
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: is shorter than expected length 2]`,
+    `[ValidationError: is shorter than expected length 2]`,
   )
 
   expect(valueSpy).not.toHaveBeenCalled()
@@ -86,6 +89,7 @@ it('should not throw if the array is exactly the minLength', () => {
       "a",
       [],
       "[0]",
+      "value",
     ]
   `)
 })
@@ -102,7 +106,7 @@ it('should throw if the arr is longer than maxLength', () => {
   expect(() => {
     validator.validate(['a', 'b', 'c', 'd', 'e', 'f'])
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: is longer than expected length 5]`,
+    `[ValidationError: is longer than expected length 5]`,
   )
 
   expect(valueSpy).not.toHaveBeenCalled()
@@ -127,6 +131,7 @@ it('should not throw if value is exactly maxLength', () => {
       "a",
       [],
       "[0]",
+      "value",
     ]
   `)
   expect(valueSpy.mock.calls[1]).toMatchInlineSnapshot(`
@@ -134,6 +139,7 @@ it('should not throw if value is exactly maxLength', () => {
       "b",
       [],
       "[1]",
+      "value",
     ]
   `)
   expect(valueSpy.mock.calls[2]).toMatchInlineSnapshot(`
@@ -141,6 +147,7 @@ it('should not throw if value is exactly maxLength', () => {
       "c",
       [],
       "[2]",
+      "value",
     ]
   `)
   expect(valueSpy.mock.calls[3]).toMatchInlineSnapshot(`
@@ -148,6 +155,7 @@ it('should not throw if value is exactly maxLength', () => {
       "d",
       [],
       "[3]",
+      "value",
     ]
   `)
   expect(valueSpy.mock.calls[4]).toMatchInlineSnapshot(`
@@ -155,6 +163,7 @@ it('should not throw if value is exactly maxLength', () => {
       "e",
       [],
       "[4]",
+      "value",
     ]
   `)
 })
@@ -202,7 +211,7 @@ it('should work when nested and there is an error', () => {
       [0, 5],
     ])
   }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: '[2]' is greater than maximum 10 at path '[0]']`,
+    `[ValidationError: is greater than maximum 10]`,
   )
 
   expect(arraySpy).toHaveBeenCalledTimes(1)
@@ -220,7 +229,7 @@ it('should throw an error if the value is undefined (required: true)', () => {
 
   expect(() => {
     validator.validate(undefined)
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: is required]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
 
   expect(valueSpy).not.toHaveBeenCalled()
 })
@@ -246,11 +255,13 @@ it('should throw an error if the test function throws', () => {
 
   const valueSpy = vi.spyOn(itemValidator, 'validate')
 
-  const test = vi.fn().mockImplementation((value: string[]) => {
-    if (value.length > 0 && value.some((v) => v === 'boom')) {
-      throw new ValidationError('test', 'cannot be boom', [], '[0]')
-    }
-  })
+  const test = vi
+    .fn()
+    .mockImplementation((value: string[], report: TestReport) => {
+      if (value.length > 0 && value.some((v) => v === 'boom')) {
+        report({ message: 'cannot be boom' })
+      }
+    })
 
   const validator = array(itemValidator, { minLength: 2, test })
 
@@ -258,7 +269,7 @@ it('should throw an error if the test function throws', () => {
 
   expect(() => {
     validator.validate(['ok', 'ok', 'boom'])
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: '[0]' cannot be boom]`)
+  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: cannot be boom]`)
 
   expect(valueSpy).toHaveBeenCalledTimes(3)
 })
@@ -268,11 +279,13 @@ it('should not throw an error if the test function does not throw', () => {
 
   const valueSpy = vi.spyOn(itemValidator, 'validate')
 
-  const test = vi.fn().mockImplementation((value: string[]) => {
-    if (value.length > 0 && value.some((v) => v === 'boom')) {
-      throw new ValidationError('test', 'cannot be boom', [], '[0]')
-    }
-  })
+  const test = vi
+    .fn()
+    .mockImplementation((value: string[], report: TestReport) => {
+      if (value.length > 0 && value.some((v) => v === 'boom')) {
+        report({ message: 'cannot be boom' })
+      }
+    })
 
   const validator = array(itemValidator, {
     minLength: 2,
@@ -299,7 +312,9 @@ it('should throw an error if unique is true and array contains duplicates', () =
 
   expect(() => {
     validator.validate(['a', 'b', 'a'])
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: contains duplicate values]`)
+  }).toThrowErrorMatchingInlineSnapshot(
+    `[ValidationError: contains duplicate values]`,
+  )
 
   expect(valueSpy).toHaveBeenCalledTimes(0)
 })
@@ -341,11 +356,14 @@ it('should handle unique validation with object values', () => {
 
   const obj1 = { id: 1 }
   const obj2 = { id: 2 }
-  const obj3 = { id: 1 } // Different object reference but same content as obj1
+  // Same content as obj1, different reference
+  const obj3 = { id: 1 }
 
   expect(() => {
     validator.validate([obj1, obj2, obj3])
-  }).toThrowErrorMatchingInlineSnapshot(`[Error: contains duplicate values]`)
+  }).toThrowErrorMatchingInlineSnapshot(
+    `[ValidationError: contains duplicate values]`,
+  )
 
   expect(valueSpy).toHaveBeenCalledTimes(0)
 })
@@ -359,9 +377,11 @@ it('should include context metadata for array validation errors', () => {
   } catch (error) {
     expect(error).toBeInstanceOf(ValidationError)
     const validationError = error as ValidationError
-    expect(validationError.type).toBe('minLength')
-    expect(validationError.meta.context).toBe('value')
-    expect(validationError.meta.minLength).toBe(3)
+    expect(validationError.code).toBe('minLength')
+    expect(validationError.constraint).toEqual({
+      code: 'minLength',
+      minLength: 3,
+    })
   }
 })
 
@@ -374,9 +394,12 @@ it('should include arrayIndex metadata for item validation errors', () => {
   } catch (error) {
     expect(error).toBeInstanceOf(ValidationError)
     const validationError = error as ValidationError
-    expect(validationError.type).toBe('minLength')
-    expect(validationError.meta.context).toBe('value')
-    expect(validationError.meta.arrayIndex).toBe(1)
-    expect(validationError.meta.minLength).toBe(3)
+    expect(validationError.code).toBe('minLength')
+    expect(validationError.path).toEqual([])
+    expect(validationError.key).toBe('[1]')
+    expect(validationError.constraint).toEqual({
+      code: 'minLength',
+      minLength: 3,
+    })
   }
 })
