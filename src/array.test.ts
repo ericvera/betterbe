@@ -1,6 +1,6 @@
 import { expect, it, vi } from 'vitest'
 import type { TestReport } from './index.js'
-import { array, number, string, ValidationError } from './index.js'
+import { array, number, object, string, ValidationError } from './index.js'
 
 it('should be able to create an array', () => {
   const itemValidator = string()
@@ -51,6 +51,81 @@ it('should work with empty array', () => {
   expect(valueSpy).not.toHaveBeenCalled()
 })
 
+it('should throw an error if the value is a number instead of array', () => {
+  const validator = array(string())
+
+  try {
+    validator.validate(42)
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "type",
+        "constraint": {
+          "code": "type",
+          "expected": "number",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is not array",
+        "path": [],
+        "pathString": "",
+        "value": 42,
+      }
+    `)
+  }
+})
+
+it('should throw an error if the value is a string instead of array', () => {
+  const validator = array(string())
+
+  try {
+    validator.validate('foo')
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "type",
+        "constraint": {
+          "code": "type",
+          "expected": "string",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is not array",
+        "path": [],
+        "pathString": "",
+        "value": "foo",
+      }
+    `)
+  }
+})
+
+it('should throw an error if the value is an object instead of array', () => {
+  const validator = array(string())
+
+  try {
+    validator.validate({})
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "type",
+        "constraint": {
+          "code": "type",
+          "expected": "object",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is not array",
+        "path": [],
+        "pathString": "",
+        "value": {},
+      }
+    `)
+  }
+})
+
 it('should throw an error if the array is shorter than expected', () => {
   const itemValidator = string()
 
@@ -60,11 +135,28 @@ it('should throw an error if the array is shorter than expected', () => {
 
   expect(valueSpy).not.toHaveBeenCalled()
 
-  expect(() => {
+  try {
     validator.validate(['a'])
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: is shorter than expected length 2]`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "minLength",
+        "constraint": {
+          "code": "minLength",
+          "minLength": 2,
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is shorter than expected length 2",
+        "path": [],
+        "pathString": "",
+        "value": [
+          "a",
+        ],
+      }
+    `)
+  }
 
   expect(valueSpy).not.toHaveBeenCalled()
 })
@@ -94,7 +186,7 @@ it('should not throw if the array is exactly the minLength', () => {
   `)
 })
 
-it('should throw if the arr is longer than maxLength', () => {
+it('should throw if the array is longer than maxLength', () => {
   const itemValidator = string()
 
   const valueSpy = vi.spyOn(itemValidator, 'validate')
@@ -103,11 +195,33 @@ it('should throw if the arr is longer than maxLength', () => {
 
   expect(valueSpy).not.toHaveBeenCalled()
 
-  expect(() => {
+  try {
     validator.validate(['a', 'b', 'c', 'd', 'e', 'f'])
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: is longer than expected length 5]`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "maxLength",
+        "constraint": {
+          "code": "maxLength",
+          "maxLength": 5,
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is longer than expected length 5",
+        "path": [],
+        "pathString": "",
+        "value": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+        ],
+      }
+    `)
+  }
 
   expect(valueSpy).not.toHaveBeenCalled()
 })
@@ -205,14 +319,31 @@ it('should work when nested and there is an error', () => {
   expect(numberSpy).not.toHaveBeenCalled()
   expect(arraySpy).not.toHaveBeenCalled()
 
-  expect(() => {
+  try {
     validator.validate([
       [1, 4, 123],
       [0, 5],
     ])
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: is greater than maximum 10]`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "max",
+        "constraint": {
+          "code": "max",
+          "max": 10,
+        },
+        "context": "value",
+        "key": "[2]",
+        "message": "is greater than maximum 10",
+        "path": [
+          "[0]",
+        ],
+        "pathString": "[0].[2]",
+        "value": 123,
+      }
+    `)
+  }
 
   expect(arraySpy).toHaveBeenCalledTimes(1)
   expect(numberSpy).toHaveBeenCalledTimes(3)
@@ -227,9 +358,25 @@ it('should throw an error if the value is undefined (required: true)', () => {
 
   expect(valueSpy).not.toHaveBeenCalled()
 
-  expect(() => {
+  try {
     validator.validate(undefined)
-  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "required",
+        "constraint": {
+          "code": "required",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is required",
+        "path": [],
+        "pathString": "",
+        "value": undefined,
+      }
+    `)
+  }
 
   expect(valueSpy).not.toHaveBeenCalled()
 })
@@ -250,6 +397,40 @@ it('should not throw an error if the value is undefined and not required', () =>
   expect(valueSpy).not.toHaveBeenCalled()
 })
 
+it('should pass correct path and key to test report callback', () => {
+  const validator = array(string(), {
+    test: (_value, report, path, key) => {
+      expect(path).toEqual([])
+      expect(key).toBe('items')
+      report({ message: 'array test fail' })
+    },
+  })
+  const rootValidator = object({ items: validator })
+
+  try {
+    rootValidator.validate({ items: ['a', 'b'] })
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "test",
+        "constraint": {
+          "code": "test",
+        },
+        "context": "value",
+        "key": "items",
+        "message": "array test fail",
+        "path": [],
+        "pathString": "items",
+        "value": [
+          "a",
+          "b",
+        ],
+      }
+    `)
+  }
+})
+
 it('should throw an error if the test function throws', () => {
   const itemValidator = string()
 
@@ -267,9 +448,29 @@ it('should throw an error if the test function throws', () => {
 
   expect(valueSpy).not.toHaveBeenCalled()
 
-  expect(() => {
+  try {
     validator.validate(['ok', 'ok', 'boom'])
-  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: cannot be boom]`)
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "test",
+        "constraint": {
+          "code": "test",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "cannot be boom",
+        "path": [],
+        "pathString": "",
+        "value": [
+          "ok",
+          "ok",
+          "boom",
+        ],
+      }
+    `)
+  }
 
   expect(valueSpy).toHaveBeenCalledTimes(3)
 })
@@ -310,11 +511,25 @@ it('should throw an error if unique is true and array contains duplicates', () =
 
   expect(valueSpy).not.toHaveBeenCalled()
 
-  expect(() => {
+  try {
     validator.validate(['a', 'b', 'a'])
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: contains duplicate values]`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "unique",
+        "constraint": {
+          "code": "unique",
+        },
+        "context": "value",
+        "key": "[2]",
+        "message": "contains duplicate values",
+        "path": [],
+        "pathString": "[2]",
+        "value": "a",
+      }
+    `)
+  }
 
   expect(valueSpy).toHaveBeenCalledTimes(0)
 })
@@ -359,33 +574,32 @@ it('should handle unique validation with object values', () => {
   // Same content as obj1, different reference
   const obj3 = { id: 1 }
 
-  expect(() => {
+  try {
     validator.validate([obj1, obj2, obj3])
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: contains duplicate values]`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "unique",
+        "constraint": {
+          "code": "unique",
+        },
+        "context": "value",
+        "key": "[2]",
+        "message": "contains duplicate values",
+        "path": [],
+        "pathString": "[2]",
+        "value": {
+          "id": 1,
+        },
+      }
+    `)
+  }
 
   expect(valueSpy).toHaveBeenCalledTimes(0)
 })
 
-it('should include context metadata for array validation errors', () => {
-  const validator = array(string(), { minLength: 3 })
-
-  try {
-    validator.validate(['a', 'b'])
-    expect.fail('Should have thrown an error')
-  } catch (error) {
-    expect(error).toBeInstanceOf(ValidationError)
-    const validationError = error as ValidationError
-    expect(validationError.code).toBe('minLength')
-    expect(validationError.constraint).toEqual({
-      code: 'minLength',
-      minLength: 3,
-    })
-  }
-})
-
-it('should include arrayIndex metadata for item validation errors', () => {
+it('should include path and key when array item validation fails', () => {
   const validator = array(string({ minLength: 3 }))
 
   try {
@@ -393,13 +607,20 @@ it('should include arrayIndex metadata for item validation errors', () => {
     expect.fail('Should have thrown an error')
   } catch (error) {
     expect(error).toBeInstanceOf(ValidationError)
-    const validationError = error as ValidationError
-    expect(validationError.code).toBe('minLength')
-    expect(validationError.path).toEqual([])
-    expect(validationError.key).toBe('[1]')
-    expect(validationError.constraint).toEqual({
-      code: 'minLength',
-      minLength: 3,
-    })
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "minLength",
+        "constraint": {
+          "code": "minLength",
+          "minLength": 3,
+        },
+        "context": "value",
+        "key": "[1]",
+        "message": "is shorter than expected length 3",
+        "path": [],
+        "pathString": "[1]",
+        "value": "ab",
+      }
+    `)
   }
 })

@@ -12,61 +12,174 @@ it('should be able to create a number with no options defined', () => {
 it('should throw an error if the value is not a number', () => {
   const validator = number()
 
-  expect(() => {
+  try {
     validator.validate('42')
-  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not number]`)
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "type",
+        "constraint": {
+          "code": "type",
+          "expected": "string",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is not number",
+        "path": [],
+        "pathString": "",
+        "value": "42",
+      }
+    `)
+  }
 })
 
 it('should throw an error if the value is NaN', () => {
   const validator = number()
 
-  expect(() => {
+  try {
     validator.validate(Number.NaN)
-  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not a number]`)
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "type",
+        "constraint": {
+          "code": "type",
+          "expected": "number",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is not a number",
+        "path": [],
+        "pathString": "",
+        "value": NaN,
+      }
+    `)
+  }
 })
 
 it('should throw an error if the value is NaN with options', () => {
   const validator = number({ min: 0, max: 100 })
 
-  expect(() => {
+  try {
     validator.validate(Number.NaN)
-  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not a number]`)
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "type",
+        "constraint": {
+          "code": "type",
+          "expected": "number",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is not a number",
+        "path": [],
+        "pathString": "",
+        "value": NaN,
+      }
+    `)
+  }
 })
 
 it('should throw an error if the value is undefined', () => {
   const validator = number()
 
-  expect(() => {
+  try {
     validator.validate(undefined)
-  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "required",
+        "constraint": {
+          "code": "required",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is required",
+        "path": [],
+        "pathString": "",
+        "value": undefined,
+      }
+    `)
+  }
 })
 
 it('should throw an error if the value is less than the minimum', () => {
   const validator = number({ min: 3 })
 
-  expect(() => {
+  try {
     validator.validate(2)
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: is less than minimum 3]`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "min",
+        "constraint": {
+          "code": "min",
+          "min": 3,
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is less than minimum 3",
+        "path": [],
+        "pathString": "",
+        "value": 2,
+      }
+    `)
+  }
 })
 
 it('should throw an error if the value is greater than the maximum', () => {
   const validator = number({ max: 3 })
 
-  expect(() => {
+  try {
     validator.validate(4)
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: is greater than maximum 3]`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "max",
+        "constraint": {
+          "code": "max",
+          "max": 3,
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is greater than maximum 3",
+        "path": [],
+        "pathString": "",
+        "value": 4,
+      }
+    `)
+  }
 })
 
 it('should throw an error if the value is not an integer', () => {
   const validator = number({ integer: true })
 
-  expect(() => {
+  try {
     validator.validate(3.14)
-  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not an integer]`)
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "int",
+        "constraint": {
+          "code": "int",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is not an integer",
+        "path": [],
+        "pathString": "",
+        "value": 3.14,
+      }
+    `)
+  }
 })
 
 it('should not throw an error if the value is an integer', () => {
@@ -83,14 +196,6 @@ it('should not throw an error if the value is undefined and not required', () =>
   expect(() => {
     validator.validate(undefined)
   }).not.toThrow()
-})
-
-it('should not throw an error if the value is undefined and required', () => {
-  const validator = number({ required: true })
-
-  expect(() => {
-    validator.validate(undefined)
-  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
 })
 
 it('should not throw an error if the value is a number and not required', () => {
@@ -114,26 +219,27 @@ it('should not throw with all the options and a valid value', () => {
   }).not.toThrow()
 })
 
-it('should throw no a negative number when min is 0', () => {
+it('should throw on a negative number when min is 0', () => {
   const validator = number({ min: 0 })
 
-  expect(() => {
-    validator.validate(-1)
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: is less than minimum 0]`,
-  )
-})
-
-it('should include context metadata for number validation errors', () => {
-  const validator = number({ min: 10 })
-
   try {
-    validator.validate(5)
-    expect.fail('Should have thrown an error')
+    validator.validate(-1)
+    expect.fail('Should have thrown')
   } catch (error) {
-    expect(error).toBeInstanceOf(ValidationError)
-    const validationError = error as ValidationError
-    expect(validationError.code).toBe('min')
-    expect(validationError.constraint).toEqual({ code: 'min', min: 10 })
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "min",
+        "constraint": {
+          "code": "min",
+          "min": 0,
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is less than minimum 0",
+        "path": [],
+        "pathString": "",
+        "value": -1,
+      }
+    `)
   }
 })

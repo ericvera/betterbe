@@ -50,6 +50,18 @@ export const object = <T extends object>(
 
     const { required } = options
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (object === null) {
+      throw new ValidationError({
+        message: 'is not object',
+        path: path ?? [],
+        key,
+        context: effectiveContext,
+        value,
+        constraint: { code: 'type', expected: 'object' },
+      })
+    }
+
     if (object === undefined) {
       if (required !== false) {
         throw new ValidationError({
@@ -103,7 +115,7 @@ export const object = <T extends object>(
       })
     }
 
-    options.test?.(object, report, newPath, key)
+    options.test?.(object, report, path ?? [], key)
   }
 
   const getProp: GetPropValidatorFunction<T> = (key: keyof T) => schema[key]

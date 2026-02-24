@@ -10,6 +10,7 @@
 - Props are required by default
 - Strict by default (no type coercion)
 - No unknown properties allowed
+- `null` rejected for object and record validators
 - Lightweight with no dependencies
 - TypeScript-first design
 
@@ -109,7 +110,7 @@ Options:
 - `pattern`: RegExp pattern the string must match
 - `alphabet`: String of allowed characters
 - `required`: Whether the value is required (default: `true`)
-- `test`: Custom validation function; receives `(value, report, path?, key?)`. Call `report({ message })` to fail.
+- `test`: Custom validation function; receives `(value, report, path?, key?)` where `path` is the path to the parent and `key` is the current segment. Call `report({ message })` to fail.
 - `oneOf`: Array of allowed string values (cannot be used with other string options)
 
 ### Number Validator
@@ -214,7 +215,7 @@ Options:
 - `maxLength`: Maximum array length
 - `required`: Whether the value is required (default: `true`)
 - `unique`: Whether array values must be unique (default: `false`)
-- `test`: Custom validation function; receives `(value, report, path?, key?)`. Call `report({ message })` to fail.
+- `test`: Custom validation function; receives `(value, report, path?, key?)` where `path` is the path to the parent and `key` is the current segment. Call `report({ message })` to fail.
 
 ### Object Validator
 
@@ -238,6 +239,9 @@ const validatePost = object({
   }),
   published: boolean(),
 })
+
+// Access schema validators
+const nameValidator = validateUser.getProp('name')
 
 // Optional object
 const validateOptionalMetadata = object(
@@ -268,7 +272,8 @@ const validateCredentials = object(
 Options:
 
 - `required`: Whether the value is required (default: `true`)
-- `test`: Custom validation function; receives `(value, report, path?, key?)`. Call `report({ message })` to fail.
+- `test`: Custom validation function; receives `(value, report, path?, key?)` where `path` is the path to the parent and `key` is the current segment. Call `report({ message })` to fail.
+- `getProp(key)`: Returns the validator for a schema property.
 
 ### Record Validator
 
@@ -322,7 +327,7 @@ const validateApiKeys = record(
 Options:
 
 - `required`: Whether the value is required (default: `true`)
-- `test`: Custom validation function; receives `(value, report, path?, key?)`. Call `report({ message })` to fail.
+- `test`: Custom validation function; receives `(value, report, path?, key?)` where `path` is the path to the parent and `key` is the current segment. Call `report({ message })` to fail.
 
 ## Error Handling
 
@@ -336,6 +341,7 @@ The library throws `ValidationError` instances when validation fails. These erro
 - `value`: The invalid value
 - `context`: `'key'` or `'value'` for record validation
 - `constraint`: Discriminated union with `code` and rule params (e.g. `{ code: 'min', min: 0 }`)
+- `toJSON()`: Returns a plain object suitable for logging or serialization
 
 ### Examples
 
@@ -358,11 +364,11 @@ try {
 const validateScores = record(string({ pattern: /^[a-z]+$/ }), number())
 
 try {
-  validateScores.validate({ 'Invalid-Key': 100 })
+  validateScores.validate({ '123': 100 })
 } catch (error) {
   console.log(error.code) // 'pattern'
   console.log(error.context) // 'key'
-  console.log(error.key) // 'Invalid-Key'
+  console.log(error.key) // '123'
 }
 
 // Array item validation error

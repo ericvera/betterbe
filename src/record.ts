@@ -107,7 +107,7 @@ export const record = <TKey extends string | number | symbol, TValue>(
       })
     }
 
-    options.test?.(object, report, newPath, key)
+    options.test?.(object, report, path ?? [], key)
   }
 
   return { validate, type: ValidatorType.RECORD }

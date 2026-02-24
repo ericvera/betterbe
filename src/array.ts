@@ -61,7 +61,7 @@ export const array = <T>(
       if (required !== false) {
         throw new ValidationError({
           message: 'is required',
-          path: newPath,
+          path: path ?? [],
           key,
           context: effectiveContext,
           value,
@@ -129,14 +129,14 @@ export const array = <T>(
     const report = (opts: { message: string }): never => {
       throw new ValidationError({
         message: opts.message,
-        path: newPath,
+        path: path ?? [],
         key,
         context: effectiveContext,
         value,
         constraint: { code: 'test' },
       })
     }
-    options.test?.(array, report, newPath, key)
+    options.test?.(array, report, path ?? [], key)
   }
 
   return { validate, type: ValidatorType.ARRAY }

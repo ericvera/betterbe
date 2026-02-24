@@ -1,5 +1,5 @@
 import { expect, it, vi } from 'vitest'
-import { string, ValidationError } from './index.js'
+import { object, string, ValidationError } from './index.js'
 
 it('should be able to create a string with no options defined', () => {
   const validator = string()
@@ -12,35 +12,99 @@ it('should be able to create a string with no options defined', () => {
 it('should throw an error if the value is not a string', () => {
   const validator = string()
 
-  expect(() => {
+  try {
     validator.validate(42)
-  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is not string]`)
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "type",
+        "constraint": {
+          "code": "type",
+          "expected": "number",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is not string",
+        "path": [],
+        "pathString": "",
+        "value": 42,
+      }
+    `)
+  }
 })
 
 it('should throw an error if the value is undefined', () => {
   const validator = string()
 
-  expect(() => {
+  try {
     validator.validate(undefined)
-  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "required",
+        "constraint": {
+          "code": "required",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is required",
+        "path": [],
+        "pathString": "",
+        "value": undefined,
+      }
+    `)
+  }
 })
 
 it('should throw an error if the value is an empty string', () => {
   const validator = string()
 
-  expect(() => {
+  try {
     validator.validate('')
-  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: is required]`)
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "required",
+        "constraint": {
+          "code": "required",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is required",
+        "path": [],
+        "pathString": "",
+        "value": "",
+      }
+    `)
+  }
 })
 
 it('should throw an error if the value is shorter than expected', () => {
   const validator = string({ minLength: 3 })
 
-  expect(() => {
+  try {
     validator.validate('hi')
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: is shorter than expected length 3]`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "minLength",
+        "constraint": {
+          "code": "minLength",
+          "minLength": 3,
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is shorter than expected length 3",
+        "path": [],
+        "pathString": "",
+        "value": "hi",
+      }
+    `)
+  }
 })
 
 it('should not throw if the value is exactly minLength', () => {
@@ -54,11 +118,26 @@ it('should not throw if the value is exactly minLength', () => {
 it('should throw an error if the value is longer than maxLength', () => {
   const validator = string({ maxLength: 3 })
 
-  expect(() => {
+  try {
     validator.validate('hola')
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: is longer than expected length 3]`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "maxLength",
+        "constraint": {
+          "code": "maxLength",
+          "maxLength": 3,
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is longer than expected length 3",
+        "path": [],
+        "pathString": "",
+        "value": "hola",
+      }
+    `)
+  }
 })
 
 it('should not throw if the value is exactly maxLength', () => {
@@ -72,21 +151,51 @@ it('should not throw if the value is exactly maxLength', () => {
 it('should throw an error if the value does not match the pattern', () => {
   const validator = string({ pattern: /^[a-z]+$/ })
 
-  expect(() => {
+  try {
     validator.validate('123')
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: does not match pattern]`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "pattern",
+        "constraint": {
+          "code": "pattern",
+          "pattern": "/^[a-z]+$/",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "does not match pattern",
+        "path": [],
+        "pathString": "",
+        "value": "123",
+      }
+    `)
+  }
 })
 
 it('should throw an error if the value does not match the alphabet', () => {
   const validator = string({ alphabet: 'abc' })
 
-  expect(() => {
+  try {
     validator.validate('def')
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: contains character 'd' which is not in alphabet 'abc']`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "alphabet",
+        "constraint": {
+          "alphabet": "abc",
+          "code": "alphabet",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "contains character 'd' which is not in alphabet 'abc'",
+        "path": [],
+        "pathString": "",
+        "value": "def",
+      }
+    `)
+  }
 })
 
 it('should not throw an error if the value matches the alphabet', () => {
@@ -97,68 +206,114 @@ it('should not throw an error if the value matches the alphabet', () => {
   }).not.toThrow()
 })
 
-it('should not throw an error if the value is undefined and not required', () => {
+it('should not throw when required: false for undefined, empty string, or valid value', () => {
   const validator = string({ required: false })
 
   expect(() => {
     validator.validate(undefined)
   }).not.toThrow()
-})
-
-it('should not throw an error if the value is an empty string and not required', () => {
-  const validator = string({ required: false })
-
   expect(() => {
     validator.validate('')
   }).not.toThrow()
-})
-
-it('should not throw an error if the value is a string and not required', () => {
-  const validator = string({ required: false })
-
   expect(() => {
     validator.validate('John Doe')
   }).not.toThrow()
 })
 
-it('should throw an error if the value is shorter than expected and not required', () => {
+it('should throw if the value is shorter than expected and not required', () => {
   const validator = string({ minLength: 3, required: false })
-
-  expect(() => {
+  try {
     validator.validate('hi')
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: is shorter than expected length 3]`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "minLength",
+        "constraint": {
+          "code": "minLength",
+          "minLength": 3,
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is shorter than expected length 3",
+        "path": [],
+        "pathString": "",
+        "value": "hi",
+      }
+    `)
+  }
 })
 
-it('should throw an error if the value is longer than expected and not required', () => {
+it('should throw if the value is longer than expected and not required', () => {
   const validator = string({ maxLength: 3, required: false })
-
-  expect(() => {
+  try {
     validator.validate('hello')
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: is longer than expected length 3]`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "maxLength",
+        "constraint": {
+          "code": "maxLength",
+          "maxLength": 3,
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is longer than expected length 3",
+        "path": [],
+        "pathString": "",
+        "value": "hello",
+      }
+    `)
+  }
 })
 
-it('should throw an error if the value does not match the pattern and not required', () => {
+it('should throw if the value does not match the pattern and not required', () => {
   const validator = string({ pattern: /^[a-z]+$/, required: false })
-
-  expect(() => {
+  try {
     validator.validate('123')
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: does not match pattern]`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "pattern",
+        "constraint": {
+          "code": "pattern",
+          "pattern": "/^[a-z]+$/",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "does not match pattern",
+        "path": [],
+        "pathString": "",
+        "value": "123",
+      }
+    `)
+  }
 })
 
-it('should throw an error if the value does not match the alphabet and not required', () => {
+it('should throw if the value does not match the alphabet and not required', () => {
   const validator = string({ alphabet: 'abc', required: false })
-
-  expect(() => {
+  try {
     validator.validate('abdc')
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: contains character 'd' which is not in alphabet 'abc']`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "alphabet",
+        "constraint": {
+          "alphabet": "abc",
+          "code": "alphabet",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "contains character 'd' which is not in alphabet 'abc'",
+        "path": [],
+        "pathString": "",
+        "value": "abdc",
+      }
+    `)
+  }
 })
 
 it('should not throw an error if the value matches the alphabet and not required', () => {
@@ -169,7 +324,7 @@ it('should not throw an error if the value matches the alphabet and not required
   }).not.toThrow()
 })
 
-it('should not throw an error if the value is undefined and not required', () => {
+it('should not throw when value satisfies all constraints', () => {
   const validator = string({
     required: true,
     minLength: 3,
@@ -194,14 +349,32 @@ it('should not throw an error if the value is one of the allowed values', () => 
 it('should throw an error if the value is not one of the allowed values', () => {
   const validator = string({ oneOf: ['hello', 'world'] })
 
-  expect(() => {
+  try {
     validator.validate('foo')
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[ValidationError: is not one of the allowed values]`,
-  )
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "one-of",
+        "constraint": {
+          "code": "one-of",
+          "oneOf": [
+            "hello",
+            "world",
+          ],
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "is not one of the allowed values",
+        "path": [],
+        "pathString": "",
+        "value": "foo",
+      }
+    `)
+  }
 })
 
-it('should not throw an error if the value is undefined and not required', () => {
+it('should not throw when undefined and not required with oneOf', () => {
   enum Value {
     One = 'one',
     Two = 'two',
@@ -214,7 +387,7 @@ it('should not throw an error if the value is undefined and not required', () =>
   }).not.toThrow()
 })
 
-it('should not throw an error if the the test function does not throw', () => {
+it('should not throw when the test function does not report', () => {
   const test = vi.fn().mockImplementation(() => undefined)
 
   const validator = string({
@@ -235,7 +408,39 @@ it('should not throw an error if the the test function does not throw', () => {
   )
 })
 
-it('should not throw an error if the the test function throws an error', () => {
+it('should pass correct path and key to test report callback', () => {
+  const validator = object({
+    name: string({
+      test: (_value, report, path, key) => {
+        expect(path).toEqual([])
+        expect(key).toBe('name')
+        report({ message: 'string test fail' })
+      },
+    }),
+  })
+
+  try {
+    validator.validate({ name: 'John' })
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "test",
+        "constraint": {
+          "code": "test",
+        },
+        "context": "value",
+        "key": "name",
+        "message": "string test fail",
+        "path": [],
+        "pathString": "name",
+        "value": "John",
+      }
+    `)
+  }
+})
+
+it('should throw an error when the test function reports a failure', () => {
   const validator = string({
     required: true,
     alphabet: 'JDohne ',
@@ -244,24 +449,23 @@ it('should not throw an error if the the test function throws an error', () => {
     },
   })
 
-  expect(() => {
-    validator.validate('John Doe')
-  }).toThrowErrorMatchingInlineSnapshot(`[ValidationError: Can't be John Doe.]`)
-})
-
-it('should include context metadata for string validation errors', () => {
-  const validator = string({ minLength: 5 })
-
   try {
-    validator.validate('abc')
-    expect.fail('Should have thrown an error')
+    validator.validate('John Doe')
+    expect.fail('Should have thrown')
   } catch (error) {
-    expect(error).toBeInstanceOf(ValidationError)
-    const validationError = error as ValidationError
-    expect(validationError.code).toBe('minLength')
-    expect(validationError.constraint).toEqual({
-      code: 'minLength',
-      minLength: 5,
-    })
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "test",
+        "constraint": {
+          "code": "test",
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "Can't be John Doe.",
+        "path": [],
+        "pathString": "",
+        "value": "John Doe",
+      }
+    `)
   }
 })
