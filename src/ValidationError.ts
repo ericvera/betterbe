@@ -9,7 +9,7 @@ export type ValidationErrorConstraint =
   | { code: 'maxLength'; maxLength: number }
   | { code: 'pattern'; pattern: string }
   | { code: 'one-of'; oneOf: readonly string[] }
-  | { code: 'type'; expected: string }
+  | { code: 'type'; expected: string; actual: string }
   | { code: 'alphabet'; alphabet: string }
   | { code: 'unique' }
   | { code: 'required' | 'int' | 'unknown-keys' | 'test' }

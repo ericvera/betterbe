@@ -44,8 +44,9 @@ it('should throw an error if the value is a number instead of object', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "number",
           "code": "type",
-          "expected": "number",
+          "expected": "object",
         },
         "context": "value",
         "key": undefined,
@@ -70,8 +71,9 @@ it('should throw an error if the value is a string instead of object', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "string",
           "code": "type",
-          "expected": "string",
+          "expected": "object",
         },
         "context": "value",
         "key": undefined,
@@ -96,8 +98,9 @@ it('should throw an error if the value is an array instead of object', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "array",
           "code": "type",
-          "expected": "array",
+          "expected": "object",
         },
         "context": "value",
         "key": undefined,
@@ -122,6 +125,7 @@ it('should throw an error when value is null', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "null",
           "code": "type",
           "expected": "object",
         },

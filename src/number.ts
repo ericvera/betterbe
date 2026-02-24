@@ -48,7 +48,7 @@ export const number = (options: NumberOptions = {}): NumberValidator => {
         key,
         context: effectiveContext,
         value,
-        constraint: { code: 'type', expected: 'number' },
+        constraint: { code: 'type', expected: 'number', actual: 'NaN' },
       })
     }
 

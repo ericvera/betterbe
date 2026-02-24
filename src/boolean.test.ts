@@ -20,8 +20,9 @@ it('should throw an error if the value is not a boolean', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "string",
           "code": "type",
-          "expected": "string",
+          "expected": "boolean",
         },
         "context": "value",
         "key": undefined,

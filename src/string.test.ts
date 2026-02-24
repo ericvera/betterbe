@@ -20,8 +20,9 @@ it('should throw an error if the value is not a string', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "number",
           "code": "type",
-          "expected": "number",
+          "expected": "string",
         },
         "context": "value",
         "key": undefined,

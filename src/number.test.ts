@@ -20,8 +20,9 @@ it('should throw an error if the value is not a number', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "string",
           "code": "type",
-          "expected": "string",
+          "expected": "number",
         },
         "context": "value",
         "key": undefined,
@@ -45,6 +46,7 @@ it('should throw an error if the value is NaN', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "NaN",
           "code": "type",
           "expected": "number",
         },
@@ -70,6 +72,7 @@ it('should throw an error if the value is NaN with options', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "NaN",
           "code": "type",
           "expected": "number",
         },

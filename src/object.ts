@@ -58,7 +58,7 @@ export const object = <T extends object>(
         key,
         context: effectiveContext,
         value,
-        constraint: { code: 'type', expected: 'object' },
+        constraint: { code: 'type', expected: 'object', actual: 'null' },
       })
     }
 

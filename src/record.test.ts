@@ -65,8 +65,9 @@ it('should throw with context key when key validator fails type check', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "string",
           "code": "type",
-          "expected": "string",
+          "expected": "number",
         },
         "context": "key",
         "key": "abc",
@@ -174,8 +175,9 @@ it('should provide proper error paths for nested validation', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "string",
           "code": "type",
-          "expected": "string",
+          "expected": "number",
         },
         "context": "value",
         "key": "score",
@@ -233,8 +235,9 @@ it('should throw error for non-object values', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "string",
           "code": "type",
-          "expected": "string",
+          "expected": "object",
         },
         "context": "value",
         "key": undefined,
@@ -254,8 +257,9 @@ it('should throw error for non-object values', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "number",
           "code": "type",
-          "expected": "number",
+          "expected": "object",
         },
         "context": "value",
         "key": undefined,
@@ -275,8 +279,9 @@ it('should throw error for non-object values', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "array",
           "code": "type",
-          "expected": "array",
+          "expected": "object",
         },
         "context": "value",
         "key": undefined,
@@ -394,6 +399,7 @@ it('should throw when value is null', () => {
       {
         "code": "type",
         "constraint": {
+          "actual": "null",
           "code": "type",
           "expected": "object",
         },

@@ -17,7 +17,7 @@ export const validateType = <T>(
       key,
       context: context ?? 'value',
       value,
-      constraint: { code: 'type', expected: calculatedType },
+      constraint: { code: 'type', expected: type, actual: calculatedType },
     })
   }
 
