@@ -20,7 +20,10 @@ export type GetPropValidatorFunction<T> = (
 
 /** Options for the report callback in test functions. */
 export interface TestReportOptions {
+  /** Human-readable failure message. */
   message: string
+  /** Optional data on the constraint for programmatic error handling. */
+  data?: Record<string, unknown>
 }
 
 /** Function that reports a test failure. Never returns (always throws). */

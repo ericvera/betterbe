@@ -470,3 +470,42 @@ it('should throw an error when the test function reports a failure', () => {
     `)
   }
 })
+
+it('should include data in constraint when report is called with data', () => {
+  const validator = string({
+    required: true,
+    test: (value: string, report) => {
+      report({
+        message: 'custom rule failed',
+        data: { allowedValues: ['a', 'b'], received: value },
+      })
+    },
+  })
+
+  try {
+    validator.validate('x')
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).toJSON()).toMatchInlineSnapshot(`
+      {
+        "code": "test",
+        "constraint": {
+          "code": "test",
+          "data": {
+            "allowedValues": [
+              "a",
+              "b",
+            ],
+            "received": "x",
+          },
+        },
+        "context": "value",
+        "key": undefined,
+        "message": "custom rule failed",
+        "path": [],
+        "pathString": "",
+        "value": "x",
+      }
+    `)
+  }
+})

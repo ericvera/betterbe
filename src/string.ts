@@ -4,6 +4,7 @@ import { validateType } from './internal/validateType.js'
 import {
   StringValidator,
   TestFunction,
+  TestReportOptions,
   ValidationFunction,
   ValidatorType,
 } from './types.js'
@@ -138,14 +139,17 @@ export const string = (options: StringOptions = {}): StringValidator => {
       })
     }
 
-    const report = (opts: { message: string }): never => {
+    const report = (opts: TestReportOptions): never => {
       throw new ValidationError({
         message: opts.message,
         path: path ?? [],
         key,
         context: effectiveContext,
         value,
-        constraint: { code: 'test' },
+        constraint:
+          opts.data !== undefined
+            ? { code: 'test', data: opts.data }
+            : { code: 'test' },
       })
     }
 

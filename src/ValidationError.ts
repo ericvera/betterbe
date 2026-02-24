@@ -12,7 +12,8 @@ export type ValidationErrorConstraint =
   | { code: 'type'; expected: string; actual: string }
   | { code: 'alphabet'; alphabet: string }
   | { code: 'unique' }
-  | { code: 'required' | 'int' | 'unknown-keys' | 'test' }
+  | { code: 'required' | 'int' | 'unknown-keys' }
+  | { code: 'test'; data?: Record<string, unknown> }
 
 /** Error code identifying the validation rule that failed. */
 export type ValidationErrorCode = ValidationErrorConstraint['code']

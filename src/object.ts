@@ -4,6 +4,7 @@ import {
   GetPropValidatorFunction,
   Schema,
   TestFunction,
+  TestReportOptions,
   ValidatorType,
   type ObjectValidator,
   type ValidationFunction,
@@ -104,14 +105,17 @@ export const object = <T extends object>(
       )
     }
 
-    const report = (opts: { message: string }): never => {
+    const report = (opts: TestReportOptions): never => {
       throw new ValidationError({
         message: opts.message,
         path: path ?? [],
         key,
         context: effectiveContext,
         value: object,
-        constraint: { code: 'test' },
+        constraint:
+          opts.data !== undefined
+            ? { code: 'test', data: opts.data }
+            : { code: 'test' },
       })
     }
 

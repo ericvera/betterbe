@@ -3,6 +3,7 @@ import { validateType } from './internal/validateType.js'
 import {
   RecordValidator,
   TestFunction,
+  TestReportOptions,
   ValidatorType,
   Value,
   type ValidationFunction,
@@ -96,14 +97,17 @@ export const record = <TKey extends string | number | symbol, TValue>(
       valueValidator.validate(objectValue, newPath, objectKey, 'value')
     }
 
-    const report = (opts: { message: string }): never => {
+    const report = (opts: TestReportOptions): never => {
       throw new ValidationError({
         message: opts.message,
         path: path ?? [],
         key,
         context: effectiveContext,
         value: object,
-        constraint: { code: 'test' },
+        constraint:
+          opts.data !== undefined
+            ? { code: 'test', data: opts.data }
+            : { code: 'test' },
       })
     }
 

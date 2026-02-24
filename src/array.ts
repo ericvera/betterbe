@@ -3,6 +3,7 @@ import { validateType } from './internal/validateType.js'
 import {
   ArrayValidator,
   TestFunction,
+  TestReportOptions,
   ValidatorType,
   Value,
   type ValidationFunction,
@@ -126,14 +127,17 @@ export const array = <T>(
       )
     }
 
-    const report = (opts: { message: string }): never => {
+    const report = (opts: TestReportOptions): never => {
       throw new ValidationError({
         message: opts.message,
         path: path ?? [],
         key,
         context: effectiveContext,
         value,
-        constraint: { code: 'test' },
+        constraint:
+          opts.data !== undefined
+            ? { code: 'test', data: opts.data }
+            : { code: 'test' },
       })
     }
     options.test?.(array, report, path ?? [], key)

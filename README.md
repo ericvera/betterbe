@@ -110,7 +110,7 @@ Options:
 - `pattern`: RegExp pattern the string must match
 - `alphabet`: String of allowed characters
 - `required`: Whether the value is required (default: `true`)
-- `test`: Custom validation function; receives `(value, report, path?, key?)` where `path` is the path to the parent and `key` is the current segment. Call `report({ message })` to fail.
+- `test`: Custom validation function; receives `(value, report, path?, key?)` where `path` is the path to the parent and `key` is the current segment. Call `report({ message, data? })` to fail; optionally include `data` (e.g. `{ allowedValues: ['a','b'] }`) for structured error info.
 - `oneOf`: Array of allowed string values (cannot be used with other string options)
 
 ### Number Validator
@@ -215,7 +215,7 @@ Options:
 - `maxLength`: Maximum array length
 - `required`: Whether the value is required (default: `true`)
 - `unique`: Whether array values must be unique (default: `false`)
-- `test`: Custom validation function; receives `(value, report, path?, key?)` where `path` is the path to the parent and `key` is the current segment. Call `report({ message })` to fail.
+- `test`: Custom validation function; receives `(value, report, path?, key?)` where `path` is the path to the parent and `key` is the current segment. Call `report({ message, data? })` to fail; optionally include `data` (e.g. `{ allowedValues: ['a','b'] }`) for structured error info.
 
 ### Object Validator
 
@@ -272,7 +272,7 @@ const validateCredentials = object(
 Options:
 
 - `required`: Whether the value is required (default: `true`)
-- `test`: Custom validation function; receives `(value, report, path?, key?)` where `path` is the path to the parent and `key` is the current segment. Call `report({ message })` to fail.
+- `test`: Custom validation function; receives `(value, report, path?, key?)` where `path` is the path to the parent and `key` is the current segment. Call `report({ message, data? })` to fail; optionally include `data` (e.g. `{ allowedValues: ['a','b'] }`) for structured error info.
 - `getProp(key)`: Returns the validator for a schema property.
 
 ### Record Validator
@@ -327,7 +327,7 @@ const validateApiKeys = record(
 Options:
 
 - `required`: Whether the value is required (default: `true`)
-- `test`: Custom validation function; receives `(value, report, path?, key?)` where `path` is the path to the parent and `key` is the current segment. Call `report({ message })` to fail.
+- `test`: Custom validation function; receives `(value, report, path?, key?)` where `path` is the path to the parent and `key` is the current segment. Call `report({ message, data? })` to fail; optionally include `data` (e.g. `{ allowedValues: ['a','b'] }`) for structured error info.
 
 ## Error Handling
 
@@ -340,7 +340,7 @@ The library throws `ValidationError` instances when validation fails. These erro
 - `pathString`: Full path as a dot-separated string (e.g. `'items.0.price'`)
 - `value`: The invalid value
 - `context`: `'key'` or `'value'` for record validation
-- `constraint`: Discriminated union with `code` and rule params (e.g. `{ code: 'min', min: 0 }`)
+- `constraint`: Discriminated union with `code` and rule params (e.g. `{ code: 'min', min: 0 }`; for `test` failures, may include `data` when provided to `report()`)
 - `toJSON()`: Returns a plain object suitable for logging or serialization
 
 ### Examples
