@@ -28,14 +28,14 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@tsconfig/strictest": "^2.0.8",
-    "@types/node": "^25.9.1",
+    "@types/node": "^25.9.2",
     "eslint": "^10.4.1",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.7",
     "pinst": "^3.0.0",
     "prettier": "^3.8.3",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.60.0",
+    "typescript-eslint": "^8.60.1",
     "vitest": "^4.1.8"
   },
   "prettier": {
