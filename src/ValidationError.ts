@@ -20,18 +20,47 @@ export type ValidationErrorCode = ValidationErrorConstraint['code']
 
 /** Options for constructing a {@link ValidationError}. */
 export interface ValidationErrorOptions {
-  /** Human-readable description of the validation failure. */
+  /**
+   * Raw constraint text. The stored `Error.message` is prefixed with the path
+   * when the path is non-empty (and with `key ` when context is `'key'`).
+   */
   message: string
   /** Error code and constraint parameters. */
   constraint: ValidationErrorConstraint
-  /** Parent path segments (e.g. `['items', '0']`). Defaults to `[]`. */
+  /** Parent path segments (e.g. `['items', '[0]']`). Defaults to `[]`. */
   path?: string[]
-  /** Current segment (e.g. `'price'` or `'0'`). Omitted at root level. */
+  /** Current segment (e.g. `'price'` or `'[0]'`). Omitted at root level. */
   key?: string | undefined
   /** Whether the error is for a key or value. Defaults to `'value'`. */
   context?: 'key' | 'value'
   /** The invalid value that failed validation. */
   value?: unknown
+}
+
+const joinPath = (segments: string[]): string =>
+  segments
+    .filter(Boolean)
+    .reduce(
+      (acc, segment) =>
+        acc === '' || segment.startsWith('[')
+          ? acc + segment
+          : `${acc}.${segment}`,
+      '',
+    )
+
+const formatMessage = (options: ValidationErrorOptions): string => {
+  const path = options.path ?? []
+  const segments = options.key !== undefined ? [...path, options.key] : path
+  const joined = joinPath(segments)
+
+  if (joined === '') {
+    return options.message
+  }
+
+  const prefix =
+    (options.context ?? 'value') === 'key' ? `key ${joined}` : joined
+
+  return `${prefix}: ${options.message}`
 }
 
 /**
@@ -56,7 +85,7 @@ export class ValidationError extends Error {
    * @param options - Message, constraint, and optional path/value metadata.
    */
   constructor(options: ValidationErrorOptions) {
-    super(options.message)
+    super(formatMessage(options))
 
     this.name = 'ValidationError'
     this.path = options.path ?? []
@@ -71,12 +100,15 @@ export class ValidationError extends Error {
     return this.constraint.code
   }
 
-  /** Full path as a dot-separated string (e.g. `'items.0.price'`). */
+  /**
+   * Full path as a string; object keys are dot-separated and array indexes
+   * attach directly (e.g. `'items[0].price'`).
+   */
   get pathString(): string {
     const segments =
       this.key !== undefined ? [...this.path, this.key] : this.path
 
-    return segments.filter(Boolean).join('.')
+    return joinPath(segments)
   }
 
   /** Returns a plain object suitable for logging or serialization. */

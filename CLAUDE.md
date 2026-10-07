@@ -73,3 +73,18 @@ Each validator (string, number, boolean, array, object) follows a consistent pat
 - Tests validate both success and failure scenarios
 - Error message and metadata validation included in tests
 - Custom test functions validated for proper error throwing
+
+## Releases and pull requests
+
+- `.github/workflows/publish.yml` runs on every push to `main`. `TriPSs/conventional-changelog-action@v5` (default angular preset) derives the version bump from commits since the last tag, then the workflow publishes to npm and creates a GitHub release. A publish cannot be undone.
+- PRs are squash-merged. The squash commit title is the PR title and its body is the PR description; that commit is what the changelog action reads.
+- The PR title must be an angular-style conventional commit header: `type(optional-scope): subject`
+  - `feat` → minor release; `fix` / `perf` → patch release
+  - Other types (`chore`, `docs`, `refactor`, `test`, `ci`, `build`) → no release
+  - Do not use the `type!:` shorthand; the angular preset's header pattern does not parse it
+- A breaking change (major release) needs a `BREAKING CHANGE: <description>` footer as the **last** paragraph of the PR description. Everything after it becomes the release note, so nothing (attribution lines, checklists) may follow it.
+- Dependabot PRs auto-merge with merge commits (`chore(deps-dev): ...`) and do not trigger a release.
+
+## Mise
+
+Never open a pull request for, or merge into another branch, any branch whose tree contains `.mise/` — that work is still in flight; run `/mise:next` on that branch to finish it first.
