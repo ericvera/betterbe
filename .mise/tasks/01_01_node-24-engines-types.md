@@ -27,7 +27,7 @@ None.
 ## Implementation details
 
 1. In `package.json`, change `"node": ">=20"` to `"node": ">=24"`.
-2. Run `yarn up @types/node@^24` from `/Users/eric/Code/betterbe`. This rewrites `package.json` to `"@types/node": "^24.x.y"` (latest 24) and updates `yarn.lock`. Confirm `package.json` shows a `^24.` range and `yarn.lock` has no `@types/node@npm:^26` entry left.
+2. Run `yarn up @types/node@^24` from `/Users/eric/Code/betterbe`. Yarn 4.12.0 writes `"@types/node": "^24"` to `package.json` and a `yarn.lock` entry keyed `"@types/node@npm:^24"` resolving to the latest 24.x (24.19.1 at planning time). Accept the `^24` range exactly as yarn writes it. Confirm `package.json` shows `"^24"` and `yarn.lock` has no `@types/node@npm:^26` entry left.
 3. In `.github/dependabot.yml`, add under the `npm` entry (sibling of `schedule` and `groups`, same indentation):
    ```yaml
    ignore:
@@ -38,7 +38,7 @@ None.
 
 ## Gotchas
 
-- Do not use the `@types/node@24` dist-tag spelling that yields an exact pin; the range must be `^24.x.y`.
+- Do not hand-edit the `@types/node` range in `package.json` after `yarn up` (e.g. to `^24.19.1`). The range must match the `yarn.lock` key (`@types/node@npm:^24`), or CI's immutable `yarn install` fails.
 - `tsconfig.json` has `skipLibCheck: false`; `yarn lint` type-checks `eslint.config.mjs` with `@types/node`, so lint must pass with the 24 types.
 - `yarn prettier --check .` covers `.github/dependabot.yml` and `package.json`; run `yarn prettier --write` on edited files if needed.
 - Do not edit `version` in `package.json`; the release workflow bumps it.
