@@ -334,10 +334,10 @@ Options:
 The library throws `ValidationError` instances when validation fails. These errors contain:
 
 - `code`: The validation that failed (e.g., 'required', 'minLength', 'pattern')
-- `message`: A human-readable error message
+- `message`: A human-readable error message, prefixed with the failing path when there is one (e.g. `'name: is longer than expected length 10'`, `'items[0].price: is greater than maximum 10'`, `'key 123: does not match pattern'` for record keys). Root-level errors have no prefix
 - `path`: Path to the parent of the failing value (array of segments)
 - `key`: The segment that identifies the failing value
-- `pathString`: Full path as a dot-separated string (e.g. `'items.0.price'`)
+- `pathString`: Full path as a string; object keys are dot-separated and array indexes attach directly (e.g. `'items[0].price'`)
 - `value`: The invalid value
 - `context`: `'key'` or `'value'` for record validation
 - `constraint`: Discriminated union with `code` and rule params (e.g. `{ code: 'min', min: 0 }`; for `test` failures, may include `data` when provided to `report()`)
@@ -355,6 +355,7 @@ try {
   validateUsername.validate('ab')
 } catch (error) {
   console.log(error.code) // 'minLength'
+  console.log(error.message) // 'is shorter than expected length 3'
   console.log(error.path) // []
   console.log(error.key) // undefined
   console.log(error.constraint) // { code: 'minLength', minLength: 3 }
@@ -367,6 +368,7 @@ try {
   validateScores.validate({ '123': 100 })
 } catch (error) {
   console.log(error.code) // 'pattern'
+  console.log(error.message) // 'key 123: does not match pattern'
   console.log(error.context) // 'key'
   console.log(error.key) // '123'
 }
@@ -378,6 +380,7 @@ try {
   validateNumbers.validate([1, -5, 3])
 } catch (error) {
   console.log(error.code) // 'min'
+  console.log(error.message) // '[1]: is less than minimum 0'
   console.log(error.path) // []
   console.log(error.key) // '[1]'
   console.log(error.constraint) // { code: 'min', min: 0 }
@@ -393,6 +396,7 @@ try {
   validateUser.validate({ name: 'ThisNameIsTooLong', age: 25 })
 } catch (error) {
   console.log(error.code) // 'maxLength'
+  console.log(error.message) // 'name: is longer than expected length 10'
   console.log(error.path) // []
   console.log(error.key) // 'name'
   console.log(error.constraint) // { code: 'maxLength', maxLength: 10 }
