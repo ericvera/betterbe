@@ -2,7 +2,7 @@
 
 ## Tasks
 
-- 01_01 (569bcb7): `package.json` `engines.node` `>=20` → `>=24`; `@types/node` `^26.6.4` → `^24` via `yarn up` (yarn.lock resolves 24.19.1); `.github/dependabot.yml` ignores `@types/node` semver-major updates. Verify: `yarn why @types/node` shows 24.19.1; `yarn smoke` passes.
+- 01_01 (569bcb7): `package.json` `engines.node` `>=20` → `>=24`; `@types/node` `^26.6.4` → `^24.19.1` (owner set the floor after `yarn up`) (yarn.lock resolves 24.19.1); `.github/dependabot.yml` ignores `@types/node` semver-major updates. Verify: `yarn why @types/node` shows 24.19.1; `yarn smoke` passes.
 
 ## Open assumptions
 
