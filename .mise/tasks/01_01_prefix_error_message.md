@@ -15,7 +15,7 @@ Make `ValidationError.message` start with the failing field's path, as in `sourc
 - No prior tasks.
 - `src/ValidationError.ts:58-67`: the constructor calls `super(options.message)`, then sets `path`, `key`, `value`, `context` and `constraint`.
 - `src/ValidationError.ts:74-80`: the `pathString` getter builds `[...path, key]` (or just `path` when `key` is undefined) and returns `segments.filter(Boolean).join('.')`.
-- Validators pass the parent path as `path` and the current segment as `key`. Array items use the key `` `[${index}]` `` (`src/array.ts:111`, `:126`). So today `pathString` yields `[0].[2]` (`src/array.test.ts:345`).
+- Validators pass the parent path as `path` and the current segment as `key`. Array items use the key `` `[${index}]` `` (`src/array.ts:111`, `:125`). So today `pathString` yields `[0].[2]` (`src/array.test.ts:345`).
 - Record key errors use `context: 'key'`, with the object key as `key` (`src/record.ts:96`).
 - Custom `test` failures go through `report({ message })`, which constructs a `ValidationError` (`src/string.ts:144`, `src/array.ts:132`, `src/object.ts:110`, `src/record.ts:102`). They get the prefix automatically.
 - Design decisions (owner-approved):
@@ -53,6 +53,7 @@ None (the config has no Skills & guides entries).
 3. In the constructor, replace `super(options.message)` with `super(formatMessage(options))`.
 4. Change `pathString` to `return joinPath(segments)`. Update its doc comment to ``/** Full path as a string; object keys are dot-separated and array indexes attach directly (e.g. `'items[0].price'`). */``.
 5. Update the `message` doc comment in `ValidationErrorOptions` to say it is the raw constraint text. The stored `Error.message` is prefixed with the path when the path is non-empty (and with `key ` when context is `'key'`).
+   Also fix the stale examples in the other `ValidationErrorOptions` doc comments, since array keys are `` `[${index}]` `` (`src/array.ts:111`): the `path` comment (`src/ValidationError.ts:27`) becomes ``/** Parent path segments (e.g. `['items', '[0]']`). Defaults to `[]`. */``, and the `key` comment (`src/ValidationError.ts:29`) becomes ``/** Current segment (e.g. `'price'` or `'[0]'`). Omitted at root level. */``.
 6. Update inline snapshots. Run `yarn vitest run -u` to rewrite them, then review the diff of every `src/*.test.ts`:
    - Only snapshots whose `pathString` is non-empty may have changed `message`.
    - Every changed `message` must equal `<pathString>: <old text>`, or `key <pathString>: <old text>` when `"context": "key"`.
