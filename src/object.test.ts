@@ -159,7 +159,7 @@ it('should throw an error if a key is not allowed', () => {
         },
         "context": "value",
         "key": "age",
-        "message": "is not allowed",
+        "message": "age: is not allowed",
         "path": [],
         "pathString": "age",
         "value": {
@@ -221,7 +221,7 @@ it('should work when nested and there is an error', () => {
         },
         "context": "value",
         "key": "age",
-        "message": "is required",
+        "message": "user.age: is required",
         "path": [
           "user",
         ],
@@ -346,7 +346,7 @@ it('should throw an error if the test function throws', () => {
         },
         "context": "value",
         "key": "age",
-        "message": "cannot be 42",
+        "message": "age: cannot be 42",
         "path": [],
         "pathString": "age",
         "value": undefined,
@@ -436,7 +436,7 @@ it('should throw an error if an inner test function throws', () => {
         },
         "context": "value",
         "key": "name",
-        "message": "cannot be John Doe",
+        "message": "name: cannot be John Doe",
         "path": [],
         "pathString": "name",
         "value": "John Doe",
@@ -480,7 +480,7 @@ it('should pass correct path and key to test report callback', () => {
         },
         "context": "value",
         "key": "name",
-        "message": "custom fail",
+        "message": "user.name: custom fail",
         "path": [
           "user",
         ],
@@ -542,7 +542,7 @@ it('should include path and key for property validation errors', () => {
         },
         "context": "value",
         "key": "name",
-        "message": "is shorter than expected length 5",
+        "message": "name: is shorter than expected length 5",
         "path": [],
         "pathString": "name",
         "value": "Bob",
@@ -570,7 +570,7 @@ it('should not duplicate path when array is required but missing', () => {
         },
         "context": "value",
         "key": "name",
-        "message": "is required",
+        "message": "name: is required",
         "path": [],
         "pathString": "name",
         "value": undefined,
@@ -600,14 +600,71 @@ it('should include path and key for nested object validation errors', () => {
         },
         "context": "value",
         "key": "price",
-        "message": "is less than minimum 1",
+        "message": "items[0].price: is less than minimum 1",
         "path": [
           "items",
           "[0]",
         ],
-        "pathString": "items.[0].price",
+        "pathString": "items[0].price",
         "value": 0,
       }
     `)
+  }
+})
+
+it('should prefix the message with the property path', () => {
+  const validator = object({ name: string({ maxLength: 10 }) })
+
+  try {
+    validator.validate({ name: 'a very long name' })
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).message).toBe(
+      'name: is longer than expected length 10',
+    )
+  }
+})
+
+it('should prefix the message with the nested property path', () => {
+  const validator = object({ user: object({ age: number({ min: 18 }) }) })
+
+  try {
+    validator.validate({ user: { age: 10 } })
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).message).toBe(
+      'user.age: is less than minimum 18',
+    )
+  }
+})
+
+it('should prefix custom test messages with the property path', () => {
+  const validator = object({
+    user: object({
+      name: string({
+        test: (_value, report) => {
+          report({ message: 'custom' })
+        },
+      }),
+    }),
+  })
+
+  try {
+    validator.validate({ user: { name: 'John' } })
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).message).toBe('user.name: custom')
+  }
+})
+
+it('should not prefix root-level errors', () => {
+  const validator = object({ name: string() })
+
+  try {
+    validator.validate(42)
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).message).toBe('is not object')
+    expect((error as ValidationError).pathString).toBe('')
   }
 })

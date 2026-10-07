@@ -45,7 +45,7 @@ it('should throw an error for invalid keys', () => {
         },
         "context": "key",
         "key": "boom",
-        "message": "does not match pattern",
+        "message": "key boom: does not match pattern",
         "path": [],
         "pathString": "boom",
         "value": "boom",
@@ -71,7 +71,7 @@ it('should throw with context key when key validator fails type check', () => {
         },
         "context": "key",
         "key": "abc",
-        "message": "is not number",
+        "message": "key abc: is not number",
         "path": [],
         "pathString": "abc",
         "value": "abc",
@@ -131,7 +131,7 @@ it('should throw an error for invalid values', () => {
         },
         "context": "value",
         "key": "foo",
-        "message": "is less than minimum 0",
+        "message": "foo: is less than minimum 0",
         "path": [],
         "pathString": "foo",
         "value": -1,
@@ -181,7 +181,7 @@ it('should provide proper error paths for nested validation', () => {
         },
         "context": "value",
         "key": "score",
-        "message": "is not number",
+        "message": "user2.score: is not number",
         "path": [
           "user2",
         ],
@@ -359,7 +359,7 @@ it('should validate with different key and value types', () => {
         },
         "context": "key",
         "key": "invalid",
-        "message": "is not one of the allowed values",
+        "message": "key invalid: is not one of the allowed values",
         "path": [],
         "pathString": "invalid",
         "value": "invalid",
@@ -431,7 +431,7 @@ it('should provide key-specific errors for various validation types', () => {
         },
         "context": "key",
         "key": "ab",
-        "message": "is shorter than expected length 3",
+        "message": "key ab: is shorter than expected length 3",
         "path": [],
         "pathString": "ab",
         "value": "ab",
@@ -455,7 +455,7 @@ it('should provide key-specific errors for various validation types', () => {
         },
         "context": "key",
         "key": "toolongkey",
-        "message": "is longer than expected length 5",
+        "message": "key toolongkey: is longer than expected length 5",
         "path": [],
         "pathString": "toolongkey",
         "value": "toolongkey",
@@ -489,7 +489,7 @@ it('should provide key-specific errors in nested records with proper paths', () 
         },
         "context": "key",
         "key": "invalidfield",
-        "message": "is not one of the allowed values",
+        "message": "key user2.invalidfield: is not one of the allowed values",
         "path": [
           "user2",
         ],
@@ -497,5 +497,48 @@ it('should provide key-specific errors in nested records with proper paths', () 
         "value": "invalidfield",
       }
     `)
+  }
+})
+
+it('should prefix key errors with a key marker', () => {
+  const validator = record(string({ pattern: /^[a-z]+$/ }), number())
+
+  try {
+    validator.validate({ '123': 1 })
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).message.startsWith('key 123: ')).toBe(
+      true,
+    )
+    expect((error as ValidationError).context).toBe('key')
+  }
+})
+
+it('should prefix nested key errors with a key marker and full path', () => {
+  const validator = record(
+    string(),
+    record(string({ oneOf: ['name', 'email'] }), string()),
+  )
+
+  try {
+    validator.validate({ user2: { invalidfield: 'value' } })
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).message).toBe(
+      'key user2.invalidfield: is not one of the allowed values',
+    )
+  }
+})
+
+it('should prefix value errors without a key marker', () => {
+  const validator = record(string(), record(string(), number()))
+
+  try {
+    validator.validate({ user2: { score: 'invalid' } })
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).message).toBe(
+      'user2.score: is not number',
+    )
   }
 })

@@ -338,11 +338,11 @@ it('should work when nested and there is an error', () => {
         },
         "context": "value",
         "key": "[2]",
-        "message": "is greater than maximum 10",
+        "message": "[0][2]: is greater than maximum 10",
         "path": [
           "[0]",
         ],
-        "pathString": "[0].[2]",
+        "pathString": "[0][2]",
         "value": 123,
       }
     `)
@@ -422,7 +422,7 @@ it('should pass correct path and key to test report callback', () => {
         },
         "context": "value",
         "key": "items",
-        "message": "array test fail",
+        "message": "items: array test fail",
         "path": [],
         "pathString": "items",
         "value": [
@@ -526,7 +526,7 @@ it('should throw an error if unique is true and array contains duplicates', () =
         },
         "context": "value",
         "key": "[2]",
-        "message": "contains duplicate values",
+        "message": "[2]: contains duplicate values",
         "path": [],
         "pathString": "[2]",
         "value": "a",
@@ -589,7 +589,7 @@ it('should handle unique validation with object values', () => {
         },
         "context": "value",
         "key": "[2]",
-        "message": "contains duplicate values",
+        "message": "[2]: contains duplicate values",
         "path": [],
         "pathString": "[2]",
         "value": {
@@ -619,11 +619,41 @@ it('should include path and key when array item validation fails', () => {
         },
         "context": "value",
         "key": "[1]",
-        "message": "is shorter than expected length 3",
+        "message": "[1]: is shorter than expected length 3",
         "path": [],
         "pathString": "[1]",
         "value": "ab",
       }
     `)
+  }
+})
+
+it('should prefix the message with an array item path', () => {
+  const validator = object({
+    items: array(object({ price: number({ max: 10 }) })),
+  })
+
+  try {
+    validator.validate({ items: [{ price: 11 }] })
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).message).toBe(
+      'items[0].price: is greater than maximum 10',
+    )
+    expect((error as ValidationError).pathString).toBe('items[0].price')
+  }
+})
+
+it('should attach nested array indexes without a dot', () => {
+  const validator = array(array(number({ max: 10 })))
+
+  try {
+    validator.validate([[1, 2, 123]])
+    expect.fail('Should have thrown')
+  } catch (error) {
+    expect((error as ValidationError).message).toBe(
+      '[0][2]: is greater than maximum 10',
+    )
+    expect((error as ValidationError).pathString).toBe('[0][2]')
   }
 })

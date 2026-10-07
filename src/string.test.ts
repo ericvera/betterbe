@@ -432,7 +432,7 @@ it('should pass correct path and key to test report callback', () => {
         },
         "context": "value",
         "key": "name",
-        "message": "string test fail",
+        "message": "name: string test fail",
         "path": [],
         "pathString": "name",
         "value": "John",
