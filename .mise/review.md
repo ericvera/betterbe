@@ -4,6 +4,7 @@
 
 - 01_01 (d70ee37): `src/ValidationError.ts` adds `joinPath`/`formatMessage`; non-root messages become `<pathString>: <msg>` (`key <pathString>: <msg>` for record-key context); array join is now `items[0].price`; doc comments fixed; snapshots updated; 9 new prefix tests (object, array, record). Verify: `yarn test`, and scan the snapshot diffs in `src/*.test.ts`.
 - 01_02 (f0fd55c): README Error Handling: `message` and `pathString` bullets rewritten, each example logs its exact message; root-level `is not a number` quotes unchanged. Verify: read README Error Handling section.
+- Review fix (f8adb10): owner's dev-dep upgrade (TS 6.0.3, ESLint 10.12, Vitest 5) committed; dropped `esModuleInterop: false` from tsconfig.json; added `"types": ["node"]` to tsconfig.eslint.json; added `vite ^8.0.0` devDependency. Verify: `yarn smoke`.
 
 ## Open assumptions
 
