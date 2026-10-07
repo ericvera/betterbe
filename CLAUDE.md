@@ -73,3 +73,7 @@ Each validator (string, number, boolean, array, object) follows a consistent pat
 - Tests validate both success and failure scenarios
 - Error message and metadata validation included in tests
 - Custom test functions validated for proper error throwing
+
+## Mise
+
+Never open a pull request for, or merge into another branch, any branch whose tree contains `.mise/` — that work is still in flight; run `/mise:next` on that branch to finish it first.
