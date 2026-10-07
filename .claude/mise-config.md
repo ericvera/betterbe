@@ -5,5 +5,5 @@
 - Check:
   - yarn build
   - yarn lint
-  - git ls-files -z | xargs -0 yarn prettier --check --ignore-unknown
+  - yarn prettier --check .
 - Unit tests: yarn test
