@@ -10,8 +10,20 @@ ensure that we are using node version 24 throughout
 - `.github/dependabot.yml:8-23` has no ignore rule, so Dependabot would propose @types/node majors past 24.
 - Hard to undo: raising `engines.node` to `>=24` breaks Node 20/22 consumers (a breaking public change; needs a `BREAKING CHANGE:` footer for a major). A push to main auto-publishes to npm.
 
-## Open questions
+## Decisions
 
-1. Does "throughout" include `engines.node` (consumer-facing, breaking → major release) or only the dev/CI toolchain?
-2. Pin `@types/node` to 24 and add a Dependabot ignore for its majors?
-3. Add a `.nvmrc` pin file and switch workflows to `node-version-file`?
+1. Raise `package.json` `engines.node` from `>=20` to `>=24`. This is a breaking change: the PR description must end with a `BREAKING CHANGE:` footer (last paragraph) so the merge publishes a major release.
+2. Pin `@types/node` to `^24` (update yarn.lock) and add a Dependabot ignore rule for `@types/node` semver-major updates.
+3. No version pin file (`.nvmrc` etc.); workflows keep `node-version: 24`.
+
+## Assumptions
+
+- CI workflows already on `node-version: 24` need no change.
+- PR title uses `feat` (not the `type!:` shorthand); the major bump comes from the footer.
+- README or other docs that mention a supported Node version are updated to 24 if any exist.
+
+## Proposal
+
+Issue: the published `engines` allows Node 20+ and `@types/node` targets 26, so the project is not on Node 24 throughout (CI already is).
+Approach: set `engines.node` to `>=24`, pin `@types/node` to `^24` with a Dependabot major-update ignore, and update any docs naming a Node version; the PR gets a `BREAKING CHANGE:` footer.
+Skips: none — the engines bump is a breaking public change, so spec and critic run.
