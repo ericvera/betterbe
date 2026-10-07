@@ -3,7 +3,8 @@
   "extends": ["@tsconfig/strictest/tsconfig.json"],
   "compilerOptions": {
     "allowJs": true,
-    "noEmit": true
+    "noEmit": true,
+    "types": ["node"]
   },
   "include": ["eslint.config.mjs"]
 }
