@@ -23,8 +23,23 @@ Not a bug fix; changes what `ValidationError.message` holds.
 9. Hard to undo: public behavior change to `error.message`; package.json is 4.1.0 → arguably 5.0.0. Publish via .github/workflows/publish.yml (`npm publish` :55, release :58); npm publish can't be taken back.
 10. Out of scope for this repo: bumping betterbe in Okven and updating its snapshots.
 
-## Open questions
+## Decisions
 
-1. Array path format in the prefix/pathString.
-2. Version bump: major or minor.
-3. Record key-context errors: plain prefix or marked differently.
+1. Array paths join as `items[0].price`: bracketed segments attach without a dot. Applies to both the message prefix and the public `pathString`; fix the doc comment (ValidationError.ts:74) and README.md:340 to match.
+2. Release as a major version: 5.0.0.
+3. Record key-context errors are marked as keys: `key 123: does not match pattern ...` (full path prefix with a `key ` marker).
+
+## Assumptions
+
+- Root-level errors (empty path) keep the raw message, no prefix.
+- Custom `test` messages get the prefix like built-in ones.
+- `toJSON()` shows the path in both `message` and `pathString`; accepted.
+- Prefix format is `<pathString>: <constraint text>`.
+- npm publish / release happens only after the review stage, with the owner's go-ahead.
+- Okven bump and snapshot updates are a separate run in the Okven repo.
+
+## Proposal
+
+Issue: `ValidationError.message` omits the failing field, so snapshots and logs don't say what failed.
+Fix: prefix non-root messages with the path (`source: ...`, `items[0].price: ...`, `key 123: ...`), change the array join to `items[0]`, update snapshots/README, bump to 5.0.0.
+Skips: none — public API change, so spec and critic run.
