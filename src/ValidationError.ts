@@ -21,8 +21,9 @@ export type ValidationErrorCode = ValidationErrorConstraint['code']
 /** Options for constructing a {@link ValidationError}. */
 export interface ValidationErrorOptions {
   /**
-   * Raw constraint text. The stored `Error.message` is prefixed with the path
-   * when the path is non-empty (and with `key ` when context is `'key'`).
+   * Raw constraint text, stored unchanged as {@link ValidationError.reason}.
+   * `Error.message` is the same text prefixed with the path when the path is
+   * non-empty (and with `key ` when context is `'key'`).
    */
   message: string
   /** Error code and constraint parameters. */
@@ -48,19 +49,22 @@ const joinPath = (segments: string[]): string =>
       '',
     )
 
-const formatMessage = (options: ValidationErrorOptions): string => {
+const formatMessage = (
+  reason: string,
+  options: ValidationErrorOptions,
+): string => {
   const path = options.path ?? []
   const segments = options.key !== undefined ? [...path, options.key] : path
   const joined = joinPath(segments)
 
   if (joined === '') {
-    return options.message
+    return reason
   }
 
   const prefix =
     (options.context ?? 'value') === 'key' ? `key ${joined}` : joined
 
-  return `${prefix}: ${options.message}`
+  return `${prefix}: ${reason}`
 }
 
 /**
@@ -68,6 +72,11 @@ const formatMessage = (options: ValidationErrorOptions): string => {
  * for the validation rule, path, and invalid value.
  */
 export class ValidationError extends Error {
+  /**
+   * The failure text without the path prefix (e.g. `'invalid phone number'`).
+   * Equals `message` for root-level errors.
+   */
+  public readonly reason: string
   /** Parent path segments. */
   public readonly path: string[]
   /** Current path segment, if any. */
@@ -85,9 +94,11 @@ export class ValidationError extends Error {
    * @param options - Message, constraint, and optional path/value metadata.
    */
   constructor(options: ValidationErrorOptions) {
-    super(formatMessage(options))
+    const reason = options.message
+    super(formatMessage(reason, options))
 
     this.name = 'ValidationError'
+    this.reason = reason
     this.path = options.path ?? []
     this.key = options.key
     this.value = options.value
@@ -116,6 +127,7 @@ export class ValidationError extends Error {
     return {
       code: this.code,
       message: this.message,
+      reason: this.reason,
       path: this.path,
       key: this.key,
       pathString: this.pathString,

@@ -53,6 +53,7 @@ it('should throw an error if the value is a number instead of object', () => {
         "message": "is not object",
         "path": [],
         "pathString": "",
+        "reason": "is not object",
         "value": 42,
       }
     `)
@@ -80,6 +81,7 @@ it('should throw an error if the value is a string instead of object', () => {
         "message": "is not object",
         "path": [],
         "pathString": "",
+        "reason": "is not object",
         "value": "foo",
       }
     `)
@@ -107,6 +109,7 @@ it('should throw an error if the value is an array instead of object', () => {
         "message": "is not object",
         "path": [],
         "pathString": "",
+        "reason": "is not object",
         "value": [],
       }
     `)
@@ -134,6 +137,7 @@ it('should throw an error when value is null', () => {
         "message": "is not object",
         "path": [],
         "pathString": "",
+        "reason": "is not object",
         "value": null,
       }
     `)
@@ -162,6 +166,7 @@ it('should throw an error if a key is not allowed', () => {
         "message": "age: is not allowed",
         "path": [],
         "pathString": "age",
+        "reason": "is not allowed",
         "value": {
           "age": 42,
           "name": "John Doe",
@@ -226,6 +231,7 @@ it('should work when nested and there is an error', () => {
           "user",
         ],
         "pathString": "user.age",
+        "reason": "is required",
         "value": undefined,
       }
     `)
@@ -288,6 +294,7 @@ it('should throw an error if the value is undefined when required', () => {
           "message": "is required",
           "path": [],
           "pathString": "",
+          "reason": "is required",
           "value": undefined,
         }
       `)
@@ -349,6 +356,7 @@ it('should throw an error if the test function throws', () => {
         "message": "age: cannot be 42",
         "path": [],
         "pathString": "age",
+        "reason": "cannot be 42",
         "value": undefined,
       }
     `)
@@ -439,6 +447,7 @@ it('should throw an error if an inner test function throws', () => {
         "message": "name: cannot be John Doe",
         "path": [],
         "pathString": "name",
+        "reason": "cannot be John Doe",
         "value": "John Doe",
       }
     `)
@@ -485,6 +494,7 @@ it('should pass correct path and key to test report callback', () => {
           "user",
         ],
         "pathString": "user.name",
+        "reason": "custom fail",
         "value": "John",
       }
     `)
@@ -545,6 +555,7 @@ it('should include path and key for property validation errors', () => {
         "message": "name: is shorter than expected length 5",
         "path": [],
         "pathString": "name",
+        "reason": "is shorter than expected length 5",
         "value": "Bob",
       }
     `)
@@ -573,6 +584,7 @@ it('should not duplicate path when array is required but missing', () => {
         "message": "name: is required",
         "path": [],
         "pathString": "name",
+        "reason": "is required",
         "value": undefined,
       }
     `)
@@ -606,6 +618,7 @@ it('should include path and key for nested object validation errors', () => {
           "[0]",
         ],
         "pathString": "items[0].price",
+        "reason": "is less than minimum 1",
         "value": 0,
       }
     `)

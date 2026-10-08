@@ -29,6 +29,7 @@ it('should throw an error if the value is not a string', () => {
         "message": "is not string",
         "path": [],
         "pathString": "",
+        "reason": "is not string",
         "value": 42,
       }
     `)
@@ -53,6 +54,7 @@ it('should throw an error if the value is undefined', () => {
         "message": "is required",
         "path": [],
         "pathString": "",
+        "reason": "is required",
         "value": undefined,
       }
     `)
@@ -77,6 +79,7 @@ it('should throw an error if the value is an empty string', () => {
         "message": "is required",
         "path": [],
         "pathString": "",
+        "reason": "is required",
         "value": "",
       }
     `)
@@ -102,6 +105,7 @@ it('should throw an error if the value is shorter than expected', () => {
         "message": "is shorter than expected length 3",
         "path": [],
         "pathString": "",
+        "reason": "is shorter than expected length 3",
         "value": "hi",
       }
     `)
@@ -135,6 +139,7 @@ it('should throw an error if the value is longer than maxLength', () => {
         "message": "is longer than expected length 3",
         "path": [],
         "pathString": "",
+        "reason": "is longer than expected length 3",
         "value": "hola",
       }
     `)
@@ -168,6 +173,7 @@ it('should throw an error if the value does not match the pattern', () => {
         "message": "does not match pattern",
         "path": [],
         "pathString": "",
+        "reason": "does not match pattern",
         "value": "123",
       }
     `)
@@ -193,6 +199,7 @@ it('should throw an error if the value does not match the alphabet', () => {
         "message": "contains character 'd' which is not in alphabet 'abc'",
         "path": [],
         "pathString": "",
+        "reason": "contains character 'd' which is not in alphabet 'abc'",
         "value": "def",
       }
     `)
@@ -239,6 +246,7 @@ it('should throw if the value is shorter than expected and not required', () => 
         "message": "is shorter than expected length 3",
         "path": [],
         "pathString": "",
+        "reason": "is shorter than expected length 3",
         "value": "hi",
       }
     `)
@@ -263,6 +271,7 @@ it('should throw if the value is longer than expected and not required', () => {
         "message": "is longer than expected length 3",
         "path": [],
         "pathString": "",
+        "reason": "is longer than expected length 3",
         "value": "hello",
       }
     `)
@@ -287,6 +296,7 @@ it('should throw if the value does not match the pattern and not required', () =
         "message": "does not match pattern",
         "path": [],
         "pathString": "",
+        "reason": "does not match pattern",
         "value": "123",
       }
     `)
@@ -311,6 +321,7 @@ it('should throw if the value does not match the alphabet and not required', () 
         "message": "contains character 'd' which is not in alphabet 'abc'",
         "path": [],
         "pathString": "",
+        "reason": "contains character 'd' which is not in alphabet 'abc'",
         "value": "abdc",
       }
     `)
@@ -369,6 +380,7 @@ it('should throw an error if the value is not one of the allowed values', () => 
         "message": "is not one of the allowed values",
         "path": [],
         "pathString": "",
+        "reason": "is not one of the allowed values",
         "value": "foo",
       }
     `)
@@ -435,6 +447,7 @@ it('should pass correct path and key to test report callback', () => {
         "message": "name: string test fail",
         "path": [],
         "pathString": "name",
+        "reason": "string test fail",
         "value": "John",
       }
     `)
@@ -465,6 +478,7 @@ it('should throw an error when the test function reports a failure', () => {
         "message": "Can't be John Doe.",
         "path": [],
         "pathString": "",
+        "reason": "Can't be John Doe.",
         "value": "John Doe",
       }
     `)
@@ -504,6 +518,7 @@ it('should include data in constraint when report is called with data', () => {
         "message": "custom rule failed",
         "path": [],
         "pathString": "",
+        "reason": "custom rule failed",
         "value": "x",
       }
     `)

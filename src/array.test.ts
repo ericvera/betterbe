@@ -71,6 +71,7 @@ it('should throw an error if the value is a number instead of array', () => {
         "message": "is not array",
         "path": [],
         "pathString": "",
+        "reason": "is not array",
         "value": 42,
       }
     `)
@@ -97,6 +98,7 @@ it('should throw an error if the value is a string instead of array', () => {
         "message": "is not array",
         "path": [],
         "pathString": "",
+        "reason": "is not array",
         "value": "foo",
       }
     `)
@@ -123,6 +125,7 @@ it('should throw an error if the value is an object instead of array', () => {
         "message": "is not array",
         "path": [],
         "pathString": "",
+        "reason": "is not array",
         "value": {},
       }
     `)
@@ -154,6 +157,7 @@ it('should throw an error if the array is shorter than expected', () => {
         "message": "is shorter than expected length 2",
         "path": [],
         "pathString": "",
+        "reason": "is shorter than expected length 2",
         "value": [
           "a",
         ],
@@ -214,6 +218,7 @@ it('should throw if the array is longer than maxLength', () => {
         "message": "is longer than expected length 5",
         "path": [],
         "pathString": "",
+        "reason": "is longer than expected length 5",
         "value": [
           "a",
           "b",
@@ -343,6 +348,7 @@ it('should work when nested and there is an error', () => {
           "[0]",
         ],
         "pathString": "[0][2]",
+        "reason": "is greater than maximum 10",
         "value": 123,
       }
     `)
@@ -376,6 +382,7 @@ it('should throw an error if the value is undefined (required: true)', () => {
         "message": "is required",
         "path": [],
         "pathString": "",
+        "reason": "is required",
         "value": undefined,
       }
     `)
@@ -425,6 +432,7 @@ it('should pass correct path and key to test report callback', () => {
         "message": "items: array test fail",
         "path": [],
         "pathString": "items",
+        "reason": "array test fail",
         "value": [
           "a",
           "b",
@@ -466,6 +474,7 @@ it('should throw an error if the test function throws', () => {
         "message": "cannot be boom",
         "path": [],
         "pathString": "",
+        "reason": "cannot be boom",
         "value": [
           "ok",
           "ok",
@@ -529,6 +538,7 @@ it('should throw an error if unique is true and array contains duplicates', () =
         "message": "[2]: contains duplicate values",
         "path": [],
         "pathString": "[2]",
+        "reason": "contains duplicate values",
         "value": "a",
       }
     `)
@@ -592,6 +602,7 @@ it('should handle unique validation with object values', () => {
         "message": "[2]: contains duplicate values",
         "path": [],
         "pathString": "[2]",
+        "reason": "contains duplicate values",
         "value": {
           "id": 1,
         },
@@ -622,6 +633,7 @@ it('should include path and key when array item validation fails', () => {
         "message": "[1]: is shorter than expected length 3",
         "path": [],
         "pathString": "[1]",
+        "reason": "is shorter than expected length 3",
         "value": "ab",
       }
     `)

@@ -335,6 +335,7 @@ The library throws `ValidationError` instances when validation fails. These erro
 
 - `code`: The validation that failed (e.g., 'required', 'minLength', 'pattern')
 - `message`: A human-readable error message, prefixed with the failing path when there is one (e.g. `'name: is longer than expected length 10'`, `'items[0].price: is greater than maximum 10'`, `'key 123: does not match pattern'` for record keys). Root-level errors have no prefix
+- `reason`: The message without the path prefix (e.g. `'is longer than expected length 10'`). Equals `message` for root-level errors. Use it when you display the path yourself
 - `path`: Path to the parent of the failing value (array of segments)
 - `key`: The segment that identifies the failing value
 - `pathString`: Full path as a string; object keys are dot-separated and array indexes attach directly (e.g. `'items[0].price'`)
@@ -369,6 +370,7 @@ try {
 } catch (error) {
   console.log(error.code) // 'pattern'
   console.log(error.message) // 'key 123: does not match pattern'
+  console.log(error.reason) // 'does not match pattern'
   console.log(error.context) // 'key'
   console.log(error.key) // '123'
 }
@@ -397,6 +399,7 @@ try {
 } catch (error) {
   console.log(error.code) // 'maxLength'
   console.log(error.message) // 'name: is longer than expected length 10'
+  console.log(error.reason) // 'is longer than expected length 10'
   console.log(error.path) // []
   console.log(error.key) // 'name'
   console.log(error.constraint) // { code: 'maxLength', maxLength: 10 }

@@ -29,6 +29,7 @@ it('should throw an error if the value is not a number', () => {
         "message": "is not number",
         "path": [],
         "pathString": "",
+        "reason": "is not number",
         "value": "42",
       }
     `)
@@ -55,6 +56,7 @@ it('should throw an error if the value is NaN', () => {
         "message": "is not a number",
         "path": [],
         "pathString": "",
+        "reason": "is not a number",
         "value": NaN,
       }
     `)
@@ -81,6 +83,7 @@ it('should throw an error if the value is NaN with options', () => {
         "message": "is not a number",
         "path": [],
         "pathString": "",
+        "reason": "is not a number",
         "value": NaN,
       }
     `)
@@ -105,6 +108,7 @@ it('should throw an error if the value is undefined', () => {
         "message": "is required",
         "path": [],
         "pathString": "",
+        "reason": "is required",
         "value": undefined,
       }
     `)
@@ -130,6 +134,7 @@ it('should throw an error if the value is less than the minimum', () => {
         "message": "is less than minimum 3",
         "path": [],
         "pathString": "",
+        "reason": "is less than minimum 3",
         "value": 2,
       }
     `)
@@ -155,6 +160,7 @@ it('should throw an error if the value is greater than the maximum', () => {
         "message": "is greater than maximum 3",
         "path": [],
         "pathString": "",
+        "reason": "is greater than maximum 3",
         "value": 4,
       }
     `)
@@ -179,6 +185,7 @@ it('should throw an error if the value is not an integer', () => {
         "message": "is not an integer",
         "path": [],
         "pathString": "",
+        "reason": "is not an integer",
         "value": 3.14,
       }
     `)
@@ -241,6 +248,7 @@ it('should throw on a negative number when min is 0', () => {
         "message": "is less than minimum 0",
         "path": [],
         "pathString": "",
+        "reason": "is less than minimum 0",
         "value": -1,
       }
     `)
