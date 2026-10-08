@@ -50,6 +50,21 @@ This is a new feature, not a bug fix, so there was nothing to reproduce.
 10. package.json:3 is `6.0.0`; the publish workflow sets the version, so package.json is not bumped by hand. `src/index.ts:8` re-exports with `export *`, so no export change is needed.
 11. Hard to undo: the public API addition only. Merging the `feat:` PR to main publishes to npm automatically.
 
-## Open questions
+## Decisions
 
-1. Should `toJSON()` include `reason`?
+- `toJSON()` includes `reason`, next to `message`. The affected inline snapshots are regenerated.
+
+## Assumptions
+
+- The change lives in `src/ValidationError.ts`; `dist/` is build output and is not edited by hand.
+- `formatMessage` is split so the reason is built first and the prefix is added to it; `reason` is `options.message` as passed.
+- New tests go in a new `src/ValidationError.test.ts`, exercising errors through the public validators (string, object, record).
+- The `message` option's TSDoc is updated to mention `reason`.
+- package.json is not bumped by hand; the publish workflow sets 6.1.0 from the `feat:` PR title.
+- README: `reason` is documented next to `message` in the Error Handling field list; examples keep printing `error.message`.
+
+## Proposal
+
+Issue: `ValidationError.message` always carries the path prefix, so callers that show the path themselves can't get the bare reason.
+Approach: add a public readonly `reason` (message minus prefix, built first in `formatMessage`), include it in `toJSON()`, add tests and README docs; ship as `feat:` (6.1.0).
+Skips: none. This is a public API addition, so spec and critic run.
