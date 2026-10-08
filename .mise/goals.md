@@ -53,6 +53,8 @@ This is a new feature, not a bug fix, so there was nothing to reproduce.
 ## Decisions
 
 - `toJSON()` includes `reason`, next to `message`. The affected inline snapshots are regenerated.
+- The owner's description is informational, not binding: where it leaves room, choose for the best developer experience and API.
+- Field name stays `reason`. `Error` has no standard `reason` (nested errors use `cause`); `detail` clashes with `CustomEvent.detail` (an object) and `description` with `Symbol.description`. `reason` reads naturally next to `pathString` (`phone: invalid phone number` → `pathString` `phone`, `reason` `invalid phone number`). Its only overlap, `Promise.allSettled`/`AbortSignal` `reason`, holds an error rather than text and is rare here.
 
 ## Assumptions
 
