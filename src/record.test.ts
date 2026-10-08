@@ -48,6 +48,7 @@ it('should throw an error for invalid keys', () => {
         "message": "key boom: does not match pattern",
         "path": [],
         "pathString": "boom",
+        "reason": "does not match pattern",
         "value": "boom",
       }
     `)
@@ -74,6 +75,7 @@ it('should throw with context key when key validator fails type check', () => {
         "message": "key abc: is not number",
         "path": [],
         "pathString": "abc",
+        "reason": "is not number",
         "value": "abc",
       }
     `)
@@ -104,6 +106,7 @@ it('should pass correct path and key to test report callback', () => {
         "message": "record test fail",
         "path": [],
         "pathString": "",
+        "reason": "record test fail",
         "value": {
           "foo": 1,
         },
@@ -134,6 +137,7 @@ it('should throw an error for invalid values', () => {
         "message": "foo: is less than minimum 0",
         "path": [],
         "pathString": "foo",
+        "reason": "is less than minimum 0",
         "value": -1,
       }
     `)
@@ -186,6 +190,7 @@ it('should provide proper error paths for nested validation', () => {
           "user2",
         ],
         "pathString": "user2.score",
+        "reason": "is not number",
         "value": "invalid",
       }
     `)
@@ -210,6 +215,7 @@ it('should handle required option', () => {
         "message": "is required",
         "path": [],
         "pathString": "",
+        "reason": "is required",
         "value": undefined,
       }
     `)
@@ -244,6 +250,7 @@ it('should throw error for non-object values', () => {
         "message": "is not object",
         "path": [],
         "pathString": "",
+        "reason": "is not object",
         "value": "not an object",
       }
     `)
@@ -266,6 +273,7 @@ it('should throw error for non-object values', () => {
         "message": "is not object",
         "path": [],
         "pathString": "",
+        "reason": "is not object",
         "value": 42,
       }
     `)
@@ -288,6 +296,7 @@ it('should throw error for non-object values', () => {
         "message": "is not object",
         "path": [],
         "pathString": "",
+        "reason": "is not object",
         "value": [],
       }
     `)
@@ -320,6 +329,7 @@ it('should work with custom test function', () => {
         "message": "Must have at least 2 properties",
         "path": [],
         "pathString": "",
+        "reason": "Must have at least 2 properties",
         "value": {
           "a": 1,
         },
@@ -362,6 +372,7 @@ it('should validate with different key and value types', () => {
         "message": "key invalid: is not one of the allowed values",
         "path": [],
         "pathString": "invalid",
+        "reason": "is not one of the allowed values",
         "value": "invalid",
       }
     `)
@@ -408,6 +419,7 @@ it('should throw when value is null', () => {
         "message": "is not object",
         "path": [],
         "pathString": "",
+        "reason": "is not object",
         "value": null,
       }
     `)
@@ -434,6 +446,7 @@ it('should provide key-specific errors for various validation types', () => {
         "message": "key ab: is shorter than expected length 3",
         "path": [],
         "pathString": "ab",
+        "reason": "is shorter than expected length 3",
         "value": "ab",
       }
     `)
@@ -458,6 +471,7 @@ it('should provide key-specific errors for various validation types', () => {
         "message": "key toolongkey: is longer than expected length 5",
         "path": [],
         "pathString": "toolongkey",
+        "reason": "is longer than expected length 5",
         "value": "toolongkey",
       }
     `)
@@ -494,6 +508,7 @@ it('should provide key-specific errors in nested records with proper paths', () 
           "user2",
         ],
         "pathString": "user2.invalidfield",
+        "reason": "is not one of the allowed values",
         "value": "invalidfield",
       }
     `)

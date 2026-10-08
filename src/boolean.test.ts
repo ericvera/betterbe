@@ -29,6 +29,7 @@ it('should throw an error if the value is not a boolean', () => {
         "message": "is not boolean",
         "path": [],
         "pathString": "",
+        "reason": "is not boolean",
         "value": "true",
       }
     `)
@@ -53,6 +54,7 @@ it('should throw an error if the value is undefined', () => {
         "message": "is required",
         "path": [],
         "pathString": "",
+        "reason": "is required",
         "value": undefined,
       }
     `)
